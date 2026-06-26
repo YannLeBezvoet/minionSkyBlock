@@ -1,4 +1,4 @@
-$scoreboard players set #sell_value skyblock_temp 0
+scoreboard players set #sell_value skyblock_temp 0
 $execute if block -7 66 0 minecraft:chest{Items:[{Slot:$(slot)b,id:"minecraft:cobblestone"}]} run scoreboard players set #sell_value skyblock_temp 1
 $execute if block -7 66 0 minecraft:chest{Items:[{Slot:$(slot)b,id:"minecraft:dirt"}]} run scoreboard players set #sell_value skyblock_temp 1
 $execute if block -7 66 0 minecraft:chest{Items:[{Slot:$(slot)b,id:"minecraft:sand"}]} run scoreboard players set #sell_value skyblock_temp 2
