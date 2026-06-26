@@ -37,7 +37,7 @@ data/
 
 | Élément | Coordonnées |
 |---|---|
-| Spawn joueur / world spawn | 0 65 0 |
+| Spawn joueur / world spawn | 0 66 0 |
 | Surface île (herbe) | Y=65 |
 | Coffre de départ | -2 66 0 |
 | Bloc d'or (zone de vente) | -3 66 0 |

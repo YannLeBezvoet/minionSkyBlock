@@ -5,8 +5,8 @@ forceload add -5 -5 5 5
 function minionskyblock:world/build_island
 forceload remove -5 -5 5 5
 
-teleport @s 0.5 65 0.5 0 0
-spawnpoint @s 0 65 0
+teleport @s 0.5 66 0.5 0 0
+spawnpoint @s 0 66 0
 
 give @s minecraft:bread 5
 gamemode survival @s
