@@ -16,11 +16,15 @@ data/
       load.json                    ← pointe vers minionskyblock:load
       tick.json                    ← pointe vers minionskyblock:tick
   minionskyblock/
-    advancement/player/first_join.json   ← trigger:tick, reward → player/first_join
+    advancement/player/
+      first_join.json              ← trigger:tick, reward → player/first_join
+      tick_loop.json               ← trigger:tick, reward → player/on_tick (auto-révocatrice)
     function/
       load.mcfunction              ← scoreboards + setworldspawn + build_island
-      tick.mcfunction              ← bouton détection + display 20t + shop trigger
-      player/first_join.mcfunction ← forceload + build_island + tp + items + title
+      tick.mcfunction              ← commentaires seulement (tag non fonctionnel en 26.2)
+      player/
+        first_join.mcfunction      ← forceload + build_island + tp + items + title
+        on_tick.mcfunction         ← revoke tick_loop + compteur skyblock_ptick + shop trigger
       world/build_island.mcfunction← fill/setblock de toute l'île + station de vente
       economy/
         display.mcfunction         ← actionbar coins toutes les 20 ticks
@@ -41,8 +45,6 @@ data/
 | Coffre de départ | -2 66 0 |
 | Arbre (tronc base) | 2 66 1 |
 | Plateforme bedrock (station vente) | -9 à -6, Y=65, Z=-1 à 1 |
-| Poteau (oak_log) | -9 66 0 |
-| Bouton de vente (stone_button, face=wall, facing=east) | -8 66 0 |
 | Coffre de vente | -7 66 0 |
 | Item display (lingot d'or flottant) | -7 67.8 0 |
 
@@ -55,35 +57,34 @@ data/
 | `skyblock_last_sale` | dummy | Coins du dernier vente (pour actionbar) |
 | `skyblock_temp` | dummy | Calculs temporaires — voir fake players ci-dessous |
 | `skyblock_shop` | trigger | Joueur tape `/trigger skyblock_shop set <id>` |
+| `skyblock_ptick` | dummy | Compteur tick par joueur (0→20), cadence les opérations lourdes |
 
 Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
 
 | Fake player | Usage |
 |---|---|
-| `#tick` | Compteur 0→20 pour cadencer les opérations lourdes |
 | `#sell_count` | Quantité d'un item dans un slot du coffre de vente |
 | `#sell_value` | Prix unitaire de l'item détecté |
 | `#sell_total` | Cumul des coins pour une session de vente |
 | `#shop_result` | 1 si un achat a réussi |
-| `#btn_prev` | État précédent du bouton (0=relâché, 1=enfoncé) — détection front montant |
 
 ## Système de vente
 
-Le joueur dépose des items dans le **coffre de vente** (-7 66 0), puis appuie sur le **bouton** (-8 66 0, sur le poteau).
+Le joueur dépose des items dans le **coffre de vente** (-7 66 0). Le scan est automatique toutes les 20 ticks (≈1s) via `player/on_tick.mcfunction`.
 
-Détection dans `tick.mcfunction` par front montant du bouton :
+`scan_chest.mcfunction` appelle `scan_slot` (macro `$(slot)`) pour les 27 slots.
+
+`scan_slot.mcfunction` — pattern par item (seule la ligne `if items` a `$`, pas les conditions) :
+
 ```mcfunction
-execute if block -8 66 0 minecraft:stone_button[powered=true] if score #btn_prev skyblock_temp matches 0
-  positioned -8 66 0 as @a[distance=..5,limit=1,sort=nearest]
-  run function minionskyblock:economy/sell/scan_chest
-execute if block -8 66 0 minecraft:stone_button[powered=true]
-  run scoreboard players set #btn_prev skyblock_temp 1
-execute unless block -8 66 0 minecraft:stone_button[powered=true]
-  run scoreboard players set #btn_prev skyblock_temp 0
+$execute store result score #sell_count skyblock_temp if items block -7 66 0 $(slot) minecraft:cobblestone
+execute if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
+execute if score #sell_count skyblock_temp matches 1.. run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
 ```
 
-`scan_chest.mcfunction` appelle `scan_slot` (macro `$(slot)`) pour les slots 0 à 26.
-`scan_slot.mcfunction` : pour chaque slot, teste chaque item vendable, récupère le count, calcule coins, vide le slot.
+Le storage passe `{slot:"container.N"}` (string) — `$(slot)` expand directement à `container.0`, `container.1`, etc.
+
+En fin de slot : `$execute if score #sell_value skyblock_temp matches 1.. run item replace block -7 66 0 $(slot) with minecraft:air`
 
 Prix unitaires (dans `economy/sell/scan_slot.mcfunction`) :
 
@@ -162,7 +163,7 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **Fonctions macro `$`** : le préfixe `$` ne doit être mis **que sur les lignes qui contiennent au moins un `$(variable)`**. Une ligne `$` sans substitution provoque "Can't parse function" en 26.2.
 - **Symlinks dans datapacks** : Minecraft les refuse ("Found forbidden symlinks"). Utiliser `update.sh` à la place.
 - **Texte JSON dans les panneaux** : en 26.2, les panneaux affichent le JSON brut. Éviter les panneaux pour l'affichage formaté.
-- **NBT item detection dans les coffres** : `execute if block ... minecraft:chest{Items:[{Slot:Nb,id:"..."}]}` — potentiellement cassé post-1.20.5. À tester en 26.2.
+- **NBT item detection dans les coffres** : `execute if block ... minecraft:chest{Items:[{Slot:Nb,id:"..."}]}` — **cassé en 26.2** (le prédicat NBT est ignoré, le check passe toujours `true`). De plus `data get block ... Items[N].Count` retourne 0 car le champ est devenu `count` (minuscule). Utiliser à la place : `execute store result score <var> if items block <pos> container.<slot> <item>` (1.20.5+) qui détecte et retourne le count en une seule commande.
 - **Tags function** : chemin `data/minecraft/tags/function/` (singulier) — correct depuis ~1.21.
 - **`return fail`** : disponible depuis 1.20.2, stoppe l'exécution de la fonction courante.
 - **Chunks au load** : `build_island` est aussi appelé depuis `player/first_join` avec `forceload add -5 -5 5 5` pour garantir que les chunks sont chargés.
