@@ -14,7 +14,16 @@ fill 1 71 0 3 71 2 minecraft:oak_leaves[persistent=true]
 setblock 2 72 1 minecraft:oak_leaves[persistent=true]
 setblock 2 69 1 minecraft:oak_log
 
-setblock -3 66 0 minecraft:gold_block
+kill @e[tag=sell_display,type=minecraft:item_display]
+kill @e[tag=sell_trigger,type=minecraft:interaction]
+kill @e[tag=sell_label,type=minecraft:text_display]
+
+fill -8 65 -1 -6 65 1 minecraft:bedrock
+setblock -7 66 0 minecraft:chest[facing=south]
+
+summon minecraft:item_display -7 67.8 0 {Tags:["sell_display"],item:{id:"minecraft:gold_ingot",count:1},billboard:"center"}
+summon minecraft:text_display -8 66.5 0 {Tags:["sell_label"],text:'{"text":"[ VENDRE ]","color":"gold","bold":true}',alignment:"center",billboard:"vertical"}
+summon minecraft:interaction -8 66 0 {Tags:["sell_trigger"],width:1.0f,height:2.0f}
 
 setblock -2 66 0 minecraft:chest[facing=east]
 item replace block -2 66 0 container.0 with minecraft:wooden_sword 1
