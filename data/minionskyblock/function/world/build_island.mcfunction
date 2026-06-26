@@ -14,6 +14,8 @@ fill 1 71 0 3 71 2 minecraft:oak_leaves[persistent=true]
 setblock 2 72 1 minecraft:oak_leaves[persistent=true]
 setblock 2 69 1 minecraft:oak_log
 
+setblock -3 66 0 minecraft:gold_block
+
 setblock -2 66 0 minecraft:chest[facing=east]
 item replace block -2 66 0 container.0 with minecraft:wooden_sword 1
 item replace block -2 66 0 container.1 with minecraft:wooden_pickaxe 1
