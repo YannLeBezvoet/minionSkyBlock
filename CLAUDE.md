@@ -169,6 +169,8 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **Tags function** : chemin `data/minecraft/tags/function/` (singulier) — correct depuis ~1.21.
 - **`return fail`** : disponible depuis 1.20.2, stoppe l'exécution de la fonction courante.
 - **Chunks au load** : `build_island` est aussi appelé depuis `player/first_join` avec `forceload add -5 -5 5 5` pour garantir que les chunks sont chargés.
+- **`CustomName` entité** : en 26.2 (post-1.20.5), le champ est un composant SNBT inline, pas une string JSON. Utiliser `CustomName:{text:"Nom",color:"yellow"}` et non `CustomName:'{"text":"Nom"}'`.
+- **`clickEvent` tellraw** : en 26.2 (post-1.21.5), le champ s'appelle `"click_event"` (snake_case) et non `"clickEvent"`. Le sous-champ `"value"` devient `"command"`. Format : `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Idem pour `"hoverEvent"` → `"hover_event"` (à vérifier).
 
 ## Prochaine phase : Minions
 

@@ -1,6 +1,8 @@
 advancement revoke @s only minionskyblock:player/tick_loop
 execute unless block -7 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-7,y=66,z=0,distance=..3]
 execute unless block -7 66 0 minecraft:chest run setblock -7 66 0 minecraft:chest[facing=south]
+
+execute as @e[tag=shop_npc_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked
 scoreboard players add @s skyblock_ptick 1
 
 execute if score @s skyblock_ptick matches 20.. run function minionskyblock:economy/display
