@@ -7,5 +7,3 @@ scoreboard objectives add skyblock_sell trigger
 scoreboard objectives add skyblock_ptick dummy
 
 setworldspawn 0 66 0
-
-function minionskyblock:world/build_island
