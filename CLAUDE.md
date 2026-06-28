@@ -20,7 +20,7 @@ data/
       first_join.json              ← trigger:tick, reward → player/first_join
       tick_loop.json               ← trigger:tick, reward → player/on_tick (auto-révocatrice)
     function/
-      load.mcfunction              ← scoreboards + setworldspawn + build_island
+      load.mcfunction              ← scoreboards + setworldspawn + init storage shop
       tick.mcfunction              ← commentaires seulement (tag non fonctionnel en 26.2)
       player/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
@@ -32,8 +32,8 @@ data/
           scan_chest.mcfunction    ← remet #sell_total à 0, appelle scan_slot 27×, crédite
           scan_slot.mcfunction     ← macro $(slot) : détecte item + prix, vide le slot
         shop/
-          catalog.mcfunction       ← route skyblock_shop trigger vers buy/*
-          buy/*.mcfunction         ← return fail si coins insuf., sinon give + remove
+          catalog.mcfunction       ← route skyblock_shop trigger vers buy.mcfunction via storage
+          buy.mcfunction           ← macro générique : $(cost) $(item) $(qty) $(name)
 ```
 
 ## Coordonnées clés (île centrée sur 0,65,0)
@@ -65,6 +65,7 @@ Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
 |---|---|
 | `#sell_count` | Quantité d'un item dans un slot du coffre de vente |
 | `#sell_value` | Prix unitaire de l'item détecté |
+| `#sell_found` | 1 dès qu'un item est identifié dans le slot (court-circuit les checks suivants) |
 | `#sell_total` | Cumul des coins pour une session de vente |
 | `#shop_result` | 1 si un achat a réussi |
 
@@ -76,17 +77,27 @@ Le coffre est **incassable** : `on_tick` détecte chaque tick si le bloc est abs
 
 `scan_chest.mcfunction` appelle `scan_slot` (macro `$(slot)`) pour les 27 slots.
 
-`scan_slot.mcfunction` — pattern par item (seule la ligne `if items` a `$`, pas les conditions) :
+`scan_slot.mcfunction` — pattern uniforme de **3 lignes par item** (seule la 1re a `$`) :
 
 ```mcfunction
-$execute store result score #sell_count skyblock_temp if items block -7 66 0 $(slot) minecraft:cobblestone
-execute if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
-execute if score #sell_count skyblock_temp matches 1.. run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
+$execute if score #sell_found skyblock_temp matches 0 store result score #sell_count skyblock_temp if items block -7 66 0 $(slot) minecraft:cobblestone
+execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
+execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_found skyblock_temp 1
 ```
 
-Le storage passe `{slot:"container.N"}` (string) — `$(slot)` expand directement à `container.0`, `container.1`, etc.
+Le flag `#sell_found` court-circuite tous les checks suivants dès qu'un item est identifié.
 
-En fin de slot : `$execute if score #sell_value skyblock_temp matches 1.. run item replace block -7 66 0 $(slot) with minecraft:air`
+En fin de fonction (bloc commun à tous les items) :
+
+```mcfunction
+execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_count skyblock_temp *= #sell_value skyblock_temp
+execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
+$execute if score #sell_found skyblock_temp matches 1 run item replace block -7 66 0 $(slot) with minecraft:air
+```
+
+**Prix par défaut** : tout item non listé vaut 1 coin (via `if items ... *` en fin de catalogue).
+
+Pour ajouter un item : copier un bloc de 3 lignes dans `scan_slot.mcfunction`, changer l'item et le prix.
 
 Prix unitaires (dans `economy/sell/scan_slot.mcfunction`) :
 
@@ -106,31 +117,46 @@ Pour ajouter un item : une ligne dans `economy/sell/scan_slot.mcfunction`.
 ## Système d'achat
 
 `/trigger skyblock_shop set <id>` — traité dans `economy/shop/catalog.mcfunction`.
-Pattern de chaque `buy/*.mcfunction` :
+
+Les données de chaque item sont dans le storage `minionskyblock:shop` (initialisé dans `load.mcfunction`) :
 ```mcfunction
-execute unless score @s skyblock_coins matches <coût>.. run return fail
-scoreboard players remove @s skyblock_coins <coût>
-give @s minecraft:<item> <quantité>
+data modify storage minionskyblock:shop cobblestone set value {cost:60,item:"minecraft:cobblestone",qty:64,name:"Cobblestone x64"}
+```
+
+`catalog.mcfunction` route l'ID vers `buy.mcfunction` via le storage :
+```mcfunction
+execute if score @s skyblock_shop matches 1 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop cobblestone
+```
+
+`buy.mcfunction` est une macro générique (variables : `$(cost)`, `$(item)`, `$(qty)`, `$(name)`) :
+```mcfunction
+$execute unless score @s skyblock_coins matches $(cost).. run return fail
+$scoreboard players remove @s skyblock_coins $(cost)
+$give @s $(item) $(qty)
 scoreboard players set #shop_result skyblock_temp 1
-title @s actionbar {...}
+$title @s actionbar {"text":"Acheté : $(name)  (-$(cost) coins)","color":"green"}
 ```
 
 Catalogue actuel :
 
-| ID | Item | Qté | Coût |
-|---|---|---|---|
-| 1 | cobblestone | 64 | 60 |
-| 2 | oak_log | 16 | 80 |
-| 3 | wheat_seeds | 16 | 30 |
-| 4 | bread | 16 | 180 |
-| 5 | sand | 16 | 30 |
-| 6 | bone_meal | 16 | 50 |
-| 7 | gravel | 16 | 30 |
-| 8 | iron_ingot | 4 | 75 |
-| 9 | oak_sapling | 4 | 35 |
-| 10 | torch | 16 | 40 |
+| ID | Clé storage | Item | Qté | Coût |
+| --- | --- | --- | --- | --- |
+| 1 | cobblestone | cobblestone | 64 | 60 |
+| 2 | oak_log | oak_log | 16 | 80 |
+| 3 | wheat_seeds | wheat_seeds | 16 | 30 |
+| 4 | bread | bread | 16 | 180 |
+| 5 | sand | sand | 16 | 30 |
+| 6 | bone_meal | bone_meal | 16 | 50 |
+| 7 | gravel | gravel | 16 | 30 |
+| 8 | iron_ingot | iron_ingot | 4 | 75 |
+| 9 | oak_sapling | oak_sapling | 4 | 35 |
+| 10 | torch | torch | 16 | 40 |
 
-Pour ajouter un item : créer `economy/shop/buy/<item>.mcfunction` + ajouter une ligne dans `catalog.mcfunction`.
+Pour ajouter un item :
+
+1. Ajouter `data modify storage minionskyblock:shop <clé> set value {...}` dans `load.mcfunction`
+2. Ajouter `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <clé>` dans `catalog.mcfunction`
+3. Mettre à jour `open_menu.mcfunction` (tellraw avec le bouton)
 
 ## Premier join
 
@@ -171,6 +197,8 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **Chunks au load** : `build_island` est aussi appelé depuis `player/first_join` avec `forceload add -5 -5 5 5` pour garantir que les chunks sont chargés.
 - **`CustomName` entité** : en 26.2 (post-1.20.5), le champ est un composant SNBT inline, pas une string JSON. Utiliser `CustomName:{text:"Nom",color:"yellow"}` et non `CustomName:'{"text":"Nom"}'`.
 - **`clickEvent` tellraw** : en 26.2 (post-1.21.5), le champ s'appelle `"click_event"` (snake_case) et non `"clickEvent"`. Le sous-champ `"value"` devient `"command"`. Format : `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Idem pour `"hoverEvent"` → `"hover_event"` (à vérifier).
+- **Espaces multiples dans les commandes** : en 26.2, le parser rejette les espaces consécutifs entre les tokens d'une commande (`cobblestone  set` ou `matches 1  run` → "Incorrect argument"). Utiliser un seul espace entre chaque token. **Ne jamais aligner visuellement les arguments avec des espaces.**
+- **`build_island` dans `load.mcfunction`** : ne pas appeler `build_island` depuis `load.mcfunction` — cela réinitialise l'île à chaque `/reload` ou redémarrage, détruisant les constructions du joueur. `build_island` ne doit être appelé que depuis `player/first_join.mcfunction`.
 
 ## Prochaine phase : Minions
 
