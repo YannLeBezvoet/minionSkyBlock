@@ -93,4 +93,8 @@ execute if score #sell_count skyblock_temp matches 1.. run scoreboard players se
 execute if score #sell_count skyblock_temp matches 1.. run scoreboard players operation #sell_count skyblock_temp *= #sell_value skyblock_temp
 execute if score #sell_count skyblock_temp matches 1.. run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
 
+$execute if score #sell_value skyblock_temp matches ..0 store result score #sell_count skyblock_temp if items block -7 66 0 $(slot) *
+execute if score #sell_value skyblock_temp matches ..0 if score #sell_count skyblock_temp matches 1.. run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
+execute if score #sell_value skyblock_temp matches ..0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
+
 $execute if score #sell_value skyblock_temp matches 1.. run item replace block -7 66 0 $(slot) with minecraft:air
