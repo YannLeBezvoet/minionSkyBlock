@@ -24,7 +24,7 @@ data/
       tick.mcfunction              ← commentaires seulement (tag non fonctionnel en 26.2)
       player/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
-        on_tick.mcfunction         ← revoke tick_loop + compteur skyblock_ptick + shop trigger
+        on_tick.mcfunction         ← revoke tick_loop + protection coffre + compteur skyblock_ptick + shop trigger
       world/build_island.mcfunction← fill/setblock de toute l'île + station de vente
       economy/
         display.mcfunction         ← actionbar coins toutes les 20 ticks
@@ -45,7 +45,7 @@ data/
 | Coffre de départ | -2 66 0 |
 | Arbre (tronc base) | 2 66 1 |
 | Plateforme bedrock (station vente) | -9 à -6, Y=65, Z=-1 à 1 |
-| Coffre de vente | -7 66 0 |
+| Coffre de vente (incassable) | -7 66 0 |
 | Item display (lingot d'or flottant) | -7 67.8 0 |
 
 ## Scoreboards
@@ -71,6 +71,8 @@ Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
 ## Système de vente
 
 Le joueur dépose des items dans le **coffre de vente** (-7 66 0). Le scan est automatique toutes les 20 ticks (≈1s) via `player/on_tick.mcfunction`.
+
+Le coffre est **incassable** : `on_tick` détecte chaque tick si le bloc est absent et le replace (+ kill des items droppés dans un rayon de 3 blocs).
 
 `scan_chest.mcfunction` appelle `scan_slot` (macro `$(slot)`) pour les 27 slots.
 
