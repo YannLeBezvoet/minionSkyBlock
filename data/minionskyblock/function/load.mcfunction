@@ -8,6 +8,8 @@ scoreboard objectives add skyblock_ptick dummy
 
 setworldspawn 0 66 0
 
+execute unless block 0 65 0 minecraft:grass_block run function minionskyblock:world/build_island
+
 # Catalogue achat (ID trigger skyblock_shop -> donnees)
 data modify storage minionskyblock:shop cobblestone set value {cost:128,item:"minecraft:cobblestone",qty:64,name:"Cobblestone x64"}
 data modify storage minionskyblock:shop oak_log set value {cost:160,item:"minecraft:oak_log",qty:16,name:"Oak Log x16"}

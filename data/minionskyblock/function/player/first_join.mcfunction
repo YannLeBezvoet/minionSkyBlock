@@ -1,13 +1,10 @@
 scoreboard players set @s skyblock_joined 1
 scoreboard players set @s skyblock_coins 0
 
-forceload add -5 -5 5 5
-function minionskyblock:world/build_island
-forceload remove -5 -5 5 5
-
 teleport @s 0.5 66 0.5 0 0
 spawnpoint @s 0 66 0
 
+tag @s add skyblock_light_fix
 give @s minecraft:bread 5
 gamemode survival @s
 

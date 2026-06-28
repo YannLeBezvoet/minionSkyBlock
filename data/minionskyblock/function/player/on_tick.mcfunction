@@ -1,4 +1,9 @@
 advancement revoke @s only minionskyblock:player/tick_loop
+execute if entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:air
+execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_fix
+execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_fix2
+execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:stone
+execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run tag @s add skyblock_light_fix2
 execute unless block -7 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-7,y=66,z=0,distance=..3]
 execute unless block -7 66 0 minecraft:chest run setblock -7 66 0 minecraft:chest[facing=south]
 
