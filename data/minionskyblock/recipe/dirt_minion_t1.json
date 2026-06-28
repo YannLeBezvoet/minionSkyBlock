@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "DSD",
+    "DDD"
+  ],
+  "key": {
+    "D": "minecraft:dirt",
+    "S": "minecraft:wooden_shovel"
+  },
+  "result": {
+    "id": "minecraft:stone_shovel",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {"text": "Dirt Minion", "color": "dark_green", "italic": false},
+      "minecraft:lore": [
+        {"text": "Tier I", "color": "gold", "italic": false},
+        {"text": "Clic droit pour placer sur l'ile.", "color": "dark_gray", "italic": false}
+      ],
+      "minecraft:custom_data": {"minion_type": "dirt", "minion_tier": 1},
+      "minecraft:unbreakable": {"show_in_tooltip": false},
+      "minecraft:enchantment_glint_override": true
+    }
+  }
+}

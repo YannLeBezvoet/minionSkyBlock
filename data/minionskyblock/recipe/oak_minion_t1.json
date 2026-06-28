@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "LAL",
+    "LLL"
+  ],
+  "key": {
+    "L": "minecraft:oak_log",
+    "A": "minecraft:wooden_axe"
+  },
+  "result": {
+    "id": "minecraft:stone_axe",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {"text": "Oak Wood Minion", "color": "green", "italic": false},
+      "minecraft:lore": [
+        {"text": "Tier I", "color": "gold", "italic": false},
+        {"text": "Clic droit pour placer sur l'ile.", "color": "dark_gray", "italic": false}
+      ],
+      "minecraft:custom_data": {"minion_type": "oak_wood", "minion_tier": 1},
+      "minecraft:unbreakable": {"show_in_tooltip": false},
+      "minecraft:enchantment_glint_override": true
+    }
+  }
+}

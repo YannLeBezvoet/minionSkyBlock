@@ -201,10 +201,40 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **Espaces multiples dans les commandes** : en 26.2, le parser rejette les espaces consécutifs entre les tokens d'une commande (`cobblestone  set` ou `matches 1  run` → "Incorrect argument"). Utiliser un seul espace entre chaque token. **Ne jamais aligner visuellement les arguments avec des espaces.**
 - **`build_island` dans `load.mcfunction`** : ne pas appeler `build_island` depuis `load.mcfunction` — cela réinitialise l'île à chaque `/reload` ou redémarrage, détruisant les constructions du joueur. `build_island` ne doit être appelé que depuis `player/first_join.mcfunction`.
 
-## Prochaine phase : Minions
+## Phase Minions
 
 - Entité : Armor Stand taggé (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
-- Placement : item custom crafté → posé → fonction détecte et spawn l'Armor Stand
+- Placement : item custom crafté → clic droit → fonction détecte via advancement et spawn l'Armor Stand
 - Tick central : une seule fonction itère sur tous les `@e[tag=minion]` (pas de schedule par entité)
 - Upgrades : retirer l'Armor Stand tier N, spawner tier N+1
-- Types à implémenter : cobblestone (priorité 1), wood, wheat, iron
+- Types à implémenter : cobblestone (priorité 1), oak_wood, wheat, iron
+
+### Recettes de craft (data/minionskyblock/recipe/)
+
+Pattern commun — 8 matériaux + 1 outil au centre (table de craft 3×3) :
+
+| Fichier | Matériau (×8) | Outil centre | Résultat (base item) |
+| --- | --- | --- | --- |
+| `cobblestone_minion_t1.json` | cobblestone | wooden_pickaxe | stone_pickaxe |
+| `oak_minion_t1.json` | oak_log | wooden_axe | stone_axe |
+| `wheat_minion_t1.json` | wheat_seeds | wooden_hoe | stone_hoe |
+| `iron_minion_t1.json` | iron_ingot | stone_pickaxe | iron_pickaxe |
+| `dirt_minion_t1.json` | dirt | wooden_shovel | stone_shovel |
+
+Composants sur chaque item résultat :
+
+- `minecraft:custom_name` : nom coloré (ex. `{"text":"Cobblestone Minion","color":"gray","italic":false}`)
+- `minecraft:lore` : `["Tier I" (gold), "Clic droit pour placer..." (dark_gray)]`
+- `minecraft:custom_data` : `{"minion_type":"cobblestone","minion_tier":1}` — clé de détection pour l'advancement
+- `minecraft:unbreakable` : `{"show_in_tooltip":false}`
+- `minecraft:enchantment_glint_override` : `true`
+
+Détection placement (à implémenter) : advancement `minecraft:item_used_on_block` filtrant `custom_data.minion_type`.
+
+### Prochaines étapes Minions
+
+1. ~~Recettes de craft~~ ✓
+2. Advancement de détection placement (item_used_on_block + predicate custom_data)
+3. Fonction `minion/place.mcfunction` — consomme l'item, spawn l'Armor Stand
+4. Fonction `minion/tick_all.mcfunction` — itère sur `@e[tag=minion]`, appelle le comportement par type
+5. Comportements par type (cobblestone : mine + drop dans coffre adjacent)

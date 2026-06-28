@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "CPC",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:cobblestone",
+    "P": "minecraft:wooden_pickaxe"
+  },
+  "result": {
+    "id": "minecraft:stone_pickaxe",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {"text": "Cobblestone Minion", "color": "gray", "italic": false},
+      "minecraft:lore": [
+        {"text": "Tier I", "color": "gold", "italic": false},
+        {"text": "Clic droit pour placer sur l'ile.", "color": "dark_gray", "italic": false}
+      ],
+      "minecraft:custom_data": {"minion_type": "cobblestone", "minion_tier": 1},
+      "minecraft:unbreakable": {"show_in_tooltip": false},
+      "minecraft:enchantment_glint_override": true
+    }
+  }
+}
