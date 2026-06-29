@@ -1,5 +1,1 @@
-data remove entity @s attack
-kill @e[type=minecraft:armor_stand,tag=minion_dirt,distance=..2,limit=1,sort=nearest]
-give @p minecraft:stone_shovel[minecraft:custom_name={"text":"Dirt Minion","color":"dark_green","italic":false},minecraft:lore=[{"text":"Tier I","color":"gold","italic":false},{"text":"Clic droit pour placer sur l'ile.","color":"dark_gray","italic":false},{"text":"Clic gauche pour ramasser.","color":"dark_gray","italic":false}],minecraft:custom_data={minion_type:"dirt",minion_tier:1},minecraft:unbreakable={show_in_tooltip:false},minecraft:enchantment_glint_override=true,minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true},minecraft:consumable={consume_seconds:0.5f}]
-title @p actionbar {"text":"Dirt Minion récupéré !","color":"green"}
-kill @s
+function minionskyblock:minion/pickup with storage minionskyblock:minion dirt
