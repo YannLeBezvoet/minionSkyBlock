@@ -249,7 +249,7 @@ Détection placement : advancement `consume_item` par type (`advancement/minion/
 
 Spawning : `execute at @s rotated ~ 0 positioned ^ ^ ^1 run summon minecraft:armor_stand ~ ~ ~` (1 bloc devant, même niveau Y, pitch forcé à 0 pour rester horizontal).
 
-Armor stand NBT : `Tags:["minion","minion_<type>","tier_1"]`, `Small:1b`, `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `HandItems:[{id:"...",count:1},{}]`, `HandDropChances:[0.0f,0.0f]`.
+Armor stand NBT : `Tags:["minion","minion_<type>","tier_1"]`, `Small:1b`, `ShowArms:1b` (obligatoire pour afficher les bras), `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `equipment:{mainhand:{id:"...",count:1}}`. **Ne pas utiliser `HandItems`/`HandDropChances`** — remplacés par `equipment` en 26.2 (ignorés silencieusement).
 
 ### Prochaines étapes Minions
 
