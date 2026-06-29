@@ -11,6 +11,13 @@ setworldspawn 0 66 0
 
 execute unless block 0 65 0 minecraft:grass_block run function minionskyblock:world/build_island
 
+# Config minions (block a poser + timer en ticks)
+data modify storage minionskyblock:minion cobblestone set value {block:"minecraft:cobblestone",timer:15}
+data modify storage minionskyblock:minion dirt set value {block:"minecraft:dirt",timer:10}
+data modify storage minionskyblock:minion oak_wood set value {block:"minecraft:oak_log",timer:20}
+data modify storage minionskyblock:minion iron set value {block:"minecraft:iron_ore",timer:60}
+data modify storage minionskyblock:minion wheat set value {block:"minecraft:hay_block",timer:20}
+
 # Catalogue achat (ID trigger skyblock_shop -> donnees)
 data modify storage minionskyblock:shop cobblestone set value {cost:128,item:"minecraft:cobblestone",qty:64,name:"Cobblestone x64"}
 data modify storage minionskyblock:shop oak_log set value {cost:160,item:"minecraft:oak_log",qty:16,name:"Oak Log x16"}
