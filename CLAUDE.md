@@ -199,6 +199,9 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **`CustomName` entité** : en 26.2 (post-1.20.5), le champ est un composant SNBT inline, pas une string JSON. Utiliser `CustomName:{text:"Nom",color:"yellow"}` et non `CustomName:'{"text":"Nom"}'`.
 - **`clickEvent` tellraw** : en 26.2 (post-1.21.5), le champ s'appelle `"click_event"` (snake_case) et non `"clickEvent"`. Le sous-champ `"value"` devient `"command"`. Format : `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Idem pour `"hoverEvent"` → `"hover_event"` (à vérifier).
 - **Espaces multiples dans les commandes** : en 26.2, le parser rejette les espaces consécutifs entre les tokens d'une commande (`cobblestone  set` ou `matches 1  run` → "Incorrect argument"). Utiliser un seul espace entre chaque token. **Ne jamais aligner visuellement les arguments avec des espaces.**
+- **Ingrédients de recette (recipe JSON)** : en 26.2, les ingrédients dans `key` doivent être une **string simple** (`"minecraft:cobblestone"`), pas un objet `{"id":"minecraft:cobblestone"}`. L'objet provoque `Not a string: {"id":...}` au chargement.
+- **`item_used_on_block` trigger** : en 26.2, ce trigger ne se déclenche que si l'item a une interaction réussie avec le bloc (shovel sur herbe → oui, pickaxe sur n'importe quoi → non). Pour une détection universelle, utiliser `consume_item` à la place.
+- **`consume_item` + `minecraft:consumable`** : en 26.2, `minecraft:consumable` seul ne déclenche pas `consume_item`. Il faut aussi ajouter `minecraft:food` (avec `nutrition:0, saturation:0.0`). Les deux composants ensemble permettent un clic droit "consommable" sans effet de nourriture réel.
 - **`build_island` dans `load.mcfunction`** : ne pas appeler `build_island` depuis `load.mcfunction` — cela réinitialise l'île à chaque `/reload` ou redémarrage, détruisant les constructions du joueur. `build_island` ne doit être appelé que depuis `player/first_join.mcfunction`.
 
 ## Phase Minions
@@ -231,10 +234,20 @@ Composants sur chaque item résultat :
 
 Détection placement (à implémenter) : advancement `minecraft:item_used_on_block` filtrant `custom_data.minion_type`.
 
+### Détection placement (data/minionskyblock/advancement/minion/ + function/minion/)
+
+- `advancement/minion/place_any.json` — trigger `item_used_on_block`, filtre `#minionskyblock:minion_items` (tag item), auto-revoking, reward → `minion/try_place`
+- `tags/item/minion_items.json` — liste les 5 base items (stone_pickaxe, stone_axe, stone_hoe, iron_pickaxe, stone_shovel)
+- `function/minion/try_place.mcfunction` — révoque l'advancement, puis dispatch vers `place_<type>` selon `custom_data~{minion_type:"..."}` en mainhand
+- `function/minion/place_<type>.mcfunction` — `clear` 1 item + `summon armor_stand` 1 bloc devant le joueur + title actionbar
+
+Spawning : `execute at @s rotated ~ 0 positioned ^ ^ ^1 run summon minecraft:armor_stand ~ ~ ~` (1 bloc devant, même niveau Y, pitch forcé à 0 pour rester horizontal).
+
+Armor stand NBT : `Tags:["minion","minion_<type>","tier_1"]`, `Small:1b`, `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `HandItems:[{id:"...",count:1},{}]`, `HandDropChances:[0.0f,0.0f]`.
+
 ### Prochaines étapes Minions
 
 1. ~~Recettes de craft~~ ✓
-2. Advancement de détection placement (item_used_on_block + predicate custom_data)
-3. Fonction `minion/place.mcfunction` — consomme l'item, spawn l'Armor Stand
-4. Fonction `minion/tick_all.mcfunction` — itère sur `@e[tag=minion]`, appelle le comportement par type
-5. Comportements par type (cobblestone : mine + drop dans coffre adjacent)
+2. ~~Advancement placement + spawn Armor Stand~~ ✓
+3. ~~`minion/tick_all.mcfunction` + comportements de base~~ ✓
+4. Collecte dans coffre adjacent (optionnel), upgrades tier 2+

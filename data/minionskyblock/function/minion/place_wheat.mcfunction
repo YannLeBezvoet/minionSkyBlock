@@ -1,0 +1,3 @@
+advancement revoke @s only minionskyblock:minion/place_wheat
+execute at @s rotated ~ 0 positioned ^ ^ ^1 align xz run summon minecraft:armor_stand ~0.5 ~ ~0.5 {Tags:["minion","minion_wheat","tier_1"],Small:1b,CustomName:{text:"Wheat Minion",color:"yellow"},CustomNameVisible:1b,HandItems:[{id:"minecraft:wooden_hoe",count:1},{}],HandDropChances:[0.0f,0.0f]}
+title @s actionbar {"text":"Wheat Minion place !","color":"green"}

@@ -5,6 +5,7 @@ scoreboard objectives add skyblock_temp dummy
 scoreboard objectives add skyblock_shop trigger
 scoreboard objectives add skyblock_sell trigger
 scoreboard objectives add skyblock_ptick dummy
+scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
 
