@@ -5,13 +5,13 @@
       "conditions": {
         "item": {
           "predicates": {
-            "minecraft:custom_data": {"minion_type": "dirt", "minion_tier": 1}
+            "minecraft:custom_data": {"minion_type": "wheat", "minion_tier": 2}
           }
         }
       }
     }
   },
   "rewards": {
-    "function": "minionskyblock:minion/place_dirt"
+    "function": "minionskyblock:minion/place_wheat_t2"
   }
 }

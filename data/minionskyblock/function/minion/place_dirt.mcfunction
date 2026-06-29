@@ -1,1 +1,1 @@
-function minionskyblock:minion/place with storage minionskyblock:minion dirt
+function minionskyblock:minion/place with storage minionskyblock:minion dirt_t1

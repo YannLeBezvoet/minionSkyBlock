@@ -1,1 +1,1 @@
-function minionskyblock:minion/place with storage minionskyblock:minion cobblestone
+function minionskyblock:minion/place with storage minionskyblock:minion cobblestone_t1

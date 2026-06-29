@@ -1,1 +1,1 @@
-function minionskyblock:minion/pickup with storage minionskyblock:minion oak_wood
+function minionskyblock:minion/pickup with storage minionskyblock:minion oak_wood_t1

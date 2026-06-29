@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "IDI",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "minecraft:diamond_pickaxe",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "text": "Iron Minion",
+        "color": "white",
+        "italic": false
+      },
+      "minecraft:lore": [
+        {
+          "text": "Tier II",
+          "color": "gold",
+          "italic": false
+        },
+        {
+          "text": "Clic droit pour placer sur l'ile.",
+          "color": "dark_gray",
+          "italic": false
+        },
+        {
+          "text": "Clic gauche pour ramasser.",
+          "color": "dark_gray",
+          "italic": false
+        }
+      ],
+      "minecraft:custom_data": {
+        "minion_type": "iron",
+        "minion_tier": 2
+      },
+      "minecraft:unbreakable": {
+        "show_in_tooltip": false
+      },
+      "minecraft:enchantment_glint_override": true,
+      "minecraft:food": {
+        "nutrition": 0,
+        "saturation": 0.0,
+        "can_always_eat": true
+      },
+      "minecraft:consumable": {
+        "consume_seconds": 0.5
+      }
+    }
+  }
+}

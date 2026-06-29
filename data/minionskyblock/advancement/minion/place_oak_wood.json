@@ -5,7 +5,7 @@
       "conditions": {
         "item": {
           "predicates": {
-            "minecraft:custom_data": {"minion_type": "oak_wood"}
+            "minecraft:custom_data": {"minion_type": "oak_wood", "minion_tier": 1}
           }
         }
       }

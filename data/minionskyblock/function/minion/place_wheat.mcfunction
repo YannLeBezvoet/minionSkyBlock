@@ -1,1 +1,1 @@
-function minionskyblock:minion/place with storage minionskyblock:minion wheat
+function minionskyblock:minion/place with storage minionskyblock:minion wheat_t1
