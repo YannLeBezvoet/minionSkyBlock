@@ -51,7 +51,13 @@
       },
       "minecraft:consumable": {
         "consume_seconds": 0.5
-      }
+      },
+      "minecraft:tool": {
+        "default_mining_speed": 1.0,
+        "damage_per_block": 0,
+        "rules": []
+      },
+      "minecraft:attribute_modifiers": []
     }
   }
 }
