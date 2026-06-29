@@ -6,3 +6,7 @@ execute if block ~1 ~-1 ~ minecraft:air run return run setblock ~1 ~-1 ~ minecra
 execute if block ~-1 ~-1 ~ minecraft:air run return run setblock ~-1 ~-1 ~ minecraft:iron_ore
 execute if block ~ ~-1 ~1 minecraft:air run return run setblock ~ ~-1 ~1 minecraft:iron_ore
 execute if block ~ ~-1 ~-1 minecraft:air run return run setblock ~ ~-1 ~-1 minecraft:iron_ore
+execute if block ~1 ~-1 ~1 minecraft:air run return run setblock ~1 ~-1 ~1 minecraft:iron_ore
+execute if block ~1 ~-1 ~-1 minecraft:air run return run setblock ~1 ~-1 ~-1 minecraft:iron_ore
+execute if block ~-1 ~-1 ~1 minecraft:air run return run setblock ~-1 ~-1 ~1 minecraft:iron_ore
+execute if block ~-1 ~-1 ~-1 minecraft:air run return run setblock ~-1 ~-1 ~-1 minecraft:iron_ore
