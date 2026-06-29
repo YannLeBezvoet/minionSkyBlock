@@ -68,6 +68,9 @@ Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
 | `#sell_found` | 1 dès qu'un item est identifié dans le slot (court-circuit les checks suivants) |
 | `#sell_total` | Cumul des coins pour une session de vente |
 | `#shop_result` | 1 si un achat a réussi |
+| `#world_ptick` | Compteur tick global serveur (0→20), cadence `tick_all` quel que soit le nombre de joueurs |
+| `#tick_now` | Gametime du tick courant — détection de changement de tick serveur |
+| `#tick_last_world` | Dernier gametime enregistré, comparé à `#tick_now` pour dédupliquer |
 
 ## Système de vente
 
@@ -120,7 +123,7 @@ Pour ajouter un item : une ligne dans `economy/sell/scan_slot.mcfunction`.
 
 Les données de chaque item sont dans le storage `minionskyblock:shop` (initialisé dans `load.mcfunction`) :
 ```mcfunction
-data modify storage minionskyblock:shop cobblestone set value {cost:60,item:"minecraft:cobblestone",qty:64,name:"Cobblestone x64"}
+data modify storage minionskyblock:shop cobblestone set value {cost:128,item:"minecraft:cobblestone",qty:64,name:"Cobblestone ×64"}
 ```
 
 `catalog.mcfunction` route l'ID vers `buy.mcfunction` via le storage :
@@ -141,22 +144,22 @@ Catalogue actuel :
 
 | ID | Clé storage | Item | Qté | Coût |
 | --- | --- | --- | --- | --- |
-| 1 | cobblestone | cobblestone | 64 | 60 |
-| 2 | oak_log | oak_log | 16 | 80 |
-| 3 | wheat_seeds | wheat_seeds | 16 | 30 |
-| 4 | bread | bread | 16 | 180 |
-| 5 | sand | sand | 16 | 30 |
-| 6 | bone_meal | bone_meal | 16 | 50 |
-| 7 | gravel | gravel | 16 | 30 |
-| 8 | iron_ingot | iron_ingot | 4 | 75 |
-| 9 | oak_sapling | oak_sapling | 4 | 35 |
-| 10 | torch | torch | 16 | 40 |
+| 1 | cobblestone | cobblestone | 64 | 128 |
+| 2 | oak_log | oak_log | 16 | 160 |
+| 3 | wheat_seeds | wheat_seeds | 16 | 60 |
+| 4 | bread | bread | 16 | 400 |
+| 5 | sand | sand | 16 | 60 |
+| 6 | bone_meal | bone_meal | 16 | 100 |
+| 7 | gravel | gravel | 16 | 60 |
+| 8 | iron_ingot | iron_ingot | 4 | 150 |
+| 9 | oak_sapling | oak_sapling | 4 | 70 |
+| 10 | torch | torch | 16 | 80 |
 
 Pour ajouter un item :
 
 1. Ajouter `data modify storage minionskyblock:shop <clé> set value {...}` dans `load.mcfunction`
 2. Ajouter `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <clé>` dans `catalog.mcfunction`
-3. Mettre à jour `open_menu.mcfunction` (tellraw avec le bouton)
+3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
 
 ## Premier join
 
@@ -171,6 +174,7 @@ Le tick par-joueur est géré via une **advancement auto-révocatrice** :
 - `advancement/player/tick_loop.json` : trigger `minecraft:tick` → reward `player/on_tick`
 - `function/player/on_tick.mcfunction` : révoque l'advancement en premier → re-trigger immédiat au prochain tick
 - Compteur `skyblock_ptick` (par joueur, dans `skyblock_temp`) cadence les opérations lourdes à 20 ticks
+- Compteur global `#world_ptick` cadence `tick_all` toutes les 20 ticks **serveur**, indépendamment du nombre de joueurs. Mécanisme : `time query gametime` stocké dans `#tick_now` comparé à `#tick_last_world` — si différent, `#world_ptick` avance d'un cran. Cela évite que les timers des minions s'incrémentent N fois par tick avec N joueurs connectés.
 
 `tick.mcfunction` existe mais ne contient que des commentaires (tag non fonctionnel, conservé pour compatibilité avec `data/minecraft/tags/function/tick.json`).
 
@@ -201,7 +205,7 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - **Espaces multiples dans les commandes** : en 26.2, le parser rejette les espaces consécutifs entre les tokens d'une commande (`cobblestone  set` ou `matches 1  run` → "Incorrect argument"). Utiliser un seul espace entre chaque token. **Ne jamais aligner visuellement les arguments avec des espaces.**
 - **Ingrédients de recette (recipe JSON)** : en 26.2, les ingrédients dans `key` doivent être une **string simple** (`"minecraft:cobblestone"`), pas un objet `{"id":"minecraft:cobblestone"}`. L'objet provoque `Not a string: {"id":...}` au chargement.
 - **`item_used_on_block` trigger** : en 26.2, ce trigger ne se déclenche que si l'item a une interaction réussie avec le bloc (shovel sur herbe → oui, pickaxe sur n'importe quoi → non). Pour une détection universelle, utiliser `consume_item` à la place.
-- **`consume_item` + `minecraft:consumable`** : en 26.2, `minecraft:consumable` seul ne déclenche pas `consume_item`. Il faut aussi ajouter `minecraft:food` (avec `nutrition:0, saturation:0.0`). Les deux composants ensemble permettent un clic droit "consommable" sans effet de nourriture réel.
+- **`consume_item` + `minecraft:consumable`** : en 26.2, `minecraft:consumable` seul ne déclenche pas `consume_item`. Il faut aussi ajouter `minecraft:food`. **`can_always_eat:true` est obligatoire** — sans lui, l'item ne peut pas être consommé quand la barre de faim est pleine, donc le trigger ne se déclenche jamais. Format complet : `minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true}` + `minecraft:consumable={consume_seconds:0.5f}`. S'applique aussi bien aux recettes JSON qu'aux commandes `give` dans les fonctions pickup.
 - **`build_island` dans `load.mcfunction`** : ne pas appeler `build_island` depuis `load.mcfunction` — cela réinitialise l'île à chaque `/reload` ou redémarrage, détruisant les constructions du joueur. `build_island` ne doit être appelé que depuis `player/first_join.mcfunction`.
 
 ## Phase Minions
@@ -231,15 +235,17 @@ Composants sur chaque item résultat :
 - `minecraft:custom_data` : `{"minion_type":"cobblestone","minion_tier":1}` — clé de détection pour l'advancement
 - `minecraft:unbreakable` : `{"show_in_tooltip":false}`
 - `minecraft:enchantment_glint_override` : `true`
+- `minecraft:food` : `{"nutrition":0,"saturation":0.0,"can_always_eat":true}` — **`can_always_eat:true` obligatoire** sinon l'item ne peut pas être posé quand la faim est pleine
+- `minecraft:consumable` : `{"consume_seconds":0.5}`
 
-Détection placement (à implémenter) : advancement `minecraft:item_used_on_block` filtrant `custom_data.minion_type`.
+Détection placement : advancement `consume_item` par type (`advancement/minion/place_<type>.json`), filtre `custom_data.minion_type`.
 
 ### Détection placement (data/minionskyblock/advancement/minion/ + function/minion/)
 
-- `advancement/minion/place_any.json` — trigger `item_used_on_block`, filtre `#minionskyblock:minion_items` (tag item), auto-revoking, reward → `minion/try_place`
-- `tags/item/minion_items.json` — liste les 5 base items (stone_pickaxe, stone_axe, stone_hoe, iron_pickaxe, stone_shovel)
-- `function/minion/try_place.mcfunction` — révoque l'advancement, puis dispatch vers `place_<type>` selon `custom_data~{minion_type:"..."}` en mainhand
-- `function/minion/place_<type>.mcfunction` — `clear` 1 item + `summon armor_stand` 1 bloc devant le joueur + title actionbar
+- `advancement/minion/place_<type>.json` (un par type) — trigger `consume_item`, filtre `custom_data.minion_type`, auto-revoking, reward → `minion/place_<type>`
+- `function/minion/place_<type>.mcfunction` — révoque advancement + `summon armor_stand` + `summon interaction` 1 bloc devant le joueur + title actionbar
+- `function/minion/pickup_<type>.mcfunction` — `kill` armor_stand nearby + `kill` interaction entity + `give @p` l'item minion + title
+- `advancement/minion/place_any.json` et `function/minion/try_place.mcfunction` : fichiers **obsolètes** (ancienne approche `item_used_on_block`), peuvent être supprimés
 
 Spawning : `execute at @s rotated ~ 0 positioned ^ ^ ^1 run summon minecraft:armor_stand ~ ~ ~` (1 bloc devant, même niveau Y, pitch forcé à 0 pour rester horizontal).
 
