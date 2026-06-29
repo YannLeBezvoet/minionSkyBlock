@@ -213,39 +213,52 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - Entité : Armor Stand taggé (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
 - Placement : item custom crafté → clic droit → fonction détecte via advancement et spawn l'Armor Stand
 - Tick central : une seule fonction itère sur tous les `@e[tag=minion]` (pas de schedule par entité)
-- Upgrades : retirer l'Armor Stand tier N, spawner tier N+1
-- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat
+- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat — Tier I et Tier II
 
 ### Storage minion (`minionskyblock:minion`)
 
-Chaque type de minion a une entrée dans ce storage (initialisé dans `load.mcfunction`).
+Les clés de storage sont au format `<type>_t<tier>` (ex. `cobblestone_t1`, `cobblestone_t2`).
 Champs par entrée :
 
-| Champ | Exemple (cobblestone) | Usage |
+| Champ | Exemple (cobblestone T1) | Usage |
 | --- | --- | --- |
-| `block` | `"minecraft:cobblestone"` | Bloc posé par le minion (behavior/tick) |
-| `timer` | `15` | Intervalle en ticks entre chaque pose |
+| `block` | `"minecraft:cobblestone"` | Bloc posé par le minion si pas de coffre adjacent |
+| `drop` | `"minecraft:cobblestone"` | Item inséré dans le coffre adjacent (peut différer du bloc, ex. iron_ore → raw_iron, hay_block → wheat) |
+| `timer` | `15` | Intervalle en ticks entre chaque action |
 | `tool` | `"minecraft:wooden_pickaxe"` | Item en main de l'armor stand |
 | `item` | `"minecraft:stone_pickaxe"` | Item rendu au joueur lors du pickup |
 | `color` | `"gray"` | Couleur du CustomName de l'armor stand |
 | `name` | `"Cobblestone Minion"` | Nom affiché (armor stand + messages) |
-| `type` | `"cobblestone"` | Clé de type — utilisée dans les tags et le nom de l'advancement |
+| `type` | `"cobblestone"` | Clé de type — utilisée dans les tags et les chemins de loot table |
+| `tier` | `1` | Numéro de tier (entier) — utilisé dans les tags et custom_data |
+| `tier_display` | `"I"` | Affichage roman numeral du tier dans le lore |
+| `placement_advancement` | `"place_cobblestone"` | Nom de l'advancement à révoquer après placement (relatif à `minionskyblock:minion/`) |
 
-Pour ajouter un type de minion :
+Timers par type et tier :
 
-1. Ajouter une entrée dans `load.mcfunction` : `data modify storage minionskyblock:minion <type> set value {block:...,timer:N,tool:...,item:...,color:...,name:...,type:"<type>"}`
-2. Créer `advancement/minion/place_<type>.json` (copier un existant, changer `minion_type`)
-3. Créer `function/minion/place_<type>.mcfunction` (1 ligne : `function minionskyblock:minion/place with storage minionskyblock:minion <type>`)
-4. Créer `function/minion/pickup_<type>.mcfunction` (1 ligne : `function minionskyblock:minion/pickup with storage minionskyblock:minion <type>`)
-5. Ajouter 1 ligne dans `minion/tick_all.mcfunction` : `execute as @e[tag=minion,tag=minion_<type>] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion <type>`
-6. Ajouter la détection pickup dans `player/on_tick.mcfunction` : `execute as @e[tag=minion_interact_<type>] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_<type>`
-7. Créer la recette `recipe/<type>_minion_t1.json`
+| Type | T1 | T2 |
+| --- | --- | --- |
+| cobblestone | 15 | 8 |
+| dirt | 10 | 5 |
+| oak_wood | 20 | 10 |
+| iron | 60 | 30 |
+| wheat | 20 | 10 |
+
+### Collecte dans coffre adjacent
+
+`behavior/tick.mcfunction` vérifie en priorité les 4 positions cardinales **au même niveau Y** que le minion (`~1 ~ ~`, `~-1 ~ ~`, `~ ~ ~1`, `~ ~ ~-1`). Si un coffre (`minecraft:chest`) est trouvé, `loot insert` dépose l'item via une loot table et retourne immédiatement. Si aucun coffre, comportement `setblock` habituel (8 positions autour à Y-1).
+
+Loot tables : `loot_table/minion/drop/<type>.json` (chemin résolution : `minionskyblock:minion/drop/<type>`).
+
+Drops par type : cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat.
+
+Si le coffre est plein, les items débordent au sol.
 
 ### Recettes de craft (data/minionskyblock/recipe/)
 
-Pattern commun — 8 matériaux + 1 outil au centre (table de craft 3×3) :
+**Tier I** — 8 matériaux + 1 outil au centre :
 
-| Fichier | Matériau (×8) | Outil centre | Résultat (base item) |
+| Fichier | Matériau (×8) | Centre | Résultat |
 | --- | --- | --- | --- |
 | `cobblestone_minion_t1.json` | cobblestone | wooden_pickaxe | stone_pickaxe |
 | `oak_minion_t1.json` | oak_log | wooden_axe | stone_axe |
@@ -253,34 +266,56 @@ Pattern commun — 8 matériaux + 1 outil au centre (table de craft 3×3) :
 | `iron_minion_t1.json` | iron_ingot | stone_pickaxe | iron_pickaxe |
 | `dirt_minion_t1.json` | dirt | wooden_shovel | stone_shovel |
 
+**Tier II** — 8 matériaux + iron_ingot au centre (diamond pour iron) :
+
+| Fichier | Matériau (×8) | Centre | Résultat |
+| --- | --- | --- | --- |
+| `cobblestone_minion_t2.json` | cobblestone | iron_ingot | iron_pickaxe |
+| `oak_minion_t2.json` | oak_log | iron_ingot | iron_axe |
+| `wheat_minion_t2.json` | wheat_seeds | iron_ingot | iron_hoe |
+| `iron_minion_t2.json` | iron_ingot | diamond | diamond_pickaxe |
+| `dirt_minion_t2.json` | dirt | iron_ingot | iron_shovel |
+
 Composants sur chaque item résultat :
 
-- `minecraft:custom_name` : nom coloré (ex. `{"text":"Cobblestone Minion","color":"gray","italic":false}`)
-- `minecraft:lore` : `["Tier I" (gold), "Clic droit pour placer..." (dark_gray)]`
-- `minecraft:custom_data` : `{"minion_type":"cobblestone","minion_tier":1}` — clé de détection pour l'advancement
+- `minecraft:custom_name` : nom coloré
+- `minecraft:lore` : `["Tier I"/"Tier II" (gold), "Clic droit pour placer..." (dark_gray), "Clic gauche pour ramasser." (dark_gray)]`
+- `minecraft:custom_data` : `{"minion_type":"cobblestone","minion_tier":1}` — filtre des advancements
 - `minecraft:unbreakable` : `{"show_in_tooltip":false}`
 - `minecraft:enchantment_glint_override` : `true`
-- `minecraft:food` : `{"nutrition":0,"saturation":0.0,"can_always_eat":true}` — **`can_always_eat:true` obligatoire** sinon l'item ne peut pas être posé quand la faim est pleine
+- `minecraft:food` : `{"nutrition":0,"saturation":0.0,"can_always_eat":true}` — **`can_always_eat:true` obligatoire**
 - `minecraft:consumable` : `{"consume_seconds":0.5}`
 
-Détection placement : advancement `consume_item` par type (`advancement/minion/place_<type>.json`), filtre `custom_data.minion_type`.
+### Détection placement (advancement/minion/ + function/minion/)
 
-### Détection placement (data/minionskyblock/advancement/minion/ + function/minion/)
+- `advancement/minion/place_<type>.json` — filtre `{minion_type:"...", minion_tier:1}`, reward → `minion/place_<type>`
+- `advancement/minion/place_<type>_t2.json` — filtre `{minion_type:"...", minion_tier:2}`, reward → `minion/place_<type>_t2`
+- `function/minion/place_<type>[_t2].mcfunction` — **1 ligne** : `function minionskyblock:minion/place with storage minionskyblock:minion <type>_t[12]`
+- `function/minion/place.mcfunction` — **macro générique** : révoque `$(placement_advancement)` + summon armor_stand avec `tier_$(tier)` tag + summon interaction avec `tier_$(tier)` tag + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(tool)`, `$(tier)`, `$(placement_advancement)`
+- `function/minion/pickup_<type>[_t2].mcfunction` — **1 ligne** vers storage correspondant
+- `function/minion/pickup.mcfunction` — **macro générique** : kill armor_stand `tag=minion_$(type),tag=tier_$(tier)` + give item + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(item)`, `$(tier)`, `$(tier_display)`
 
-- `advancement/minion/place_<type>.json` (un par type) — trigger `consume_item`, filtre `custom_data.minion_type`, auto-revoking, reward → `minion/place_<type>`
-- `function/minion/place_<type>.mcfunction` — **1 ligne** : `function minionskyblock:minion/place with storage minionskyblock:minion <type>`
-- `function/minion/place.mcfunction` — **macro générique** : révoque advancement `place_$(type)` + summon armor_stand + summon interaction + title actionbar. Variables : `$(type)`, `$(name)`, `$(color)`, `$(tool)`
-- `function/minion/pickup_<type>.mcfunction` — **1 ligne** : `function minionskyblock:minion/pickup with storage minionskyblock:minion <type>`
-- `function/minion/pickup.mcfunction` — **macro générique** : kill armor_stand `minion_$(type)` + give item avec composants + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(item)`. Le lore est identique pour tous et est hardcodé.
-- `advancement/minion/place_any.json` et `function/minion/try_place.mcfunction` : fichiers **obsolètes** (ancienne approche `item_used_on_block`), peuvent être supprimés
+**Rétrocompatibilité** : les minions placés avant l'ajout des tiers (interaction entity sans `tier_<n>` tag) sont traités comme T1 via `unless entity @s[tag=tier_2]` dans `on_tick.mcfunction`.
 
-Spawning : `execute at @s rotated ~ 0 positioned ^ ^ ^1 run summon minecraft:armor_stand ~ ~ ~` (1 bloc devant, même niveau Y, pitch forcé à 0 pour rester horizontal).
+Armor stand NBT : `Tags:["minion","minion_<type>","tier_<n>"]`, `Small:1b`, `ShowArms:1b`, `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `equipment:{mainhand:{id:"...",count:1}}`. **Ne pas utiliser `HandItems`/`HandDropChances`** — remplacés par `equipment` en 26.2.
 
-Armor stand NBT : `Tags:["minion","minion_<type>","tier_1"]`, `Small:1b`, `ShowArms:1b` (obligatoire pour afficher les bras), `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `equipment:{mainhand:{id:"...",count:1}}`. **Ne pas utiliser `HandItems`/`HandDropChances`** — remplacés par `equipment` en 26.2 (ignorés silencieusement).
+Interaction entity NBT : `Tags:["minion_interact","minion_interact_<type>","tier_<n>"]`.
+
+### Pour ajouter un nouveau type de minion
+
+1. Ajouter les entrées T1 et T2 dans `load.mcfunction` (avec tous les champs : `block`, `drop`, `timer`, `tool`, `item`, `color`, `name`, `type`, `tier`, `tier_display`, `placement_advancement`)
+2. Créer `loot_table/minion/drop/<type>.json`
+3. Créer `advancement/minion/place_<type>.json` et `place_<type>_t2.json`
+4. Créer `function/minion/place_<type>.mcfunction`, `place_<type>_t2.mcfunction`, `pickup_<type>.mcfunction`, `pickup_<type>_t2.mcfunction` (1 ligne chacun)
+5. Ajouter 2 lignes dans `tick_all.mcfunction` (T1 avec `unless entity @s[tag=tier_2]`, T2 avec `tag=tier_2`)
+6. Ajouter 4 lignes dans `on_tick.mcfunction` (T1 + T2 pour pickup, avec `unless entity @s[tag=tier_2]` pour T1)
+7. Créer les recettes `recipe/<type>_minion_t1.json` et `recipe/<type>_minion_t2.json`
 
 ### Prochaines étapes Minions
 
 1. ~~Recettes de craft~~ ✓
 2. ~~Advancement placement + spawn Armor Stand~~ ✓
 3. ~~`minion/tick_all.mcfunction` + comportements de base~~ ✓
-4. Collecte dans coffre adjacent (optionnel), upgrades tier 2+
+4. ~~Collecte dans coffre adjacent~~ ✓
+5. ~~Upgrades tier 2~~ ✓
+6. Tier 3+ (optionnel), upgrades in-place sans ramasser
