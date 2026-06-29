@@ -20,7 +20,7 @@ data/
       first_join.json              ← trigger:tick, reward → player/first_join
       tick_loop.json               ← trigger:tick, reward → player/on_tick (auto-révocatrice)
     function/
-      load.mcfunction              ← scoreboards + setworldspawn + init storage shop
+      load.mcfunction              ← scoreboards + setworldspawn + init storage minion + init storage shop
       tick.mcfunction              ← commentaires seulement (tag non fonctionnel en 26.2)
       player/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
@@ -214,7 +214,32 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - Placement : item custom crafté → clic droit → fonction détecte via advancement et spawn l'Armor Stand
 - Tick central : une seule fonction itère sur tous les `@e[tag=minion]` (pas de schedule par entité)
 - Upgrades : retirer l'Armor Stand tier N, spawner tier N+1
-- Types à implémenter : cobblestone (priorité 1), oak_wood, wheat, iron
+- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat
+
+### Storage minion (`minionskyblock:minion`)
+
+Chaque type de minion a une entrée dans ce storage (initialisé dans `load.mcfunction`).
+Champs par entrée :
+
+| Champ | Exemple (cobblestone) | Usage |
+| --- | --- | --- |
+| `block` | `"minecraft:cobblestone"` | Bloc posé par le minion (behavior/tick) |
+| `timer` | `15` | Intervalle en ticks entre chaque pose |
+| `tool` | `"minecraft:wooden_pickaxe"` | Item en main de l'armor stand |
+| `item` | `"minecraft:stone_pickaxe"` | Item rendu au joueur lors du pickup |
+| `color` | `"gray"` | Couleur du CustomName de l'armor stand |
+| `name` | `"Cobblestone Minion"` | Nom affiché (armor stand + messages) |
+| `type` | `"cobblestone"` | Clé de type — utilisée dans les tags et le nom de l'advancement |
+
+Pour ajouter un type de minion :
+
+1. Ajouter une entrée dans `load.mcfunction` : `data modify storage minionskyblock:minion <type> set value {block:...,timer:N,tool:...,item:...,color:...,name:...,type:"<type>"}`
+2. Créer `advancement/minion/place_<type>.json` (copier un existant, changer `minion_type`)
+3. Créer `function/minion/place_<type>.mcfunction` (1 ligne : `function minionskyblock:minion/place with storage minionskyblock:minion <type>`)
+4. Créer `function/minion/pickup_<type>.mcfunction` (1 ligne : `function minionskyblock:minion/pickup with storage minionskyblock:minion <type>`)
+5. Ajouter 1 ligne dans `minion/tick_all.mcfunction` : `execute as @e[tag=minion,tag=minion_<type>] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion <type>`
+6. Ajouter la détection pickup dans `player/on_tick.mcfunction` : `execute as @e[tag=minion_interact_<type>] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_<type>`
+7. Créer la recette `recipe/<type>_minion_t1.json`
 
 ### Recettes de craft (data/minionskyblock/recipe/)
 
@@ -243,8 +268,10 @@ Détection placement : advancement `consume_item` par type (`advancement/minion/
 ### Détection placement (data/minionskyblock/advancement/minion/ + function/minion/)
 
 - `advancement/minion/place_<type>.json` (un par type) — trigger `consume_item`, filtre `custom_data.minion_type`, auto-revoking, reward → `minion/place_<type>`
-- `function/minion/place_<type>.mcfunction` — révoque advancement + `summon armor_stand` + `summon interaction` 1 bloc devant le joueur + title actionbar
-- `function/minion/pickup_<type>.mcfunction` — `kill` armor_stand nearby + `kill` interaction entity + `give @p` l'item minion + title
+- `function/minion/place_<type>.mcfunction` — **1 ligne** : `function minionskyblock:minion/place with storage minionskyblock:minion <type>`
+- `function/minion/place.mcfunction` — **macro générique** : révoque advancement `place_$(type)` + summon armor_stand + summon interaction + title actionbar. Variables : `$(type)`, `$(name)`, `$(color)`, `$(tool)`
+- `function/minion/pickup_<type>.mcfunction` — **1 ligne** : `function minionskyblock:minion/pickup with storage minionskyblock:minion <type>`
+- `function/minion/pickup.mcfunction` — **macro générique** : kill armor_stand `minion_$(type)` + give item avec composants + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(item)`. Le lore est identique pour tous et est hardcodé.
 - `advancement/minion/place_any.json` et `function/minion/try_place.mcfunction` : fichiers **obsolètes** (ancienne approche `item_used_on_block`), peuvent être supprimés
 
 Spawning : `execute at @s rotated ~ 0 positioned ^ ^ ^1 run summon minecraft:armor_stand ~ ~ ~` (1 bloc devant, même niveau Y, pitch forcé à 0 pour rester horizontal).
