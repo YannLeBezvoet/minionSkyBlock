@@ -20,7 +20,7 @@ Trois piliers fondamentaux :
 - Détection du premier join via advancement (`minecraft:tick`)
 - Scoreboards `skyblock_joined` et `skyblock_coins`
 
-### Phase 2 — Économie
+### Phase 2 — Économie ✅
 
 - Système de monnaie via scoreboard `skyblock_coins`
 - Mécanique de vente : drop d'un item dans une zone définie → conversion en coins
