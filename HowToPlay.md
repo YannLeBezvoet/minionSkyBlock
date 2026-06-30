@@ -26,20 +26,32 @@ Les recettes se font dans une **table de craft standard** (9 cases). La forme es
 
 ```
 M M M
-M T M
+M C M
 M M M
 ```
 
-- **M** = 8× le matériau principal du Minion
-- **T** = l'outil au centre
+- **M** = 8× le matériau principal
+- **C** = **torche de redstone** pour le Tier I / **bloc de redstone** pour le Tier II
 
-| Minion | Matériau (×8) | Outil (T1) | Outil (T2) |
-|---|---|---|---|
-| Cobblestone | Cobblestone | Pioche en bois | Lingot de fer |
-| Chêne | Oak Log | Hache en bois | Lingot de fer |
-| Blé | Wheat Seeds | Houe en bois | Lingot de fer |
-| Fer | Iron Ingot | Pioche en pierre | Diamant |
-| Terre | Dirt | Pelle en bois | Lingot de fer |
+Le matériau suit une logique de progression :
+
+- **Tier I** : forme traitée/fondue (lingot, poudre, item récolté)
+- **Tier II** : forme bloc (bloc de fer, bloc de charbon, hay block…)
+
+| Minion | Matériau T1 (×8) | Matériau T2 (×8) |
+|---|---|---|
+| Cobblestone | Cobblestone | Stone |
+| Chêne | Oak Planks | Oak Log |
+| Blé | Wheat | Hay Block |
+| Fer | Iron Ingot | Iron Block |
+| Terre | Dirt | Mud |
+| Charbon | Coal | Coal Block |
+| Cuivre | Copper Ingot | Copper Block |
+| Or | Gold Ingot | Gold Block |
+| Redstone | Redstone | Redstone Block (×9) |
+| Lapis | Lapis Lazuli | Lapis Block |
+| Diamant | Diamond | Diamond Block |
+| Émeraude | Emerald | Emerald Block |
 
 > Le résultat est un item spécial avec un nom coloré et un reflet enchanté — c'est ton Minion à placer.
 
@@ -62,12 +74,22 @@ Tu récupères un item Minion dans ton inventaire, prêt à être reposé ailleu
 
 Chaque Minion existe en **Tier I** et **Tier II**. Le Tier II est plus rapide et a un meilleur outil.
 
-| | Cobblestone | Chêne | Blé | Fer | Terre |
-|---|---|---|---|---|---|
-| T1 (intervalle) | 15 ticks | 20 ticks | 20 ticks | 60 ticks | 10 ticks |
-| T2 (intervalle) | 8 ticks | 10 ticks | 10 ticks | 30 ticks | 5 ticks |
+| Minion | T1 (intervalle) | T2 (intervalle) |
+|---|---|---|
+| Cobblestone | 15 ticks | 8 ticks |
+| Chêne | 20 ticks | 10 ticks |
+| Blé | 20 ticks | 10 ticks |
+| Fer | 60 ticks | 30 ticks |
+| Terre | 10 ticks | 5 ticks |
+| Charbon | 30 ticks | 15 ticks |
+| Cuivre | 40 ticks | 20 ticks |
+| Or | 60 ticks | 30 ticks |
+| Redstone | 45 ticks | 22 ticks |
+| Lapis | 45 ticks | 22 ticks |
+| Diamant | 120 ticks | 60 ticks |
+| Émeraude | 120 ticks | 60 ticks |
 
-Pour crafter un T2, utilise la même forme de craft mais avec un outil plus puissant au centre (voir tableau ci-dessus).
+Pour crafter un T2, remplace la torche de redstone par un **bloc de redstone** et les matériaux par leur forme bloc.
 
 ---
 
@@ -131,13 +153,16 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 
 ## Progression suggérée
 
-1. **Cobblestone Minion T1** en premier — ressource de base, recette peu coûteuse
+1. **Cobblestone Minion T1** en premier — recette peu coûteuse (8 cobblestones + torche de redstone)
 2. Vends la cobblestone pour acheter des graines et du bois supplémentaire
-3. **Wheat Minion** pour générer du blé à vendre
-4. **Oak Wood Minion** pour le bois (utile pour d'autres crafts)
-5. Améliore tes Minions en T2 pour doubler leur vitesse
-6. **Iron Minion** en fin de progression — coûteux à crafter mais génère du raw iron à 20 ¢/u
-7. Place des coffres à côté de tes Minions pour une collecte automatique
+3. **Coal Minion T1** — génère du charbon vendable, facile à crafter
+4. **Wheat Minion T1** — blé à vendre, craft avec 8 blés + torche de redstone
+5. **Oak Wood Minion T1** — planches au lieu de logs pour le T1
+6. Améliore tes premiers Minions en **T2** (matériaux en blocs + bloc de redstone)
+7. **Iron Minion** — coûteux à crafter (8 lingots de fer) mais génère du raw iron
+8. **Gold / Redstone / Lapis Minions** — minerais intermédiaires, nécessitent de vrais lingots ou poudres
+9. **Diamond / Emerald Minions** — endgame, recettes très coûteuses mais drops précieux
+10. Place des **coffres** à côté de tes Minions pour une collecte automatique sans intervention
 
 ---
 

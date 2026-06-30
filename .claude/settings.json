@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | { read -r f; echo \"$f\" | grep -qE '\\.(mcfunction)$|/recipe/[^/]+\\.json$' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"REMINDER gameplay file modified — si ce changement impacte le joueur (craft, minion, economie, timers, prix de vente), mettre a jour HowToPlay.md avant de terminer.\"}}' || true; }"
+          }
+        ]
+      }
+    ]
+  }
+}

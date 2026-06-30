@@ -14,8 +14,9 @@ Déploiement : `./update.sh` → copie vers `~/.minecraft/saves/New World/datapa
 **Implémenté :**
 - Île de spawn + coffre de départ + arbre
 - Économie : vente auto (coffre -7 66 0), boutique NPC (clic sur l'entité interaction)
-- Minions T1 + T2 : cobblestone, dirt, oak_wood, iron, wheat
-- Craft des minions (recettes JSON), placement (advancement consume_item), pickup (clic gauche)
+- Minions T1 + T2 : cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald
+- Craft des minions (recettes JSON) : centre redstone_torch (T1) / redstone_block (T2), matériaux T2 en forme bloc
+- Placement (advancement consume_item), pickup (clic gauche)
 - Coffre adjacent : le minion dépose via `loot insert` en priorité
 
 **Prochaines étapes notées dans CLAUDE.md :**

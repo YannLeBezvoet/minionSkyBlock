@@ -213,7 +213,7 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 - Entité : Armor Stand taggé (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
 - Placement : item custom crafté → clic droit → fonction détecte via advancement et spawn l'Armor Stand
 - Tick central : une seule fonction itère sur tous les `@e[tag=minion]` (pas de schedule par entité)
-- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat — Tier I et Tier II
+- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald — Tier I et Tier II
 
 ### Storage minion (`minionskyblock:minion`)
 
@@ -243,6 +243,13 @@ Timers par type et tier :
 | oak_wood | 20 | 10 |
 | iron | 60 | 30 |
 | wheat | 20 | 10 |
+| coal | 30 | 15 |
+| copper | 40 | 20 |
+| gold | 60 | 30 |
+| redstone | 45 | 22 |
+| lapis | 45 | 22 |
+| diamond | 120 | 60 |
+| emerald | 120 | 60 |
 
 ### Collecte dans coffre adjacent
 
@@ -250,31 +257,47 @@ Timers par type et tier :
 
 Loot tables : `loot_table/minion/drop/<type>.json` (chemin résolution : `minionskyblock:minion/drop/<type>`).
 
-Drops par type : cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat.
+Drops par type : cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald.
 
 Si le coffre est plein, les items débordent au sol.
 
 ### Recettes de craft (data/minionskyblock/recipe/)
 
-**Tier I** — 8 matériaux + 1 outil au centre :
+Centre universel : **redstone_torch** pour tous les T1, **redstone_block** pour tous les T2.
 
-| Fichier | Matériau (×8) | Centre | Résultat |
-| --- | --- | --- | --- |
-| `cobblestone_minion_t1.json` | cobblestone | wooden_pickaxe | stone_pickaxe |
-| `oak_minion_t1.json` | oak_log | wooden_axe | stone_axe |
-| `wheat_minion_t1.json` | wheat_seeds | wooden_hoe | stone_hoe |
-| `iron_minion_t1.json` | iron_ingot | stone_pickaxe | iron_pickaxe |
-| `dirt_minion_t1.json` | dirt | wooden_shovel | stone_shovel |
+**Tier I** — 8× matériau (forme traitée/fondue) + redstone_torch au centre :
 
-**Tier II** — 8 matériaux + iron_ingot au centre (diamond pour iron) :
+| Fichier | Matériau (×8) | Résultat |
+| --- | --- | --- |
+| `cobblestone_minion_t1.json` | cobblestone | stone_pickaxe |
+| `oak_minion_t1.json` | oak_planks | stone_axe |
+| `wheat_minion_t1.json` | wheat | stone_hoe |
+| `iron_minion_t1.json` | iron_ingot | iron_pickaxe |
+| `dirt_minion_t1.json` | dirt | stone_shovel |
+| `coal_minion_t1.json` | coal | stone_pickaxe |
+| `copper_minion_t1.json` | copper_ingot | stone_pickaxe |
+| `gold_minion_t1.json` | gold_ingot | iron_pickaxe |
+| `redstone_minion_t1.json` | redstone | iron_pickaxe |
+| `lapis_minion_t1.json` | lapis_lazuli | iron_pickaxe |
+| `diamond_minion_t1.json` | diamond | diamond_pickaxe |
+| `emerald_minion_t1.json` | emerald | diamond_pickaxe |
 
-| Fichier | Matériau (×8) | Centre | Résultat |
-| --- | --- | --- | --- |
-| `cobblestone_minion_t2.json` | cobblestone | iron_ingot | iron_pickaxe |
-| `oak_minion_t2.json` | oak_log | iron_ingot | iron_axe |
-| `wheat_minion_t2.json` | wheat_seeds | iron_ingot | iron_hoe |
-| `iron_minion_t2.json` | iron_ingot | diamond | diamond_pickaxe |
-| `dirt_minion_t2.json` | dirt | iron_ingot | iron_shovel |
+**Tier II** — 8× matériau (forme bloc) + redstone_block au centre :
+
+| Fichier | Matériau (×8) | Résultat |
+| --- | --- | --- |
+| `cobblestone_minion_t2.json` | stone | iron_pickaxe |
+| `oak_minion_t2.json` | oak_log | iron_axe |
+| `wheat_minion_t2.json` | hay_block | iron_hoe |
+| `iron_minion_t2.json` | iron_block | diamond_pickaxe |
+| `dirt_minion_t2.json` | mud | iron_shovel |
+| `coal_minion_t2.json` | coal_block | iron_pickaxe |
+| `copper_minion_t2.json` | copper_block | iron_pickaxe |
+| `gold_minion_t2.json` | gold_block | diamond_pickaxe |
+| `redstone_minion_t2.json` | redstone_block (×9 — centre inclus) | diamond_pickaxe |
+| `lapis_minion_t2.json` | lapis_block | diamond_pickaxe |
+| `diamond_minion_t2.json` | diamond_block | diamond_pickaxe |
+| `emerald_minion_t2.json` | emerald_block | diamond_pickaxe |
 
 Composants sur chaque item résultat :
 
