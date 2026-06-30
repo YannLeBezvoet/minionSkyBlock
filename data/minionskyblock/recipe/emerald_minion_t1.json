@@ -2,26 +2,26 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "III",
-    "IDI",
-    "III"
+    "EEE",
+    "ERE",
+    "EEE"
   ],
   "key": {
-    "I": "minecraft:iron_block",
-    "D": "minecraft:redstone_block"
+    "E": "minecraft:emerald",
+    "R": "minecraft:redstone_torch"
   },
   "result": {
     "id": "minecraft:diamond_pickaxe",
     "count": 1,
     "components": {
       "minecraft:custom_name": {
-        "text": "Iron Minion",
-        "color": "white",
+        "text": "Emerald Minion",
+        "color": "green",
         "italic": false
       },
       "minecraft:lore": [
         {
-          "text": "Tier II",
+          "text": "Tier I",
           "color": "gold",
           "italic": false
         },
@@ -37,8 +37,8 @@
         }
       ],
       "minecraft:custom_data": {
-        "minion_type": "iron",
-        "minion_tier": 2
+        "minion_type": "emerald",
+        "minion_tier": 1
       },
       "minecraft:unbreakable": {
         "show_in_tooltip": false

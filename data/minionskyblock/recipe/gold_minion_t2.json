@@ -2,21 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "III",
-    "IDI",
-    "III"
+    "GGG",
+    "GRG",
+    "GGG"
   ],
   "key": {
-    "I": "minecraft:iron_block",
-    "D": "minecraft:redstone_block"
+    "G": "minecraft:gold_block",
+    "R": "minecraft:redstone_block"
   },
   "result": {
     "id": "minecraft:diamond_pickaxe",
     "count": 1,
     "components": {
       "minecraft:custom_name": {
-        "text": "Iron Minion",
-        "color": "white",
+        "text": "Gold Minion",
+        "color": "yellow",
         "italic": false
       },
       "minecraft:lore": [
@@ -37,7 +37,7 @@
         }
       ],
       "minecraft:custom_data": {
-        "minion_type": "iron",
+        "minion_type": "gold",
         "minion_tier": 2
       },
       "minecraft:unbreakable": {

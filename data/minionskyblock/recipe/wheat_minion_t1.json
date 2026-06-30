@@ -7,8 +7,8 @@
     "SSS"
   ],
   "key": {
-    "S": "minecraft:wheat_seeds",
-    "H": "minecraft:wooden_hoe"
+    "S": "minecraft:wheat",
+    "H": "minecraft:redstone_torch"
   },
   "result": {
     "id": "minecraft:stone_hoe",

@@ -7,8 +7,8 @@
     "CCC"
   ],
   "key": {
-    "C": "minecraft:cobblestone",
-    "I": "minecraft:iron_ingot"
+    "C": "minecraft:stone",
+    "I": "minecraft:redstone_block"
   },
   "result": {
     "id": "minecraft:iron_pickaxe",

@@ -7,8 +7,8 @@
     "DDD"
   ],
   "key": {
-    "D": "minecraft:dirt",
-    "I": "minecraft:iron_ingot"
+    "D": "minecraft:mud",
+    "I": "minecraft:redstone_block"
   },
   "result": {
     "id": "minecraft:iron_shovel",

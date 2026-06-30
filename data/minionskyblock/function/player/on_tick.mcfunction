@@ -18,6 +18,20 @@ execute as @e[tag=minion_interact_oak_wood] unless entity @s[tag=tier_2] if data
 execute as @e[tag=minion_interact_oak_wood,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_oak_wood_t2
 execute as @e[tag=minion_interact_wheat] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_wheat
 execute as @e[tag=minion_interact_wheat,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_wheat_t2
+execute as @e[tag=minion_interact_coal] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_coal
+execute as @e[tag=minion_interact_coal,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_coal_t2
+execute as @e[tag=minion_interact_copper] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_copper
+execute as @e[tag=minion_interact_copper,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_copper_t2
+execute as @e[tag=minion_interact_gold] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gold
+execute as @e[tag=minion_interact_gold,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gold_t2
+execute as @e[tag=minion_interact_redstone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_redstone
+execute as @e[tag=minion_interact_redstone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_redstone_t2
+execute as @e[tag=minion_interact_lapis] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_lapis
+execute as @e[tag=minion_interact_lapis,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_lapis_t2
+execute as @e[tag=minion_interact_diamond] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_diamond
+execute as @e[tag=minion_interact_diamond,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_diamond_t2
+execute as @e[tag=minion_interact_emerald] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald
+execute as @e[tag=minion_interact_emerald,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald_t2
 
 # Avance le compteur global d'un cran une seule fois par tick serveur (gametime identique pour tous les joueurs dans un même tick)
 execute store result score #tick_now skyblock_temp run time query gametime

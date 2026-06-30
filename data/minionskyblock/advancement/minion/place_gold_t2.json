@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "consumed": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": {"minion_type": "gold", "minion_tier": 2}
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "minionskyblock:minion/place_gold_t2"
+  }
+}

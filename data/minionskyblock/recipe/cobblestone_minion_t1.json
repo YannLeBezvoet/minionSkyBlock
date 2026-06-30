@@ -8,7 +8,7 @@
   ],
   "key": {
     "C": "minecraft:cobblestone",
-    "P": "minecraft:wooden_pickaxe"
+    "P": "minecraft:redstone_torch"
   },
   "result": {
     "id": "minecraft:stone_pickaxe",

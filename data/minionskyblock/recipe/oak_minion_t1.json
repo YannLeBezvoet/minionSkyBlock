@@ -7,8 +7,8 @@
     "LLL"
   ],
   "key": {
-    "L": "minecraft:oak_log",
-    "A": "minecraft:wooden_axe"
+    "L": "minecraft:oak_planks",
+    "A": "minecraft:redstone_torch"
   },
   "result": {
     "id": "minecraft:stone_axe",

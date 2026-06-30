@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "consumed": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": {"minion_type": "lapis", "minion_tier": 1}
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "minionskyblock:minion/place_lapis"
+  }
+}
