@@ -10,6 +10,7 @@ execute if score @s skyblock_shop matches 7 run function minionskyblock:economy/
 execute if score @s skyblock_shop matches 8 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop iron_ingot
 execute if score @s skyblock_shop matches 9 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop oak_sapling
 execute if score @s skyblock_shop matches 10 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop torch
+execute if score @s skyblock_shop matches 11 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop redstone
 
 execute if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Coins insuffisants !","color":"red"}
 
