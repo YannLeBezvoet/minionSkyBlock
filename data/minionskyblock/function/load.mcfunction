@@ -7,6 +7,7 @@ scoreboard objectives add skyblock_ptick dummy
 scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
+gamerule randomTickSpeed 10
 
 execute unless block 0 65 0 minecraft:grass_block run function minionskyblock:world/build_island
 

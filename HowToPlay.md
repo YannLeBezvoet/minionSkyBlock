@@ -172,3 +172,4 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 - Le coffre de vente est **incassable** — si quelqu'un le détruit, il se repose automatiquement.
 - Les Minions fonctionnent **même quand tu n'es pas connecté** tant que le serveur tourne.
 - Tu peux placer **autant de Minions que tu veux** sur ton île.
+- Les cultures et les arbres **poussent plus vite** que dans un monde normal (randomTickSpeed x3).
