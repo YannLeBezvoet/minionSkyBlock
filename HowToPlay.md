@@ -118,7 +118,6 @@ Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or fl
 | Bone, String | 6 ¢ |
 | Coal | 6 ¢ |
 | Apple | 8 ¢ |
-| Oak Sapling | 10 ¢ |
 | Bread | 12 ¢ |
 | Iron Ingot | 20 ¢ |
 | Gold Ingot | 32 ¢ |
