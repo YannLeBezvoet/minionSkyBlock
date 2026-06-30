@@ -109,7 +109,7 @@ Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or fl
 
 | Item | Prix |
 |---|---|
-| Cobblestone, Dirt | 1 ¢ |
+| Par défaut | 1 ¢ |
 | Sand, Gravel, Wheat Seeds | 2 ¢ |
 | Wheat | 4 ¢ |
 | Oak Log (et autres logs) | 5 ¢ |
