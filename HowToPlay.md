@@ -124,6 +124,8 @@ Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or fl
 | Gold Ingot | 32 ¢ |
 | Emerald | 40 ¢ |
 | Diamond | 80 ¢ |
+| Golden Apple | 100 ¢ |
+| Enchanted Golden Apple | 250 ¢ |
 
 > Tout autre item vaut 1 ¢ par défaut.
 
@@ -173,3 +175,4 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 - Les Minions fonctionnent **même quand tu n'es pas connecté** tant que le serveur tourne.
 - Tu peux placer **autant de Minions que tu veux** sur ton île.
 - Les cultures et les arbres **poussent plus vite** que dans un monde normal (randomTickSpeed x3).
+- Les feuilles de chêne ont une chance de dropper une **Golden Apple** (1%) ou une **Enchanted Golden Apple** (0.5%) en plus des saplings et pommes habituels.

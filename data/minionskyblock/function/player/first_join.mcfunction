@@ -1,6 +1,9 @@
 scoreboard players set @s skyblock_joined 1
 scoreboard players set @s skyblock_coins 0
 
+forceload add -16 -16 15 15
+execute unless block 0 65 0 minecraft:grass_block run function minionskyblock:world/build_island
+
 teleport @s 0.5 66 0.5 0 0
 spawnpoint @s 0 66 0
 

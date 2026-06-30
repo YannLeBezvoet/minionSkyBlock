@@ -7,9 +7,7 @@ scoreboard objectives add skyblock_ptick dummy
 scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
-gamerule randomTickSpeed 15
-
-execute unless block 0 65 0 minecraft:grass_block run function minionskyblock:world/build_island
+gamerule random_tick_speed 15
 
 # Config minions Tier 1
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1,tier_display:"I",placement_advancement:"place_cobblestone"}
