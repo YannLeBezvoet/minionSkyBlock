@@ -1,12 +1,20 @@
-fill -5 60 -5 5 75 5 minecraft:air
+fill -7 60 -7 7 75 7 minecraft:air
 
-fill -3 64 -2 3 64 2 minecraft:dirt
-fill -2 64 -3 2 64 3 minecraft:dirt
-fill -4 64 -1 4 64 1 minecraft:dirt
+fill -5 62 -4 5 62 4 minecraft:cobblestone
+fill -4 62 -5 4 62 5 minecraft:cobblestone
+fill -6 62 -3 6 62 3 minecraft:cobblestone
 
-fill -3 65 -2 3 65 2 minecraft:grass_block
-fill -2 65 -3 2 65 3 minecraft:grass_block
-fill -4 65 -1 4 65 1 minecraft:grass_block
+fill -5 63 -4 5 63 4 minecraft:dirt
+fill -4 63 -5 4 63 5 minecraft:dirt
+fill -6 63 -3 6 63 3 minecraft:dirt
+
+fill -5 64 -4 5 64 4 minecraft:dirt
+fill -4 64 -5 4 64 5 minecraft:dirt
+fill -6 64 -3 6 64 3 minecraft:dirt
+
+fill -5 65 -4 5 65 4 minecraft:grass_block
+fill -4 65 -5 4 65 5 minecraft:grass_block
+fill -6 65 -3 6 65 3 minecraft:grass_block
 
 fill 2 66 1 2 69 1 minecraft:oak_log
 fill 0 69 -1 3 70 3 minecraft:oak_leaves[persistent=true]
@@ -18,10 +26,10 @@ kill @e[tag=sell_display,type=minecraft:item_display]
 kill @e[tag=shop_npc]
 kill @e[tag=shop_npc_interaction]
 
-fill -9 65 -1 -6 65 1 minecraft:bedrock
-setblock -7 66 0 minecraft:chest[facing=east]
+fill -10 65 -1 -7 65 1 minecraft:bedrock
+setblock -8 66 0 minecraft:chest[facing=east]
 
-summon minecraft:item_display -7 67.8 0 {Tags:["sell_display"],item:{id:"minecraft:gold_ingot",count:1},billboard:"center"}
+summon minecraft:item_display -8 67.8 0 {Tags:["sell_display"],item:{id:"minecraft:gold_ingot",count:1},billboard:"center"}
 
 fill 7 65 -1 10 65 1 minecraft:bedrock
 summon minecraft:villager 9 66 0 {Tags:["shop_npc"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Marchand",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:cleric",type:"minecraft:plains",level:2}}

@@ -44,9 +44,9 @@ data/
 | Surface île (herbe) | Y=65 |
 | Coffre de départ | -2 66 0 |
 | Arbre (tronc base) | 2 66 1 |
-| Plateforme bedrock (station vente) | -9 à -6, Y=65, Z=-1 à 1 |
-| Coffre de vente (incassable) | -7 66 0 |
-| Item display (lingot d'or flottant) | -7 67.8 0 |
+| Plateforme bedrock (station vente) | -10 à -7, Y=65, Z=-1 à 1 |
+| Coffre de vente (incassable) | -8 66 0 |
+| Item display (lingot d'or flottant) | -8 67.8 0 |
 
 ## Scoreboards
 

@@ -4,8 +4,8 @@ execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_f
 execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_fix2
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:stone
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run tag @s add skyblock_light_fix2
-execute unless block -7 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-7,y=66,z=0,distance=..3]
-execute unless block -7 66 0 minecraft:chest run setblock -7 66 0 minecraft:chest[facing=east]
+execute unless block -8 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-8,y=66,z=0,distance=..3]
+execute unless block -8 66 0 minecraft:chest run setblock -8 66 0 minecraft:chest[facing=east]
 
 execute as @e[tag=shop_npc_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked
 execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_cobblestone
