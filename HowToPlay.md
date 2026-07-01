@@ -147,9 +147,24 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 
 > Si tu n'as pas assez de Coins, l'achat est refusé sans débit.
 
+### Acheter des minerais au Mineur
+
+Juste à côté (à droite) du Marchand se trouve un second PNJ, le **Mineur**. Il vend des minerais bruts à l'unité — pratique pour compléter les drops de tes minions sans devoir tout miner toi-même.
+
+| Item | Quantité | Coût |
+|---|---|---|
+| Coal | 1 | 200 ¢ |
+| Raw Copper | 1 | 250 ¢ |
+| Raw Iron | 1 | 300 ¢ |
+| Redstone | 1 | 500 ¢ |
+| Lapis Lazuli | 1 | 750 ¢ |
+| Raw Gold | 1 | 750 ¢ |
+| Emerald | 1 | 2500 ¢ |
+| Diamond | 1 | 3000 ¢ |
+
 ### Acheter des saplings
 
-Juste à côté du Marchand se trouve un second PNJ, le **Pépiniériste**. Il vend tous les types de saplings vanilla, utile puisque ton île ne pousse que des chênes.
+Plus loin sur la même rangée se trouve un troisième PNJ, le **Pépiniériste**. Il vend tous les types de saplings vanilla, utile puisque ton île ne pousse que des chênes.
 
 | Item | Quantité | Coût |
 |---|---|---|

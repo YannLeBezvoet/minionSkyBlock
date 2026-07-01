@@ -54,3 +54,13 @@ data modify storage minionskyblock:shop sapling_jungle set value {cost:5000,item
 data modify storage minionskyblock:shop sapling_acacia set value {cost:5000,item:"minecraft:acacia_sapling",qty:1,name:"Acacia Sapling"}
 data modify storage minionskyblock:shop sapling_dark_oak set value {cost:5000,item:"minecraft:dark_oak_sapling",qty:1,name:"Dark Oak Sapling"}
 data modify storage minionskyblock:shop sapling_cherry set value {cost:5000,item:"minecraft:cherry_sapling",qty:1,name:"Cherry Sapling"}
+
+# Catalogue achat minerais (PNJ Mineur, IDs skyblock_shop 15-22, vendu a l'unite)
+data modify storage minionskyblock:shop ore_coal set value {cost:200,item:"minecraft:coal",qty:1,name:"Coal"}
+data modify storage minionskyblock:shop ore_copper set value {cost:250,item:"minecraft:raw_copper",qty:1,name:"Raw Copper"}
+data modify storage minionskyblock:shop ore_iron set value {cost:300,item:"minecraft:raw_iron",qty:1,name:"Raw Iron"}
+data modify storage minionskyblock:shop ore_redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone"}
+data modify storage minionskyblock:shop ore_lapis set value {cost:750,item:"minecraft:lapis_lazuli",qty:1,name:"Lapis Lazuli"}
+data modify storage minionskyblock:shop ore_gold set value {cost:750,item:"minecraft:raw_gold",qty:1,name:"Raw Gold"}
+data modify storage minionskyblock:shop ore_emerald set value {cost:2500,item:"minecraft:emerald",qty:1,name:"Emerald"}
+data modify storage minionskyblock:shop ore_diamond set value {cost:3000,item:"minecraft:diamond",qty:1,name:"Diamond"}

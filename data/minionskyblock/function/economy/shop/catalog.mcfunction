@@ -14,6 +14,14 @@ execute if score @s skyblock_shop matches 11 run function minionskyblock:economy
 execute if score @s skyblock_shop matches 12 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sapling_acacia
 execute if score @s skyblock_shop matches 13 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sapling_dark_oak
 execute if score @s skyblock_shop matches 14 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sapling_cherry
+execute if score @s skyblock_shop matches 15 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_coal
+execute if score @s skyblock_shop matches 16 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_copper
+execute if score @s skyblock_shop matches 17 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_iron
+execute if score @s skyblock_shop matches 18 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_redstone
+execute if score @s skyblock_shop matches 19 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_lapis
+execute if score @s skyblock_shop matches 20 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_gold
+execute if score @s skyblock_shop matches 21 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_emerald
+execute if score @s skyblock_shop matches 22 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_diamond
 
 execute if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Coins insuffisants !","color":"red"}
 

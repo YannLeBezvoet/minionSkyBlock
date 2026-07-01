@@ -32,7 +32,7 @@ data/
           scan_chest.mcfunction    ← remet #sell_total à 0, appelle scan_slot 27×, crédite
           scan_slot.mcfunction     ← macro $(slot) : détecte item + prix, vide le slot
         shop/
-          catalog.mcfunction       ← route skyblock_shop trigger vers buy.mcfunction via storage
+          catalog.mcfunction       ← route skyblock_shop trigger vers buy.mcfunction via storage (Marchand+Mineur+Pépiniériste)
           buy.mcfunction           ← macro générique : $(cost) $(item) $(qty) $(name)
 ```
 
@@ -48,7 +48,9 @@ data/
 | Coffre de vente (incassable) | -8 66 0 |
 | Item display (lingot d'or flottant) | -8 67.8 0 |
 | PNJ Marchand (achat catalogue) | 8 66 0 |
-| PNJ Pépiniériste (achat saplings) | 8 66 -2 |
+| PNJ Mineur (achat minerais à l'unité) | 8 66 -2 |
+| PNJ Pépiniériste (achat saplings) | 8 66 -4 |
+| Plateforme bedrock (PNJ, x 7-9) | Z=-5 à 1 |
 
 ## Scoreboards
 
@@ -58,7 +60,7 @@ data/
 | `skyblock_coins` | dummy | Monnaie du joueur |
 | `skyblock_last_sale` | dummy | Coins du dernier vente (pour actionbar) |
 | `skyblock_temp` | dummy | Calculs temporaires — voir fake players ci-dessous |
-| `skyblock_shop` | trigger | Joueur tape `/trigger skyblock_shop set <id>` |
+| `skyblock_shop` | trigger | Joueur tape `/trigger skyblock_shop set <id>` (achat catalogue, IDs 1-22) |
 | `skyblock_ptick` | dummy | Compteur tick par joueur (0→20), cadence les opérations lourdes |
 
 Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
@@ -160,16 +162,28 @@ Catalogue actuel :
 | 12 | sapling_acacia | acacia_sapling | 1 | 5000 |
 | 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
 | 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
+| 15 | ore_coal | coal | 1 | 200 |
+| 16 | ore_copper | raw_copper | 1 | 250 |
+| 17 | ore_iron | raw_iron | 1 | 300 |
+| 18 | ore_redstone | redstone | 1 | 500 |
+| 19 | ore_lapis | lapis_lazuli | 1 | 750 |
+| 20 | ore_gold | raw_gold | 1 | 750 |
+| 21 | ore_emerald | emerald | 1 | 2500 |
+| 22 | ore_diamond | diamond | 1 | 3000 |
 
 Pour ajouter un item :
 
 1. Ajouter `data modify storage minionskyblock:shop <clé> set value {...}` dans `load.mcfunction`
 2. Ajouter `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <clé>` dans `catalog.mcfunction`
-3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` (ou `open_menu_saplings.mcfunction`) — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
+3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` (ou `open_menu_saplings.mcfunction`/`open_menu_ore.mcfunction`) — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
 
-### Deuxième PNJ — Pépiniériste (saplings)
+### Deuxième PNJ — Mineur (minerais à l'unité)
 
-Un second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) est posé à `9 66 -1`, juste à côté du Marchand. Il route vers son propre menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (même mécanisme que le Marchand, cf. `player/on_tick.mcfunction`). Il vend les 7 saplings vanilla (oak/spruce/birch/jungle/acacia/dark_oak/cherry) à 5000 coins l'unité, IDs `skyblock_shop` 8 à 14, en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`.
+Un second villager (`tag=shop_npc_ore`, interaction `tag=shop_npc_ore_interaction`) est posé à `8 66 -2`, juste à côté (à droite) du Marchand. Il route vers son propre menu `economy/shop/open_menu_ore.mcfunction` via `economy/shop/npc_clicked_ore.mcfunction` (même mécanisme que le Marchand, cf. `player/on_tick.mcfunction`). Il vend les minerais bruts à l'unité et à prix élevé (coal, raw_copper, raw_iron, redstone, lapis_lazuli, raw_gold, emerald, diamond — IDs `skyblock_shop` 15 à 22), en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`. Pensé comme débouché pratique pour les drops de minions minerais (acheter 1 raw_iron/raw_gold à l'unité plutôt que de miner soi-même).
+
+### Troisième PNJ — Pépiniériste (saplings)
+
+Un troisième villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) est posé à `8 66 -4`, plus loin sur la même rangée. Il route vers son propre menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (même mécanisme que les deux autres PNJ). Il vend les 7 saplings vanilla (oak/spruce/birch/jungle/acacia/dark_oak/cherry) à 5000 coins l'unité, IDs `skyblock_shop` 8 à 14, en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`.
 
 ## Premier join
 

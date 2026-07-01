@@ -9,6 +9,7 @@ execute unless block -8 66 0 minecraft:chest run setblock -8 66 0 minecraft:ches
 
 execute as @e[tag=shop_npc_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked
 execute as @e[tag=shop_npc_saplings_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_saplings
+execute as @e[tag=shop_npc_ore_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_ore
 execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_cobblestone
 execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_cobblestone_t2
 execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_dirt
