@@ -26,7 +26,7 @@ Trois piliers fondamentaux :
 - Mécanique de vente : drop d'un item dans une zone définie → conversion en coins
 - Shop d'achat : interface (villageois ou GUI chest) pour dépenser les coins
 
-### Phase 3 — Minions
+### Phase 3 — Minions ✅
 
 - Recettes de craft custom pour obtenir des minions
 - Placement : item posé → spawn d'un Armor Stand taggé représentant le minion

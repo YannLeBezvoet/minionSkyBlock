@@ -332,11 +332,3 @@ Interaction entity NBT : `Tags:["minion_interact","minion_interact_<type>","tier
 6. Ajouter 4 lignes dans `on_tick.mcfunction` (T1 + T2 pour pickup, avec `unless entity @s[tag=tier_2]` pour T1)
 7. Créer les recettes `recipe/<type>_minion_t1.json` et `recipe/<type>_minion_t2.json`
 
-### Prochaines étapes Minions
-
-1. ~~Recettes de craft~~ ✓
-2. ~~Advancement placement + spawn Armor Stand~~ ✓
-3. ~~`minion/tick_all.mcfunction` + comportements de base~~ ✓
-4. ~~Collecte dans coffre adjacent~~ ✓
-5. ~~Upgrades tier 2~~ ✓
-6. Tier 3+ (optionnel), upgrades in-place sans ramasser
