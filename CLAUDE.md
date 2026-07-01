@@ -47,10 +47,10 @@ data/
 | Plateforme bedrock (station vente) | -9 à -7, Y=65, Z=-1 à 1 |
 | Coffre de vente (incassable) | -8 66 0 |
 | Item display (lingot d'or flottant) | -8 67.8 0 |
-| PNJ Marchand (achat catalogue) | 8 66 0 |
-| PNJ Mineur (achat minerais à l'unité) | 8 66 -2 |
-| PNJ Pépiniériste (achat saplings) | 8 66 -4 |
-| Plateforme bedrock (PNJ, x 7-9) | Z=-5 à 1 |
+| PNJ Marchand (achat catalogue) | 8 66 2 |
+| PNJ Mineur (achat minerais à l'unité) | 8 66 0 |
+| PNJ Pépiniériste (achat saplings) | 8 66 -2 |
+| Plateforme bedrock (PNJ, x 7-9) | Z=-3 à 3 (centrée sur l'île) |
 
 ## Scoreboards
 
