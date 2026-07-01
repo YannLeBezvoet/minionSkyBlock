@@ -137,16 +137,13 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 
 | Item | Quantité | Coût |
 |---|---|---|
-| Cobblestone ×1 | 1 | 100 ¢ |
-| Oak Log ×16 | 16 | 160 ¢ |
-| Wheat Seeds ×16 | 16 | 60 ¢ |
-| Bread ×16 | 16 | 400 ¢ |
-| Sand ×16 | 16 | 60 ¢ |
-| Bone Meal ×16 | 16 | 100 ¢ |
-| Gravel ×16 | 16 | 60 ¢ |
-| Iron Ingot ×1 | 1 | 200 ¢ |
-| Oak Sapling ×4 | 4 | 70 ¢ |
-| Torch ×16 | 16 | 80 ¢ |
+| Cobblestone | 1 | 100 ¢ |
+| Oak Log | 1 | 150 ¢ |
+| Sand | 1 | 150 ¢ |
+| Gravel | 1 | 150 ¢ |
+| Iron Ingot | 1 | 300 ¢ |
+| Redstone | 1 | 500 ¢ |
+| Water Bucket | 1 | 5000 ¢ |
 
 > Si tu n'as pas assez de Coins, l'achat est refusé sans débit.
 

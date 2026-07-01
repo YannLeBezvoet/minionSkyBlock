@@ -144,16 +144,13 @@ Catalogue actuel :
 
 | ID | Clé storage | Item | Qté | Coût |
 | --- | --- | --- | --- | --- |
-| 1 | cobblestone | cobblestone | 64 | 128 |
-| 2 | oak_log | oak_log | 16 | 160 |
-| 3 | wheat_seeds | wheat_seeds | 16 | 60 |
-| 4 | bread | bread | 16 | 400 |
-| 5 | sand | sand | 16 | 60 |
-| 6 | bone_meal | bone_meal | 16 | 100 |
-| 7 | gravel | gravel | 16 | 60 |
-| 8 | iron_ingot | iron_ingot | 4 | 150 |
-| 9 | oak_sapling | oak_sapling | 4 | 70 |
-| 10 | torch | torch | 16 | 80 |
+| 1 | cobblestone | cobblestone | 1 | 100 |
+| 2 | oak_log | oak_log | 1 | 150 |
+| 3 | sand | sand | 1 | 150 |
+| 4 | gravel | gravel | 1 | 150 |
+| 5 | iron_ingot | iron_ingot | 1 | 300 |
+| 6 | redstone | redstone | 1 | 500 |
+| 7 | water_bucket | water_bucket | 1 | 5000 |
 
 Pour ajouter un item :
 

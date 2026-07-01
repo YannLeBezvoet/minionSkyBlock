@@ -40,14 +40,10 @@ data modify storage minionskyblock:minion diamond_t2 set value {block:"minecraft
 data modify storage minionskyblock:minion emerald_t2 set value {block:"minecraft:emerald_ore",drop:"minecraft:emerald",timer:60,tool:"minecraft:diamond_pickaxe",item:"minecraft:diamond_pickaxe",color:"green",name:"Emerald Minion",type:"emerald",tier:2,tier_display:"II",placement_advancement:"place_emerald_t2"}
 
 # Catalogue achat (ID trigger skyblock_shop -> donnees)
-data modify storage minionskyblock:shop cobblestone set value {cost:100,item:"minecraft:cobblestone",qty:1,name:"Cobblestone ×1"}
-data modify storage minionskyblock:shop oak_log set value {cost:160,item:"minecraft:oak_log",qty:16,name:"Oak Log ×16"}
-data modify storage minionskyblock:shop wheat_seeds set value {cost:60,item:"minecraft:wheat_seeds",qty:16,name:"Wheat Seeds ×16"}
-data modify storage minionskyblock:shop bread set value {cost:400,item:"minecraft:bread",qty:16,name:"Bread ×16"}
-data modify storage minionskyblock:shop sand set value {cost:60,item:"minecraft:sand",qty:16,name:"Sand ×16"}
-data modify storage minionskyblock:shop bone_meal set value {cost:100,item:"minecraft:bone_meal",qty:16,name:"Bone Meal ×16"}
-data modify storage minionskyblock:shop gravel set value {cost:60,item:"minecraft:gravel",qty:16,name:"Gravel ×16"}
-data modify storage minionskyblock:shop iron_ingot set value {cost:200,item:"minecraft:iron_ingot",qty:1,name:"Iron Ingot ×1"}
-data modify storage minionskyblock:shop oak_sapling set value {cost:70,item:"minecraft:oak_sapling",qty:4,name:"Oak Sapling ×4"}
-data modify storage minionskyblock:shop torch set value {cost:80,item:"minecraft:torch",qty:16,name:"Torch ×16"}
-data modify storage minionskyblock:shop redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone ×1"}
+data modify storage minionskyblock:shop cobblestone set value {cost:100,item:"minecraft:cobblestone",qty:1,name:"Cobblestone"}
+data modify storage minionskyblock:shop oak_log set value {cost:150,item:"minecraft:oak_log",qty:1,name:"Oak Log"}
+data modify storage minionskyblock:shop sand set value {cost:150,item:"minecraft:sand",qty:1,name:"Sand"}
+data modify storage minionskyblock:shop gravel set value {cost:150,item:"minecraft:gravel",qty:1,name:"Gravel"}
+data modify storage minionskyblock:shop iron_ingot set value {cost:300,item:"minecraft:iron_ingot",qty:1,name:"Iron Ingot"}
+data modify storage minionskyblock:shop redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone"}
+data modify storage minionskyblock:shop water_bucket set value {cost:5000,item:"minecraft:water_bucket",qty:1,name:"Water Bucket"}
