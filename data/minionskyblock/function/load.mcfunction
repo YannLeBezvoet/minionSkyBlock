@@ -45,7 +45,6 @@ data modify storage minionskyblock:shop oak_log set value {cost:150,item:"minecr
 data modify storage minionskyblock:shop sand set value {cost:150,item:"minecraft:sand",qty:1,name:"Sand"}
 data modify storage minionskyblock:shop gravel set value {cost:150,item:"minecraft:gravel",qty:1,name:"Gravel"}
 data modify storage minionskyblock:shop iron_ingot set value {cost:300,item:"minecraft:iron_ingot",qty:1,name:"Iron Ingot"}
-data modify storage minionskyblock:shop redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone"}
 data modify storage minionskyblock:shop water_bucket set value {cost:5000,item:"minecraft:water_bucket",qty:1,name:"Water Bucket"}
 data modify storage minionskyblock:shop sapling_oak set value {cost:5000,item:"minecraft:oak_sapling",qty:1,name:"Oak Sapling"}
 data modify storage minionskyblock:shop sapling_spruce set value {cost:5000,item:"minecraft:spruce_sapling",qty:1,name:"Spruce Sapling"}
