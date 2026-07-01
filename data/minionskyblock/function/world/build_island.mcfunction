@@ -19,7 +19,7 @@ kill @e[tag=shop_npc]
 kill @e[tag=shop_npc_interaction]
 
 fill -9 65 -1 -6 65 1 minecraft:bedrock
-setblock -7 66 0 minecraft:chest[facing=south]
+setblock -7 66 0 minecraft:chest[facing=east]
 
 summon minecraft:item_display -7 67.8 0 {Tags:["sell_display"],item:{id:"minecraft:gold_ingot",count:1},billboard:"center"}
 
