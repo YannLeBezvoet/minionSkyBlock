@@ -44,9 +44,11 @@ data/
 | Surface île (herbe) | Y=65 |
 | Coffre de départ | -2 66 0 |
 | Arbre (tronc base) | 2 66 1 |
-| Plateforme bedrock (station vente) | -10 à -7, Y=65, Z=-1 à 1 |
+| Plateforme bedrock (station vente) | -9 à -7, Y=65, Z=-1 à 1 |
 | Coffre de vente (incassable) | -8 66 0 |
 | Item display (lingot d'or flottant) | -8 67.8 0 |
+| PNJ Marchand (achat catalogue) | 8 66 0 |
+| PNJ Pépiniériste (achat saplings) | 8 66 -2 |
 
 ## Scoreboards
 
@@ -151,12 +153,23 @@ Catalogue actuel :
 | 5 | iron_ingot | iron_ingot | 1 | 300 |
 | 6 | redstone | redstone | 1 | 500 |
 | 7 | water_bucket | water_bucket | 1 | 5000 |
+| 8 | sapling_oak | oak_sapling | 1 | 5000 |
+| 9 | sapling_spruce | spruce_sapling | 1 | 5000 |
+| 10 | sapling_birch | birch_sapling | 1 | 5000 |
+| 11 | sapling_jungle | jungle_sapling | 1 | 5000 |
+| 12 | sapling_acacia | acacia_sapling | 1 | 5000 |
+| 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
+| 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
 
 Pour ajouter un item :
 
 1. Ajouter `data modify storage minionskyblock:shop <clé> set value {...}` dans `load.mcfunction`
 2. Ajouter `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <clé>` dans `catalog.mcfunction`
-3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
+3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` (ou `open_menu_saplings.mcfunction`) — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
+
+### Deuxième PNJ — Pépiniériste (saplings)
+
+Un second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) est posé à `9 66 -1`, juste à côté du Marchand. Il route vers son propre menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (même mécanisme que le Marchand, cf. `player/on_tick.mcfunction`). Il vend les 7 saplings vanilla (oak/spruce/birch/jungle/acacia/dark_oak/cherry) à 5000 coins l'unité, IDs `skyblock_shop` 8 à 14, en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`.
 
 ## Premier join
 

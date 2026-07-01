@@ -147,6 +147,20 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 
 > Si tu n'as pas assez de Coins, l'achat est refusé sans débit.
 
+### Acheter des saplings
+
+Juste à côté du Marchand se trouve un second PNJ, le **Pépiniériste**. Il vend tous les types de saplings vanilla, utile puisque ton île ne pousse que des chênes.
+
+| Item | Quantité | Coût |
+|---|---|---|
+| Oak Sapling | 1 | 5000 ¢ |
+| Spruce Sapling | 1 | 5000 ¢ |
+| Birch Sapling | 1 | 5000 ¢ |
+| Jungle Sapling | 1 | 5000 ¢ |
+| Acacia Sapling | 1 | 5000 ¢ |
+| Dark Oak Sapling | 1 | 5000 ¢ |
+| Cherry Sapling | 1 | 5000 ¢ |
+
 ---
 
 ## Progression suggérée

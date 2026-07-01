@@ -47,3 +47,10 @@ data modify storage minionskyblock:shop gravel set value {cost:150,item:"minecra
 data modify storage minionskyblock:shop iron_ingot set value {cost:300,item:"minecraft:iron_ingot",qty:1,name:"Iron Ingot"}
 data modify storage minionskyblock:shop redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone"}
 data modify storage minionskyblock:shop water_bucket set value {cost:5000,item:"minecraft:water_bucket",qty:1,name:"Water Bucket"}
+data modify storage minionskyblock:shop sapling_oak set value {cost:5000,item:"minecraft:oak_sapling",qty:1,name:"Oak Sapling"}
+data modify storage minionskyblock:shop sapling_spruce set value {cost:5000,item:"minecraft:spruce_sapling",qty:1,name:"Spruce Sapling"}
+data modify storage minionskyblock:shop sapling_birch set value {cost:5000,item:"minecraft:birch_sapling",qty:1,name:"Birch Sapling"}
+data modify storage minionskyblock:shop sapling_jungle set value {cost:5000,item:"minecraft:jungle_sapling",qty:1,name:"Jungle Sapling"}
+data modify storage minionskyblock:shop sapling_acacia set value {cost:5000,item:"minecraft:acacia_sapling",qty:1,name:"Acacia Sapling"}
+data modify storage minionskyblock:shop sapling_dark_oak set value {cost:5000,item:"minecraft:dark_oak_sapling",qty:1,name:"Dark Oak Sapling"}
+data modify storage minionskyblock:shop sapling_cherry set value {cost:5000,item:"minecraft:cherry_sapling",qty:1,name:"Cherry Sapling"}
