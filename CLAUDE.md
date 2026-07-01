@@ -152,7 +152,6 @@ Catalogue actuel :
 | 2 | oak_log | oak_log | 1 | 150 |
 | 3 | sand | sand | 1 | 150 |
 | 4 | gravel | gravel | 1 | 150 |
-| 5 | iron_ingot | iron_ingot | 1 | 300 |
 | 7 | water_bucket | water_bucket | 1 | 5000 |
 | 8 | sapling_oak | oak_sapling | 1 | 5000 |
 | 9 | sapling_spruce | spruce_sapling | 1 | 5000 |
