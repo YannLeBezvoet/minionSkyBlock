@@ -8,6 +8,7 @@ scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
 gamerule random_tick_speed 15
+gamerule send_command_feedback false
 
 # Config minions Tier 1
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1,tier_display:"I",placement_advancement:"place_cobblestone"}
