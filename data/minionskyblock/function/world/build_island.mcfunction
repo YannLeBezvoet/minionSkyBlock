@@ -17,9 +17,9 @@ fill -4 65 -5 4 65 5 minecraft:grass_block
 fill -6 65 -3 6 65 3 minecraft:grass_block
 
 fill 2 66 1 2 69 1 minecraft:oak_log
-fill 0 69 -1 3 70 3 minecraft:oak_leaves[persistent=true]
-fill 1 71 0 3 71 2 minecraft:oak_leaves[persistent=true]
-setblock 2 72 1 minecraft:oak_leaves[persistent=true]
+fill 0 69 -1 3 70 3 minecraft:oak_leaves[persistent=false]
+fill 1 71 0 3 71 2 minecraft:oak_leaves[persistent=false]
+setblock 2 72 1 minecraft:oak_leaves[persistent=false]
 setblock 2 69 1 minecraft:oak_log
 
 kill @e[tag=sell_display,type=minecraft:item_display]
