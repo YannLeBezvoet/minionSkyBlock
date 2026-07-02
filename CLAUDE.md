@@ -1,90 +1,90 @@
-# MinionSkyBlock — Référence interne
+# MinionSkyBlock — Internal reference
 
-## Version cible
-Minecraft Java **26.2** — `pack.mcmeta` utilise `min_format`/`max_format` (pas `pack_format`).
-Format actuel : `min_format: 101, max_format: 107.1`
+## Target version
+Minecraft Java **26.2** — `pack.mcmeta` uses `min_format`/`max_format` (not `pack_format`).
+Current format: `min_format: 101, max_format: 107.1`
 
 ## Namespace & structure
 
-Namespace : `minionskyblock`
+Namespace: `minionskyblock`
 
 ```
 data/
   minecraft/
     dimension/overworld.json       ← void world (flat, biome the_void, no layers)
     tags/function/
-      load.json                    ← pointe vers minionskyblock:load
-      tick.json                    ← pointe vers minionskyblock:tick
+      load.json                    ← points to minionskyblock:load
+      tick.json                    ← points to minionskyblock:tick
   minionskyblock/
     advancement/player/
       first_join.json              ← trigger:tick, reward → player/first_join
-      tick_loop.json               ← trigger:tick, reward → player/on_tick (auto-révocatrice)
+      tick_loop.json               ← trigger:tick, reward → player/on_tick (self-revoking)
     function/
-      load.mcfunction              ← scoreboards + setworldspawn + init storage minion + init storage shop
-      tick.mcfunction              ← commentaires seulement (tag non fonctionnel en 26.2)
+      load.mcfunction              ← scoreboards + setworldspawn + init minion storage + init shop storage
+      tick.mcfunction              ← comments only (tag non-functional in 26.2)
       player/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
-        on_tick.mcfunction         ← revoke tick_loop + protection coffre + compteur skyblock_ptick + shop trigger
-      world/build_island.mcfunction← fill/setblock de toute l'île + station de vente
+        on_tick.mcfunction         ← revoke tick_loop + chest protection + skyblock_ptick counter + shop trigger
+      world/build_island.mcfunction← fill/setblock of the whole island + sell station
       economy/
-        display.mcfunction         ← actionbar coins toutes les 20 ticks
+        display.mcfunction         ← coins actionbar every 20 ticks
         sell/
-          scan_chest.mcfunction    ← remet #sell_total à 0, appelle scan_slot 27×, crédite
-          scan_slot.mcfunction     ← macro $(slot) : détecte item + prix, vide le slot
+          scan_chest.mcfunction    ← resets #sell_total to 0, calls scan_slot 27×, credits
+          scan_slot.mcfunction     ← macro $(slot): detects item + price, empties the slot
         shop/
-          catalog.mcfunction       ← route skyblock_shop trigger vers buy.mcfunction via storage (Marchand+Mineur+Pépiniériste)
-          buy.mcfunction           ← macro générique : $(cost) $(item) $(qty) $(name)
+          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Miner+Nurseryman)
+          buy.mcfunction           ← generic macro: $(cost) $(item) $(qty) $(name)
 ```
 
-## Coordonnées clés (île centrée sur 0,65,0)
+## Key coordinates (island centered on 0,65,0)
 
-| Élément | Coordonnées |
+| Element | Coordinates |
 |---|---|
-| Spawn joueur / world spawn | 0 66 0 |
-| Surface île (herbe) | Y=65 |
-| Coffre de départ | -2 66 0 |
-| Arbre (tronc base) | 2 66 1 |
-| Plateforme bedrock (station vente) | -9 à -7, Y=65, Z=-1 à 1 |
-| Coffre de vente (incassable) | -8 66 0 |
-| Item display (lingot d'or flottant) | -8 67.8 0 |
-| PNJ Marchand (achat catalogue) | 8 66 2 |
-| PNJ Mineur (achat minerais à l'unité) | 8 66 0 |
-| PNJ Pépiniériste (achat saplings) | 8 66 -2 |
-| Plateforme bedrock (PNJ, x 7-9) | Z=-3 à 3 (centrée sur l'île) |
+| Player spawn / world spawn | 0 66 0 |
+| Island surface (grass) | Y=65 |
+| Starter chest | -2 66 0 |
+| Tree (trunk base) | 2 66 1 |
+| Bedrock platform (sell station) | -9 to -7, Y=65, Z=-1 to 1 |
+| Sell chest (unbreakable) | -8 66 0 |
+| Item display (floating gold ingot) | -8 67.8 0 |
+| Merchant NPC (catalog purchases) | 8 66 2 |
+| Miner NPC (unit ore purchases) | 8 66 0 |
+| Nurseryman NPC (sapling purchases) | 8 66 -2 |
+| Bedrock platform (NPCs, x 7-9) | Z=-3 to 3 (centered on the island) |
 
 ## Scoreboards
 
-| Objectif | Type | Usage |
+| Objective | Type | Usage |
 |---|---|---|
-| `skyblock_joined` | dummy | 0=jamais connecté, 1=déjà connecté |
-| `skyblock_coins` | dummy | Monnaie **partagée entre tous les joueurs** — toujours lue/écrite sur le fake player global `#coins` (jamais `@s`), initialisé une fois dans `load.mcfunction` |
-| `skyblock_last_sale` | dummy | Coins du dernier vente (pour actionbar, reste par-joueur) |
-| `skyblock_temp` | dummy | Calculs temporaires — voir fake players ci-dessous |
-| `skyblock_shop` | trigger | Joueur tape `/trigger skyblock_shop set <id>` (achat catalogue, IDs 1-22) |
-| `skyblock_ptick` | dummy | Compteur tick par joueur (0→20), cadence les opérations lourdes |
+| `skyblock_joined` | dummy | 0=never connected, 1=already connected |
+| `skyblock_coins` | dummy | Currency **shared between all players** — always read/written on the global fake player `#coins` (never `@s`), initialized once in `load.mcfunction` |
+| `skyblock_last_sale` | dummy | Coins from the last sale (for the actionbar, stays per-player) |
+| `skyblock_temp` | dummy | Temporary calculations — see fake players below |
+| `skyblock_shop` | trigger | Player types `/trigger skyblock_shop set <id>` (catalog purchase, IDs 1-22) |
+| `skyblock_ptick` | dummy | Per-player tick counter (0→20), paces heavy operations |
 
-Fake players dans `skyblock_temp` (globaux, Minecraft est mono-thread) :
+Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 
 | Fake player | Usage |
 |---|---|
-| `#sell_count` | Quantité d'un item dans un slot du coffre de vente |
-| `#sell_value` | Prix unitaire de l'item détecté |
-| `#sell_found` | 1 dès qu'un item est identifié dans le slot (court-circuit les checks suivants) |
-| `#sell_total` | Cumul des coins pour une session de vente |
-| `#shop_result` | 1 si un achat a réussi |
-| `#world_ptick` | Compteur tick global serveur (0→20), cadence `tick_all` quel que soit le nombre de joueurs |
-| `#tick_now` | Gametime du tick courant — détection de changement de tick serveur |
-| `#tick_last_world` | Dernier gametime enregistré, comparé à `#tick_now` pour dédupliquer |
+| `#sell_count` | Quantity of an item in a sell chest slot |
+| `#sell_value` | Unit price of the detected item |
+| `#sell_found` | 1 as soon as an item is identified in the slot (short-circuits subsequent checks) |
+| `#sell_total` | Cumulative coins for a selling session |
+| `#shop_result` | 1 if a purchase succeeded |
+| `#world_ptick` | Global server tick counter (0→20), paces `tick_all` regardless of the number of players |
+| `#tick_now` | Gametime of the current tick — detects server tick changes |
+| `#tick_last_world` | Last recorded gametime, compared to `#tick_now` to deduplicate |
 
-## Système de vente
+## Selling system
 
-Le joueur dépose des items dans le **coffre de vente** (-7 66 0). Le scan est automatique toutes les 20 ticks (≈1s) via `player/on_tick.mcfunction`.
+The player drops items into the **sell chest** (-7 66 0). The scan is automatic every 20 ticks (≈1s) via `player/on_tick.mcfunction`.
 
-Le coffre est **incassable** : `on_tick` détecte chaque tick si le bloc est absent et le replace (+ kill des items droppés dans un rayon de 3 blocs).
+The chest is **unbreakable**: `on_tick` checks every tick whether the block is missing and replaces it (+ kills dropped items within a 3-block radius).
 
-`scan_chest.mcfunction` appelle `scan_slot` (macro `$(slot)`) pour les 27 slots.
+`scan_chest.mcfunction` calls `scan_slot` (macro `$(slot)`) for the 27 slots.
 
-`scan_slot.mcfunction` — pattern uniforme de **3 lignes par item** (seule la 1re a `$`) :
+`scan_slot.mcfunction` — uniform pattern of **3 lines per item** (only the 1st has `$`):
 
 ```mcfunction
 $execute if score #sell_found skyblock_temp matches 0 store result score #sell_count skyblock_temp if items block -7 66 0 $(slot) minecraft:cobblestone
@@ -92,9 +92,9 @@ execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblo
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_found skyblock_temp 1
 ```
 
-Le flag `#sell_found` court-circuite tous les checks suivants dès qu'un item est identifié.
+The `#sell_found` flag short-circuits all subsequent checks as soon as an item is identified.
 
-En fin de fonction (bloc commun à tous les items) :
+At the end of the function (block common to all items):
 
 ```mcfunction
 execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_count skyblock_temp *= #sell_value skyblock_temp
@@ -102,11 +102,11 @@ execute if score #sell_found skyblock_temp matches 1 run scoreboard players oper
 $execute if score #sell_found skyblock_temp matches 1 run item replace block -7 66 0 $(slot) with minecraft:air
 ```
 
-**Prix par défaut** : tout item non listé vaut 1 coin (via `if items ... *` en fin de catalogue).
+**Default price**: any unlisted item is worth 1 coin (via `if items ... *` at the end of the catalog).
 
-Pour ajouter un item : copier un bloc de 3 lignes dans `scan_slot.mcfunction`, changer l'item et le prix.
+To add an item: copy a 3-line block in `scan_slot.mcfunction`, change the item and the price.
 
-Prix unitaires (dans `economy/sell/scan_slot.mcfunction`) :
+Unit prices (in `economy/sell/scan_slot.mcfunction`):
 
 | Item | Coins | Item | Coins |
 |---|---|---|---|
@@ -114,39 +114,39 @@ Prix unitaires (dans `economy/sell/scan_slot.mcfunction`) :
 | sand, gravel | 2 | coal | 6 |
 | wheat_seeds | 2 | iron_ingot | 20 |
 | wheat | 4 | gold_ingot | 32 |
-| tous les logs | 5 | emerald | 40 |
+| all logs | 5 | emerald | 40 |
 | charcoal, rotten_flesh | 5, 3 | diamond | 80 |
 | apple | 8 | oak_sapling | 10 |
 | bread | 12 | | |
 
-Pour ajouter un item : une ligne dans `economy/sell/scan_slot.mcfunction`.
+To add an item: one line in `economy/sell/scan_slot.mcfunction`.
 
-## Système d'achat
+## Buying system
 
-`/trigger skyblock_shop set <id>` — traité dans `economy/shop/catalog.mcfunction`.
+`/trigger skyblock_shop set <id>` — handled in `economy/shop/catalog.mcfunction`.
 
-Les données de chaque item sont dans le storage `minionskyblock:shop` (initialisé dans `load.mcfunction`) :
+Each item's data lives in the `minionskyblock:shop` storage (initialized in `load.mcfunction`):
 ```mcfunction
 data modify storage minionskyblock:shop cobblestone set value {cost:128,item:"minecraft:cobblestone",qty:64,name:"Cobblestone ×64"}
 ```
 
-`catalog.mcfunction` route l'ID vers `buy.mcfunction` via le storage :
+`catalog.mcfunction` routes the ID to `buy.mcfunction` via the storage:
 ```mcfunction
 execute if score @s skyblock_shop matches 1 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop cobblestone
 ```
 
-`buy.mcfunction` est une macro générique (variables : `$(cost)`, `$(item)`, `$(qty)`, `$(name)`) :
+`buy.mcfunction` is a generic macro (variables: `$(cost)`, `$(item)`, `$(qty)`, `$(name)`):
 ```mcfunction
 $execute unless score #coins skyblock_coins matches $(cost).. run return fail
 $scoreboard players remove #coins skyblock_coins $(cost)
 $give @s $(item) $(qty)
 scoreboard players set #shop_result skyblock_temp 1
-$title @s actionbar {"text":"Acheté : $(name)  (-$(cost) coins)","color":"green"}
+$title @s actionbar {"text":"Bought: $(name)  (-$(cost) coins)","color":"green"}
 ```
 
-Catalogue actuel :
+Current catalog:
 
-| ID | Clé storage | Item | Qté | Coût |
+| ID | Storage key | Item | Qty | Cost |
 | --- | --- | --- | --- | --- |
 | 1 | cobblestone | cobblestone | 1 | 100 |
 | 2 | oak_log | oak_log | 1 | 150 |
@@ -169,96 +169,96 @@ Catalogue actuel :
 | 21 | ore_emerald | emerald | 1 | 2500 |
 | 22 | ore_diamond | diamond | 1 | 3000 |
 
-Pour ajouter un item :
+To add an item:
 
-1. Ajouter `data modify storage minionskyblock:shop <clé> set value {...}` dans `load.mcfunction`
-2. Ajouter `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <clé>` dans `catalog.mcfunction`
-3. Ajouter une ligne `[Acheter]` dans `open_menu.mcfunction` (ou `open_menu_saplings.mcfunction`/`open_menu_ore.mcfunction`) — prix et nom sont lus automatiquement depuis le storage via `{"nbt":"<clé>.cost","storage":"minionskyblock:shop"}` et `{"nbt":"<clé>.name","storage":"minionskyblock:shop"}`
+1. Add `data modify storage minionskyblock:shop <key> set value {...}` in `load.mcfunction`
+2. Add `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <key>` in `catalog.mcfunction`
+3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`/`open_menu_ore.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
 
-### Deuxième PNJ — Mineur (minerais à l'unité)
+### Second NPC — Miner (unit ores)
 
-Un second villager (`tag=shop_npc_ore`, interaction `tag=shop_npc_ore_interaction`) est posé à `8 66 -2`, juste à côté (à droite) du Marchand. Il route vers son propre menu `economy/shop/open_menu_ore.mcfunction` via `economy/shop/npc_clicked_ore.mcfunction` (même mécanisme que le Marchand, cf. `player/on_tick.mcfunction`). Il vend les minerais bruts à l'unité et à prix élevé (coal, raw_copper, raw_iron, redstone, lapis_lazuli, raw_gold, emerald, diamond — IDs `skyblock_shop` 15 à 22), en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`. Pensé comme débouché pratique pour les drops de minions minerais (acheter 1 raw_iron/raw_gold à l'unité plutôt que de miner soi-même).
+A second villager (`tag=shop_npc_ore`, interaction `tag=shop_npc_ore_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_ore.mcfunction` via `economy/shop/npc_clicked_ore.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells raw ores individually at a high price (coal, raw_copper, raw_iron, redstone, lapis_lazuli, raw_gold, emerald, diamond — `skyblock_shop` IDs 15 to 22), reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage. Designed as a practical outlet for ore minion drops (buying 1 raw_iron/raw_gold individually rather than mining it yourself).
 
-### Troisième PNJ — Pépiniériste (saplings)
+### Third NPC — Nurseryman (saplings)
 
-Un troisième villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) est posé à `8 66 -4`, plus loin sur la même rangée. Il route vers son propre menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (même mécanisme que les deux autres PNJ). Il vend les 7 saplings vanilla (oak/spruce/birch/jungle/acacia/dark_oak/cherry) à 5000 coins l'unité, IDs `skyblock_shop` 8 à 14, en réutilisant le même `buy.mcfunction` générique et le même storage `minionskyblock:shop`.
+A third villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -4`, further along the same row. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the other two NPCs). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
 
-## Premier join
+## First join
 
-Géré par **advancement** (`advancement/player/first_join.json`, trigger `minecraft:tick`) → reward function `player/first_join`. Plus fiable que `@a[scores={skyblock_joined=0}]` qui ne matche pas les joueurs non-trackés.
+Handled by an **advancement** (`advancement/player/first_join.json`, trigger `minecraft:tick`) → reward function `player/first_join`. More reliable than `@a[scores={skyblock_joined=0}]`, which does not match untracked players.
 
 ## Tick
 
-`#minecraft:tick` tag **ne fonctionne pas en 26.2**.
+The `#minecraft:tick` tag **does not work in 26.2**.
 
-Le tick par-joueur est géré via une **advancement auto-révocatrice** :
+The per-player tick is handled via a **self-revoking advancement**:
 
-- `advancement/player/tick_loop.json` : trigger `minecraft:tick` → reward `player/on_tick`
-- `function/player/on_tick.mcfunction` : révoque l'advancement en premier → re-trigger immédiat au prochain tick
-- Compteur `skyblock_ptick` (par joueur, dans `skyblock_temp`) cadence les opérations lourdes à 20 ticks
-- Compteur global `#world_ptick` cadence `tick_all` toutes les 20 ticks **serveur**, indépendamment du nombre de joueurs. Mécanisme : `time query gametime` stocké dans `#tick_now` comparé à `#tick_last_world` — si différent, `#world_ptick` avance d'un cran. Cela évite que les timers des minions s'incrémentent N fois par tick avec N joueurs connectés.
+- `advancement/player/tick_loop.json`: trigger `minecraft:tick` → reward `player/on_tick`
+- `function/player/on_tick.mcfunction`: revokes the advancement first → immediate re-trigger on the next tick
+- `skyblock_ptick` counter (per player, in `skyblock_temp`) paces heavy operations at 20 ticks
+- Global `#world_ptick` counter paces `tick_all` every 20 **server** ticks, independent of the number of players. Mechanism: `time query gametime` stored in `#tick_now` compared to `#tick_last_world` — if different, `#world_ptick` advances by one. This prevents minion timers from incrementing N times per tick with N players connected.
 
-`tick.mcfunction` existe mais ne contient que des commentaires (tag non fonctionnel, conservé pour compatibilité avec `data/minecraft/tags/function/tick.json`).
+`tick.mcfunction` exists but contains only comments (non-functional tag, kept for compatibility with `data/minecraft/tags/function/tick.json`).
 
-## Workflow de développement
+## Development workflow
 
-Modifier les fichiers dans `/home/yann/dev/minionSkyBlock/`, puis :
+Edit files in `/home/yann/dev/minionSkyBlock/`, then:
 
 ```bash
-./update.sh   # copie tout vers ~/.minecraft/saves/New World/datapacks/minionSkyBlock
+./update.sh   # copies everything to ~/.minecraft/saves/New World/datapacks/minionSkyBlock
 ```
 
-Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les bloque par sécurité.
+Then `/reload` in Minecraft. **Do not use a symlink** — Minecraft blocks them for security.
 
-## Gotchas connus
+## Known gotchas
 
-- **`#minecraft:tick` tag** : ne déclenche pas en 26.2. Utiliser l'advancement `minecraft:tick` per-joueur (voir section Tick).
-- **`score ... matches ..` (bornes vides)** : invalide en 26.2 pour tester l'existence d'un score — provoque "Expected value or range of values" et fait échouer le **chargement de toute la fonction** (même symptôme que le gotcha gamerule ci-dessous : si c'est `load.mcfunction`, rien n'est initialisé sur un monde neuf). Utiliser une plage explicite couvrant tout l'intervalle int, ex. `matches -2147483648..2147483647` (échoue quand même si le score n'existe pas, donc reste un test d'existence valide).
-- **`gamerule spawnRadius`** : supprimé en 26.2 — commande invalide, provoque "Failed to load function" pour tout le fichier qui la contient. Retiré de `load.mcfunction`.
-- **Gamerules en snake_case** : en 26.2, tous les noms de gamerule sont passés en snake_case (`randomTickSpeed` → `random_tick_speed`). L'ancien nom camelCase provoque "Incorrect argument for command at position N: gamerule" et fait échouer le **chargement de toute la fonction** (pas juste la ligne). Si la fonction cassée est `load.mcfunction`, elle disparaît du tag `#minecraft:load` (log : "Couldn't load tag minecraft:load as it is missing following references") et **rien n'est initialisé** (scoreboards, storages, world spawn) dans un monde fraîchement créé — alors qu'un monde déjà existant continue de fonctionner car il a conservé l'état créé avant la régression. Toujours vérifier `~/.minecraft/logs/latest.log` pour ce genre d'échec silencieux quand un bug ne touche que les nouveaux mondes.
-- **Fonctions macro `$`** : le préfixe `$` ne doit être mis **que sur les lignes qui contiennent au moins un `$(variable)`**. Une ligne `$` sans substitution provoque "Can't parse function" en 26.2.
-- **Symlinks dans datapacks** : Minecraft les refuse ("Found forbidden symlinks"). Utiliser `update.sh` à la place.
-- **Texte JSON dans les panneaux** : en 26.2, les panneaux affichent le JSON brut. Éviter les panneaux pour l'affichage formaté.
-- **NBT item detection dans les coffres** : `execute if block ... minecraft:chest{Items:[{Slot:Nb,id:"..."}]}` — **cassé en 26.2** (le prédicat NBT est ignoré, le check passe toujours `true`). De plus `data get block ... Items[N].Count` retourne 0 car le champ est devenu `count` (minuscule). Utiliser à la place : `execute store result score <var> if items block <pos> container.<slot> <item>` (1.20.5+) qui détecte et retourne le count en une seule commande.
-- **Tags function** : chemin `data/minecraft/tags/function/` (singulier) — correct depuis ~1.21.
-- **`return fail`** : disponible depuis 1.20.2, stoppe l'exécution de la fonction courante.
-- **`build_island` depuis `load.mcfunction`** : `build_island` est appelé depuis `load.mcfunction` avec un guard (`execute unless block 0 65 0 minecraft:grass_block run ...`) pour construire l'île une seule fois avant le premier join. Ne pas le dupliquer dans `first_join` — l'île est déjà construite.
-- **Chunks noirs au spawn (void world)** : dans un monde void, certains chunks (notamment x<0) ont le sky light initialisé à 0. Un `fill`/`setblock` dans la même tick est annulé par le moteur de lumière (net change = 0). Fix : deux ticks séparés via tags — tick 1 : `fill ... stone`, tick 2 : `fill ... air`. Voir tags `skyblock_light_fix` / `skyblock_light_fix2` dans `on_tick.mcfunction`.
-- **`CustomName` entité** : en 26.2 (post-1.20.5), le champ est un composant SNBT inline, pas une string JSON. Utiliser `CustomName:{text:"Nom",color:"yellow"}` et non `CustomName:'{"text":"Nom"}'`.
-- **`clickEvent` tellraw** : en 26.2 (post-1.21.5), le champ s'appelle `"click_event"` (snake_case) et non `"clickEvent"`. Le sous-champ `"value"` devient `"command"`. Format : `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Idem pour `"hoverEvent"` → `"hover_event"` (à vérifier).
-- **Espaces multiples dans les commandes** : en 26.2, le parser rejette les espaces consécutifs entre les tokens d'une commande (`cobblestone  set` ou `matches 1  run` → "Incorrect argument"). Utiliser un seul espace entre chaque token. **Ne jamais aligner visuellement les arguments avec des espaces.**
-- **Ingrédients de recette (recipe JSON)** : en 26.2, les ingrédients dans `key` doivent être une **string simple** (`"minecraft:cobblestone"`), pas un objet `{"id":"minecraft:cobblestone"}`. L'objet provoque `Not a string: {"id":...}` au chargement. Même le format post-1.21 `{"item":"...","components":{...}}` n'est pas supporté dans `key` — la recette est silencieusement désactivée sans erreur. **Il est donc impossible de filtrer par durabilité (`minecraft:damage: 0`) dans les ingrédients de recette en 26.2.**
-- **`item_used_on_block` trigger** : en 26.2, ce trigger ne se déclenche que si l'item a une interaction réussie avec le bloc (shovel sur herbe → oui, pickaxe sur n'importe quoi → non). Pour une détection universelle, utiliser `consume_item` à la place.
-- **`consume_item` + `minecraft:consumable`** : en 26.2, `minecraft:consumable` seul ne déclenche pas `consume_item`. Il faut aussi ajouter `minecraft:food`. **`can_always_eat:true` est obligatoire** — sans lui, l'item ne peut pas être consommé quand la barre de faim est pleine, donc le trigger ne se déclenche jamais. Format complet : `minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true}` + `minecraft:consumable={consume_seconds:0.5f}`. S'applique aussi bien aux recettes JSON qu'aux commandes `give` dans les fonctions pickup.
-- **`build_island` dans `load.mcfunction`** : ne pas appeler `build_island` depuis `load.mcfunction` — cela réinitialise l'île à chaque `/reload` ou redémarrage, détruisant les constructions du joueur. `build_island` ne doit être appelé que depuis `player/first_join.mcfunction`.
+- **`#minecraft:tick` tag**: does not trigger in 26.2. Use the per-player `minecraft:tick` advancement (see Tick section).
+- **`score ... matches ..` (empty bounds)**: invalid in 26.2 for testing whether a score exists — causes "Expected value or range of values" and makes the **entire function fail to load** (same symptom as the gamerule gotcha below: if it's `load.mcfunction`, nothing gets initialized on a fresh world). Use an explicit range covering the whole int interval, e.g. `matches -2147483648..2147483647` (still fails if the score doesn't exist, so it remains a valid existence test).
+- **`gamerule spawnRadius`**: removed in 26.2 — invalid command, causes "Failed to load function" for the entire file containing it. Removed from `load.mcfunction`.
+- **Gamerules in snake_case**: in 26.2, all gamerule names are passed in snake_case (`randomTickSpeed` → `random_tick_speed`). The old camelCase name causes "Incorrect argument for command at position N: gamerule" and makes the **entire function fail to load** (not just the line). If the broken function is `load.mcfunction`, it disappears from the `#minecraft:load` tag (log: "Couldn't load tag minecraft:load as it is missing following references") and **nothing gets initialized** (scoreboards, storages, world spawn) on a freshly created world — whereas an already-existing world keeps working since it retained the state created before the regression. Always check `~/.minecraft/logs/latest.log` for this kind of silent failure when a bug only affects new worlds.
+- **`$` macro functions**: the `$` prefix must only be put **on lines containing at least one `$(variable)`**. A `$` line with no substitution causes "Can't parse function" in 26.2.
+- **Symlinks in datapacks**: Minecraft refuses them ("Found forbidden symlinks"). Use `update.sh` instead.
+- **JSON text in signs**: in 26.2, signs display the raw JSON. Avoid signs for formatted display.
+- **NBT item detection in chests**: `execute if block ... minecraft:chest{Items:[{Slot:Nb,id:"..."}]}` — **broken in 26.2** (the NBT predicate is ignored, the check always passes `true`). Also `data get block ... Items[N].Count` returns 0 because the field became `count` (lowercase). Use instead: `execute store result score <var> if items block <pos> container.<slot> <item>` (1.20.5+), which detects and returns the count in a single command.
+- **Function tags**: path `data/minecraft/tags/function/` (singular) — correct since ~1.21.
+- **`return fail`**: available since 1.20.2, stops execution of the current function.
+- **`build_island` from `load.mcfunction`**: `build_island` is called from `load.mcfunction` with a guard (`execute unless block 0 65 0 minecraft:grass_block run ...`) to build the island only once before the first join. Do not duplicate it in `first_join` — the island is already built.
+- **Black chunks at spawn (void world)**: in a void world, some chunks (notably x<0) have sky light initialized to 0. A `fill`/`setblock` in the same tick gets cancelled by the lighting engine (net change = 0). Fix: two separate ticks via tags — tick 1: `fill ... stone`, tick 2: `fill ... air`. See tags `skyblock_light_fix` / `skyblock_light_fix2` in `on_tick.mcfunction`.
+- **Entity `CustomName`**: in 26.2 (post-1.20.5), the field is an inline SNBT component, not a JSON string. Use `CustomName:{text:"Name",color:"yellow"}` and not `CustomName:'{"text":"Name"}'`.
+- **tellraw `clickEvent`**: in 26.2 (post-1.21.5), the field is called `"click_event"` (snake_case), not `"clickEvent"`. The sub-field `"value"` becomes `"command"`. Format: `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Same for `"hoverEvent"` → `"hover_event"` (to verify).
+- **Multiple spaces in commands**: in 26.2, the parser rejects consecutive spaces between command tokens (`cobblestone  set` or `matches 1  run` → "Incorrect argument"). Use a single space between each token. **Never visually align arguments with spaces.**
+- **Recipe ingredients (recipe JSON)**: in 26.2, ingredients in `key` must be a **simple string** (`"minecraft:cobblestone"`), not an object `{"id":"minecraft:cobblestone"}`. The object causes `Not a string: {"id":...}` on load. Even the post-1.21 format `{"item":"...","components":{...}}` is not supported in `key` — the recipe is silently disabled with no error. **It is therefore impossible to filter by durability (`minecraft:damage: 0`) in recipe ingredients in 26.2.**
+- **`item_used_on_block` trigger**: in 26.2, this trigger only fires if the item has a successful interaction with the block (shovel on grass → yes, pickaxe on anything → no). For universal detection, use `consume_item` instead.
+- **`consume_item` + `minecraft:consumable`**: in 26.2, `minecraft:consumable` alone does not trigger `consume_item`. `minecraft:food` must also be added. **`can_always_eat:true` is mandatory** — without it, the item cannot be consumed when the hunger bar is full, so the trigger never fires. Full format: `minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true}` + `minecraft:consumable={consume_seconds:0.5f}`. Applies both to JSON recipes and `give` commands in pickup functions.
+- **`build_island` in `load.mcfunction`**: do not call `build_island` from `load.mcfunction` — this would rebuild the island on every `/reload` or restart, destroying the player's builds. `build_island` must only be called from `player/first_join.mcfunction`.
 
-## Phase Minions
+## Minions phase
 
-- Entité : Armor Stand taggé (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
-- Placement : item custom crafté → clic droit → fonction détecte via advancement et spawn l'Armor Stand
-- Tick central : une seule fonction itère sur tous les `@e[tag=minion]` (pas de schedule par entité)
-- Types implémentés : cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald — Tier I et Tier II
+- Entity: tagged Armor Stand (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
+- Placement: custom crafted item → right-click → function detects via advancement and spawns the Armor Stand
+- Central tick: a single function iterates over all `@e[tag=minion]` (no per-entity schedule)
+- Implemented types: cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald — Tier I and Tier II
 
-### Storage minion (`minionskyblock:minion`)
+### Minion storage (`minionskyblock:minion`)
 
-Les clés de storage sont au format `<type>_t<tier>` (ex. `cobblestone_t1`, `cobblestone_t2`).
-Champs par entrée :
+Storage keys follow the format `<type>_t<tier>` (e.g. `cobblestone_t1`, `cobblestone_t2`).
+Fields per entry:
 
-| Champ | Exemple (cobblestone T1) | Usage |
+| Field | Example (cobblestone T1) | Usage |
 | --- | --- | --- |
-| `block` | `"minecraft:cobblestone"` | Bloc posé par le minion si pas de coffre adjacent |
-| `drop` | `"minecraft:cobblestone"` | Item inséré dans le coffre adjacent (peut différer du bloc, ex. iron_ore → raw_iron, hay_block → wheat) |
-| `timer` | `15` | Intervalle en ticks entre chaque action |
-| `tool` | `"minecraft:wooden_pickaxe"` | Item en main de l'armor stand |
-| `item` | `"minecraft:stone_pickaxe"` | Item rendu au joueur lors du pickup |
-| `color` | `"gray"` | Couleur du CustomName de l'armor stand |
-| `name` | `"Cobblestone Minion"` | Nom affiché (armor stand + messages) |
-| `type` | `"cobblestone"` | Clé de type — utilisée dans les tags et les chemins de loot table |
-| `tier` | `1` | Numéro de tier (entier) — utilisé dans les tags et custom_data |
-| `tier_display` | `"I"` | Affichage roman numeral du tier dans le lore |
-| `placement_advancement` | `"place_cobblestone"` | Nom de l'advancement à révoquer après placement (relatif à `minionskyblock:minion/`) |
+| `block` | `"minecraft:cobblestone"` | Block placed by the minion if no adjacent chest |
+| `drop` | `"minecraft:cobblestone"` | Item inserted into the adjacent chest (can differ from the block, e.g. iron_ore → raw_iron, hay_block → wheat) |
+| `timer` | `15` | Interval in ticks between each action |
+| `tool` | `"minecraft:wooden_pickaxe"` | Item in the armor stand's hand |
+| `item` | `"minecraft:stone_pickaxe"` | Item given back to the player on pickup |
+| `color` | `"gray"` | Color of the armor stand's CustomName |
+| `name` | `"Cobblestone Minion"` | Displayed name (armor stand + messages) |
+| `type` | `"cobblestone"` | Type key — used in tags and loot table paths |
+| `tier` | `1` | Tier number (integer) — used in tags and custom_data |
+| `tier_display` | `"I"` | Roman numeral tier display in the lore |
+| `placement_advancement` | `"place_cobblestone"` | Name of the advancement to revoke after placement (relative to `minionskyblock:minion/`) |
 
-Timers par type et tier :
+Timers by type and tier:
 
 | Type | T1 | T2 |
 | --- | --- | --- |
@@ -275,23 +275,23 @@ Timers par type et tier :
 | diamond | 120 | 60 |
 | emerald | 120 | 60 |
 
-### Collecte dans coffre adjacent
+### Collection into an adjacent chest
 
-`behavior/tick.mcfunction` vérifie en priorité les 4 positions cardinales **au même niveau Y** que le minion (`~1 ~ ~`, `~-1 ~ ~`, `~ ~ ~1`, `~ ~ ~-1`). Si un coffre (`minecraft:chest`) est trouvé, `loot insert` dépose l'item via une loot table et retourne immédiatement. Si aucun coffre, comportement `setblock` habituel (8 positions autour à Y-1).
+`behavior/tick.mcfunction` checks, in priority order, the 4 cardinal positions **at the same Y level** as the minion (`~1 ~ ~`, `~-1 ~ ~`, `~ ~ ~1`, `~ ~ ~-1`). If a chest (`minecraft:chest`) is found, `loot insert` deposits the item via a loot table and returns immediately. If no chest is found, the usual `setblock` behavior applies (8 positions around at Y-1).
 
-Loot tables : `loot_table/minion/drop/<type>.json` (chemin résolution : `minionskyblock:minion/drop/<type>`).
+Loot tables: `loot_table/minion/drop/<type>.json` (resolution path: `minionskyblock:minion/drop/<type>`).
 
-Drops par type : cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald.
+Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald.
 
-Si le coffre est plein, les items débordent au sol.
+If the chest is full, items overflow onto the ground.
 
-### Recettes de craft (data/minionskyblock/recipe/)
+### Crafting recipes (data/minionskyblock/recipe/)
 
-Centre universel : **redstone_torch** pour tous les T1, **redstone_block** pour tous les T2.
+Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 
-**Tier I** — 8× matériau (forme traitée/fondue) + redstone_torch au centre :
+**Tier I** — 8× material (processed/smelted form) + redstone_torch at the center:
 
-| Fichier | Matériau (×8) | Résultat |
+| File | Material (×8) | Result |
 | --- | --- | --- |
 | `cobblestone_minion_t1.json` | cobblestone | stone_pickaxe |
 | `oak_minion_t1.json` | oak_planks | stone_axe |
@@ -306,9 +306,9 @@ Centre universel : **redstone_torch** pour tous les T1, **redstone_block** pour 
 | `diamond_minion_t1.json` | diamond | diamond_pickaxe |
 | `emerald_minion_t1.json` | emerald | diamond_pickaxe |
 
-**Tier II** — 8× matériau (forme bloc) + redstone_block au centre :
+**Tier II** — 8× material (block form) + redstone_block at the center:
 
-| Fichier | Matériau (×8) | Résultat |
+| File | Material (×8) | Result |
 | --- | --- | --- |
 | `cobblestone_minion_t2.json` | stone | iron_pickaxe |
 | `oak_minion_t2.json` | oak_log | iron_axe |
@@ -318,43 +318,42 @@ Centre universel : **redstone_torch** pour tous les T1, **redstone_block** pour 
 | `coal_minion_t2.json` | coal_block | iron_pickaxe |
 | `copper_minion_t2.json` | copper_block | iron_pickaxe |
 | `gold_minion_t2.json` | gold_block | diamond_pickaxe |
-| `redstone_minion_t2.json` | redstone_block (×9 — centre inclus) | diamond_pickaxe |
+| `redstone_minion_t2.json` | redstone_block (×9 — center included) | diamond_pickaxe |
 | `lapis_minion_t2.json` | lapis_block | diamond_pickaxe |
 | `diamond_minion_t2.json` | diamond_block | diamond_pickaxe |
 | `emerald_minion_t2.json` | emerald_block | diamond_pickaxe |
 
-Composants sur chaque item résultat :
+Components on each resulting item:
 
-- `minecraft:custom_name` : nom coloré
-- `minecraft:lore` : `["Tier I"/"Tier II" (gold), "Clic droit pour placer..." (dark_gray), "Clic gauche pour ramasser." (dark_gray)]`
-- `minecraft:custom_data` : `{"minion_type":"cobblestone","minion_tier":1}` — filtre des advancements
-- `minecraft:unbreakable` : `{"show_in_tooltip":false}`
-- `minecraft:enchantment_glint_override` : `true`
-- `minecraft:food` : `{"nutrition":0,"saturation":0.0,"can_always_eat":true}` — **`can_always_eat:true` obligatoire**
-- `minecraft:consumable` : `{"consume_seconds":0.5}`
+- `minecraft:custom_name`: colored name
+- `minecraft:lore`: `["Tier I"/"Tier II" (gold), "Right-click to place..." (dark_gray), "Left-click to pick up." (dark_gray)]`
+- `minecraft:custom_data`: `{"minion_type":"cobblestone","minion_tier":1}` — advancement filter
+- `minecraft:unbreakable`: `{"show_in_tooltip":false}`
+- `minecraft:enchantment_glint_override`: `true`
+- `minecraft:food`: `{"nutrition":0,"saturation":0.0,"can_always_eat":true}` — **`can_always_eat:true` mandatory**
+- `minecraft:consumable`: `{"consume_seconds":0.5}`
 
-### Détection placement (advancement/minion/ + function/minion/)
+### Placement detection (advancement/minion/ + function/minion/)
 
-- `advancement/minion/place_<type>.json` — filtre `{minion_type:"...", minion_tier:1}`, reward → `minion/place_<type>`
-- `advancement/minion/place_<type>_t2.json` — filtre `{minion_type:"...", minion_tier:2}`, reward → `minion/place_<type>_t2`
-- `function/minion/place_<type>[_t2].mcfunction` — **1 ligne** : `function minionskyblock:minion/place with storage minionskyblock:minion <type>_t[12]`
-- `function/minion/place.mcfunction` — **macro générique** : révoque `$(placement_advancement)` + summon armor_stand avec `tier_$(tier)` tag + summon interaction avec `tier_$(tier)` tag + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(tool)`, `$(tier)`, `$(placement_advancement)`
-- `function/minion/pickup_<type>[_t2].mcfunction` — **1 ligne** vers storage correspondant
-- `function/minion/pickup.mcfunction` — **macro générique** : kill armor_stand `tag=minion_$(type),tag=tier_$(tier)` + give item + title. Variables : `$(type)`, `$(name)`, `$(color)`, `$(item)`, `$(tier)`, `$(tier_display)`
+- `advancement/minion/place_<type>.json` — filter `{minion_type:"...", minion_tier:1}`, reward → `minion/place_<type>`
+- `advancement/minion/place_<type>_t2.json` — filter `{minion_type:"...", minion_tier:2}`, reward → `minion/place_<type>_t2`
+- `function/minion/place_<type>[_t2].mcfunction` — **1 line**: `function minionskyblock:minion/place with storage minionskyblock:minion <type>_t[12]`
+- `function/minion/place.mcfunction` — **generic macro**: revokes `$(placement_advancement)` + summons armor_stand with `tier_$(tier)` tag + summons interaction with `tier_$(tier)` tag + title. Variables: `$(type)`, `$(name)`, `$(color)`, `$(tool)`, `$(tier)`, `$(placement_advancement)`
+- `function/minion/pickup_<type>[_t2].mcfunction` — **1 line** to the corresponding storage
+- `function/minion/pickup.mcfunction` — **generic macro**: kills armor_stand `tag=minion_$(type),tag=tier_$(tier)` + gives item + title. Variables: `$(type)`, `$(name)`, `$(color)`, `$(item)`, `$(tier)`, `$(tier_display)`
 
-**Rétrocompatibilité** : les minions placés avant l'ajout des tiers (interaction entity sans `tier_<n>` tag) sont traités comme T1 via `unless entity @s[tag=tier_2]` dans `on_tick.mcfunction`.
+**Backward compatibility**: minions placed before tiers were added (interaction entity without a `tier_<n>` tag) are treated as T1 via `unless entity @s[tag=tier_2]` in `on_tick.mcfunction`.
 
-Armor stand NBT : `Tags:["minion","minion_<type>","tier_<n>"]`, `Small:1b`, `ShowArms:1b`, `CustomName:{text:"...",color:"..."}` (SNBT inline), `CustomNameVisible:1b`, `equipment:{mainhand:{id:"...",count:1}}`. **Ne pas utiliser `HandItems`/`HandDropChances`** — remplacés par `equipment` en 26.2.
+Armor stand NBT: `Tags:["minion","minion_<type>","tier_<n>"]`, `Small:1b`, `ShowArms:1b`, `CustomName:{text:"...",color:"..."}` (inline SNBT), `CustomNameVisible:1b`, `equipment:{mainhand:{id:"...",count:1}}`. **Do not use `HandItems`/`HandDropChances`** — replaced by `equipment` in 26.2.
 
-Interaction entity NBT : `Tags:["minion_interact","minion_interact_<type>","tier_<n>"]`.
+Interaction entity NBT: `Tags:["minion_interact","minion_interact_<type>","tier_<n>"]`.
 
-### Pour ajouter un nouveau type de minion
+### To add a new minion type
 
-1. Ajouter les entrées T1 et T2 dans `load.mcfunction` (avec tous les champs : `block`, `drop`, `timer`, `tool`, `item`, `color`, `name`, `type`, `tier`, `tier_display`, `placement_advancement`)
-2. Créer `loot_table/minion/drop/<type>.json`
-3. Créer `advancement/minion/place_<type>.json` et `place_<type>_t2.json`
-4. Créer `function/minion/place_<type>.mcfunction`, `place_<type>_t2.mcfunction`, `pickup_<type>.mcfunction`, `pickup_<type>_t2.mcfunction` (1 ligne chacun)
-5. Ajouter 2 lignes dans `tick_all.mcfunction` (T1 avec `unless entity @s[tag=tier_2]`, T2 avec `tag=tier_2`)
-6. Ajouter 4 lignes dans `on_tick.mcfunction` (T1 + T2 pour pickup, avec `unless entity @s[tag=tier_2]` pour T1)
-7. Créer les recettes `recipe/<type>_minion_t1.json` et `recipe/<type>_minion_t2.json`
-
+1. Add the T1 and T2 entries in `load.mcfunction` (with all fields: `block`, `drop`, `timer`, `tool`, `item`, `color`, `name`, `type`, `tier`, `tier_display`, `placement_advancement`)
+2. Create `loot_table/minion/drop/<type>.json`
+3. Create `advancement/minion/place_<type>.json` and `place_<type>_t2.json`
+4. Create `function/minion/place_<type>.mcfunction`, `place_<type>_t2.mcfunction`, `pickup_<type>.mcfunction`, `pickup_<type>_t2.mcfunction` (1 line each)
+5. Add 2 lines in `tick_all.mcfunction` (T1 with `unless entity @s[tag=tier_2]`, T2 with `tag=tier_2`)
+6. Add 4 lines in `on_tick.mcfunction` (T1 + T2 for pickup, with `unless entity @s[tag=tier_2]` for T1)
+7. Create recipes `recipe/<type>_minion_t1.json` and `recipe/<type>_minion_t2.json`

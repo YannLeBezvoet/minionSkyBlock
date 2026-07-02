@@ -1,28 +1,28 @@
-# Comment jouer — MinionSkyBlock
+# How to Play — MinionSkyBlock
 
-MinionSkyBlock est un datapack Minecraft (Java **26.2**) inspiré du mode SkyBlock. Tu démarres sur une petite île flottante dans le vide et tu dois développer ton économie en fabriquant des **Minions** — des petits automates qui récoltent des ressources à ta place pendant que tu explores ou construis.
-
----
-
-## Démarrage
-
-À ton premier login, tu apparais sur ton île avec 5 pains pour ne pas mourir de faim. L'île contient :
-
-- un coffre de départ avec quelques ressources de base
-- un arbre à couper
-- une **station de vente** sur la plateforme en bas à gauche de l'île
-
-Commence par couper ton arbre et miner ta cobblestone pour avoir de quoi crafter ton premier Minion.
+MinionSkyBlock is a Minecraft datapack (Java **26.2**) inspired by SkyBlock mode. You start on a small floating island in the void and must grow your economy by crafting **Minions** — small automatons that gather resources on your behalf while you explore or build.
 
 ---
 
-## Les Minions
+## Getting started
 
-Les Minions sont des automates qui génèrent des ressources automatiquement toutes les quelques secondes. Tu n'as rien à faire : laisse-les travailler pendant que tu gères le reste.
+On your first login, you spawn on your island with 5 bread so you don't starve. The island contains:
+
+- a starter chest with a few basic resources
+- a tree to chop down
+- a **selling station** on the platform at the bottom-left of the island
+
+Start by chopping your tree and mining your cobblestone to have enough for your first Minion.
+
+---
+
+## Minions
+
+Minions are automatons that generate resources automatically every few seconds. You don't have to do anything: let them work while you handle the rest.
 
 ### Crafting
 
-Les recettes se font dans une **table de craft standard** (9 cases). La forme est toujours la même :
+Recipes are made on a **standard crafting table** (9 slots). The shape is always the same:
 
 ```
 M M M
@@ -30,89 +30,89 @@ M C M
 M M M
 ```
 
-- **M** = 8× le matériau principal
-- **C** = **torche de redstone** pour le Tier I / **bloc de redstone** pour le Tier II
+- **M** = 8× the main material
+- **C** = **redstone torch** for Tier I / **redstone block** for Tier II
 
-Le matériau suit une logique de progression :
+The material follows a progression logic:
 
-- **Tier I** : forme traitée/fondue (lingot, poudre, item récolté)
-- **Tier II** : forme bloc (bloc de fer, bloc de charbon, hay block…)
+- **Tier I**: processed/smelted form (ingot, dust, harvested item)
+- **Tier II**: block form (iron block, coal block, hay block…)
 
-| Minion | Matériau T1 (×8) | Matériau T2 (×8) |
+| Minion | T1 Material (×8) | T2 Material (×8) |
 |---|---|---|
 | Cobblestone | Cobblestone | Stone |
-| Chêne | Oak Planks | Oak Log |
-| Blé | Wheat | Hay Block |
-| Fer | Iron Ingot | Iron Block |
-| Terre | Dirt | Mud |
-| Charbon | Coal | Coal Block |
-| Cuivre | Copper Ingot | Copper Block |
-| Or | Gold Ingot | Gold Block |
+| Oak | Oak Planks | Oak Log |
+| Wheat | Wheat | Hay Block |
+| Iron | Iron Ingot | Iron Block |
+| Dirt | Dirt | Mud |
+| Coal | Coal | Coal Block |
+| Copper | Copper Ingot | Copper Block |
+| Gold | Gold Ingot | Gold Block |
 | Redstone | Redstone | Redstone Block (×9) |
 | Lapis | Lapis Lazuli | Lapis Block |
-| Diamant | Diamond | Diamond Block |
-| Émeraude | Emerald | Emerald Block |
+| Diamond | Diamond | Diamond Block |
+| Emerald | Emerald | Emerald Block |
 
-> Le résultat est un item spécial avec un nom coloré et un reflet enchanté — c'est ton Minion à placer.
+> The result is a special item with a colored name and an enchanted glint — this is your Minion, ready to be placed.
 
 ### Placement
 
-**Clic droit** avec le Minion en main pour le **poser** sur ton île.  
-Un petit Armor Stand apparaît avec son outil en main : il commence à travailler immédiatement.
+**Right-click** with the Minion in hand to **place** it on your island.
+A small Armor Stand appears with its tool in hand: it starts working immediately.
 
-### Fonctionnement
+### How it works
 
-- S'il n'y a **pas de coffre** à côté de lui, le Minion pose les blocs récoltés directement autour de lui (à récupérer à la main).
-- S'il y a **un coffre** adjacent (dans les 4 directions cardinales, même niveau Y), le Minion y dépose automatiquement ses ressources. Quand le coffre est plein, les items tombent au sol.
+- If there is **no chest** next to it, the Minion places the harvested blocks directly around itself (to be picked up by hand).
+- If there is **a chest** adjacent (in the 4 cardinal directions, same Y level), the Minion automatically deposits its resources into it. When the chest is full, the items drop on the ground.
 
-### Récupérer un Minion
+### Picking up a Minion
 
-**Clic gauche** sur l'Armor Stand pour **ramasser** le Minion.  
-Tu récupères un item Minion dans ton inventaire, prêt à être reposé ailleurs.
+**Left-click** the Armor Stand to **pick up** the Minion.
+You get a Minion item back in your inventory, ready to be placed elsewhere.
 
 ### Tiers
 
-Chaque Minion existe en **Tier I** et **Tier II**. Le Tier II est plus rapide et a un meilleur outil.
+Each Minion exists in **Tier I** and **Tier II**. Tier II is faster and has a better tool.
 
-| Minion | T1 (intervalle) | T2 (intervalle) |
+| Minion | T1 (interval) | T2 (interval) |
 |---|---|---|
 | Cobblestone | 15 ticks | 8 ticks |
-| Chêne | 20 ticks | 10 ticks |
-| Blé | 20 ticks | 10 ticks |
-| Fer | 60 ticks | 30 ticks |
-| Terre | 10 ticks | 5 ticks |
-| Charbon | 30 ticks | 15 ticks |
-| Cuivre | 40 ticks | 20 ticks |
-| Or | 60 ticks | 30 ticks |
+| Oak | 20 ticks | 10 ticks |
+| Wheat | 20 ticks | 10 ticks |
+| Iron | 60 ticks | 30 ticks |
+| Dirt | 10 ticks | 5 ticks |
+| Coal | 30 ticks | 15 ticks |
+| Copper | 40 ticks | 20 ticks |
+| Gold | 60 ticks | 30 ticks |
 | Redstone | 45 ticks | 22 ticks |
 | Lapis | 45 ticks | 22 ticks |
-| Diamant | 120 ticks | 60 ticks |
-| Émeraude | 120 ticks | 60 ticks |
+| Diamond | 120 ticks | 60 ticks |
+| Emerald | 120 ticks | 60 ticks |
 
-Pour crafter un T2, remplace la torche de redstone par un **bloc de redstone** et les matériaux par leur forme bloc.
+To craft a T2, replace the redstone torch with a **redstone block** and the materials with their block form.
 
 ---
 
-## L'économie — Les Coins
+## The economy — Coins
 
-Toute la progression repose sur les **Coins** (¢), une monnaie **partagée entre tous les joueurs** — il n'y a qu'un seul solde commun pour le serveur.  
-Ce solde est affiché en permanence dans la barre d'action.
+All progression relies on **Coins** (¢), a currency **shared between all players** — there is only one common balance for the server.
+This balance is permanently displayed in the action bar.
 
-### Vendre des ressources
+### Selling resources
 
-Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or flottant). Elle contient un **coffre de vente incassable**.
+On the island there is a **selling station** (a platform with a floating gold ingot). It contains an **unbreakable sell chest**.
 
-1. Dépose tes ressources dans ce coffre
-2. Le scan est automatique toutes les secondes — les items sont convertis en Coins et le coffre se vide
+1. Drop your resources into this chest
+2. The scan is automatic every second — items are converted into Coins and the chest is emptied
 
-**Prix de vente :**
+**Selling prices:**
 
-| Item | Prix |
+| Item | Price |
 |---|---|
-| Par défaut | 1 ¢ |
+| Default | 1 ¢ |
 | Sand, Gravel, Wheat Seeds | 2 ¢ |
 | Wheat | 4 ¢ |
-| Oak Log (et autres logs) | 5 ¢ |
+| Oak Log (and other logs) | 5 ¢ |
 | Charcoal | 5 ¢ |
 | Rotten Flesh | 3 ¢ |
 | Bone, String | 6 ¢ |
@@ -126,16 +126,16 @@ Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or fl
 | Golden Apple | 50 ¢ |
 | Enchanted Golden Apple | 100 ¢ |
 
-> Tout autre item vaut 1 ¢ par défaut.
+> Any other item is worth 1 ¢ by default.
 
-### Acheter des ressources
+### Buying resources
 
-Clique sur le **PNJ marchand** à la station de vente pour ouvrir la boutique dans le chat.  
-Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités automatiquement.
+Click the **Merchant NPC** at the selling station to open the shop in chat.
+Click **[Buy]** next to the desired item — the Coins are debited automatically.
 
-**Catalogue :**
+**Catalog:**
 
-| Item | Quantité | Coût |
+| Item | Quantity | Cost |
 |---|---|---|
 | Cobblestone | 1 | 100 ¢ |
 | Oak Log | 1 | 150 ¢ |
@@ -145,13 +145,13 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 | Water Bucket | 1 | 5000 ¢ |
 | Lava Bucket | 1 | 10000 ¢ |
 
-> Si tu n'as pas assez de Coins, l'achat est refusé sans débit.
+> If you don't have enough Coins, the purchase is refused with no debit.
 
-### Acheter des minerais au Mineur
+### Buying ores from the Miner
 
-Juste à côté (à droite) du Marchand se trouve un second PNJ, le **Mineur**. Il vend des minerais bruts à l'unité — pratique pour compléter les drops de tes minions sans devoir tout miner toi-même.
+Right next to the Merchant is a second NPC, the **Miner**. He sells raw ores individually — handy for topping up your minions' drops without having to mine everything yourself.
 
-| Item | Quantité | Coût |
+| Item | Quantity | Cost |
 |---|---|---|
 | Coal | 1 | 200 ¢ |
 | Raw Copper | 1 | 250 ¢ |
@@ -162,11 +162,11 @@ Juste à côté (à droite) du Marchand se trouve un second PNJ, le **Mineur**. 
 | Emerald | 1 | 2500 ¢ |
 | Diamond | 1 | 3000 ¢ |
 
-### Acheter des saplings
+### Buying saplings
 
-Plus loin sur la même rangée se trouve un troisième PNJ, le **Pépiniériste**. Il vend tous les types de saplings vanilla, utile puisque ton île ne pousse que des chênes.
+Further along the same row is a third NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
 
-| Item | Quantité | Coût |
+| Item | Quantity | Cost |
 |---|---|---|
 | Oak Sapling | 1 | 5000 ¢ |
 | Spruce Sapling | 1 | 5000 ¢ |
@@ -178,27 +178,27 @@ Plus loin sur la même rangée se trouve un troisième PNJ, le **Pépiniériste*
 
 ---
 
-## Progression suggérée
+## Suggested progression
 
-1. **Cobblestone Minion T1** en premier — recette peu coûteuse (8 cobblestones + torche de redstone)
-2. Vends la cobblestone pour acheter des graines et du bois supplémentaire
-3. **Coal Minion T1** — génère du charbon vendable, facile à crafter
-4. **Wheat Minion T1** — blé à vendre, craft avec 8 blés + torche de redstone
-5. **Oak Wood Minion T1** — planches au lieu de logs pour le T1
-6. Améliore tes premiers Minions en **T2** (matériaux en blocs + bloc de redstone)
-7. **Iron Minion** — coûteux à crafter (8 lingots de fer) mais génère du raw iron
-8. **Gold / Redstone / Lapis Minions** — minerais intermédiaires, nécessitent de vrais lingots ou poudres
-9. **Diamond / Emerald Minions** — endgame, recettes très coûteuses mais drops précieux
-10. Place des **coffres** à côté de tes Minions pour une collecte automatique sans intervention
+1. **Cobblestone Minion T1** first — cheap recipe (8 cobblestone + redstone torch)
+2. Sell the cobblestone to buy seeds and extra wood
+3. **Coal Minion T1** — generates sellable coal, easy to craft
+4. **Wheat Minion T1** — wheat to sell, craft with 8 wheat + redstone torch
+5. **Oak Wood Minion T1** — planks instead of logs for T1
+6. Upgrade your first Minions to **T2** (block materials + redstone block)
+7. **Iron Minion** — expensive to craft (8 iron ingots) but generates raw iron
+8. **Gold / Redstone / Lapis Minions** — mid-tier ores, require real ingots or dust
+9. **Diamond / Emerald Minions** — endgame, very expensive recipes but valuable drops
+10. Place **chests** next to your Minions for automatic collection with no intervention
 
 ---
 
-## Conseils
+## Tips
 
-- Un Minion **ne peut pas être cassé** par d'autres joueurs (seul toi peux le récupérer via clic gauche).
-- Le coffre de vente est **incassable** — si quelqu'un le détruit, il se repose automatiquement.
-- Les Minions fonctionnent **même quand tu n'es pas connecté** tant que le serveur tourne.
-- Tu peux placer **autant de Minions que tu veux** sur ton île.
-- Les cultures et les arbres **poussent plus vite** que dans un monde normal (randomTickSpeed x3).
-- Les feuilles de chêne ont une chance de dropper une **Golden Apple** (0.5%) ou une **Enchanted Golden Apple** (0.25%) en plus des saplings et pommes habituels.
-- Le monde reste vide en dehors de ton île, mais le biome (Meadow) permet aux mobs de spawn normalement : animaux passifs le jour, monstres si ta zone n'est pas assez éclairée la nuit.
+- A Minion **cannot be broken** by other players (only you can pick it up via left-click).
+- The sell chest is **unbreakable** — if someone destroys it, it repositions itself automatically.
+- Minions work **even when you're offline** as long as the server is running.
+- You can place **as many Minions as you want** on your island.
+- Crops and trees **grow faster** than in a normal world (randomTickSpeed x3).
+- Oak leaves have a chance to drop a **Golden Apple** (0.5%) or an **Enchanted Golden Apple** (0.25%) in addition to the usual saplings and apples.
+- The world remains empty outside your island, but the biome (Meadow) allows mobs to spawn normally: passive animals during the day, monsters if your area isn't lit enough at night.

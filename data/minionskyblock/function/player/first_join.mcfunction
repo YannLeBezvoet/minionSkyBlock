@@ -12,4 +12,4 @@ gamemode survival @s
 
 title @s times 20 70 20
 title @s title {"text":"MinionSkyBlock","color":"gold","bold":true}
-title @s subtitle {"text":"Bonne chance !","color":"yellow"}
+title @s subtitle {"text":"Good luck!","color":"yellow"}

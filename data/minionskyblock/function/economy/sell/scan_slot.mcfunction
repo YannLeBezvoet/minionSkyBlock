@@ -2,10 +2,10 @@ scoreboard players set #sell_value skyblock_temp 0
 scoreboard players set #sell_count skyblock_temp 0
 scoreboard players set #sell_found skyblock_temp 0
 
-# === CATALOGUE DE VENTE ===
-# Ajouter un item  : copier un bloc de 3 lignes, changer <item> et <prix>
-# Modifier un prix : changer la valeur sur la 2e ligne du bloc
-# Supprimer        : supprimer les 3 lignes du bloc
+# === SELL CATALOG ===
+# Add item    : copy a 3-line block, change <item> and <price>
+# Change price: change the value on the block's 2nd line
+# Remove      : delete the block's 3 lines
 
 $execute if score #sell_found skyblock_temp matches 0 store result score #sell_count skyblock_temp if items block -8 66 0 $(slot) minecraft:cobblestone
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
@@ -88,7 +88,7 @@ $execute if score #sell_found skyblock_temp matches 0 store result score #sell_c
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 100
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_found skyblock_temp 1
 
-# Prix par défaut : tout item non listé vaut 1 coin
+# Default price: any unlisted item is worth 1 coin
 $execute if score #sell_found skyblock_temp matches 0 store result score #sell_count skyblock_temp if items block -8 66 0 $(slot) *
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
 execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_found skyblock_temp 1

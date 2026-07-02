@@ -1,12 +1,11 @@
 # MinionSkyBlock
 
-Reproduction de la boucle de gameplay de Hypixel SkyBlock en solo et realm via un data pack Minecraft Java 26.2.
+A reproduction of the Hypixel SkyBlock gameplay loop, solo and realm, via a Minecraft Java 26.2 data pack.
 
-## Boucle de gameplay
+## Gameplay loop
 
-Trois piliers fondamentaux :
+Three fundamental pillars:
 
-1. **Île isolée** — le joueur commence sur une petite île au milieu du vide, sans ressources autour de lui.
-2. **Minions** — des entités posables et craftables qui génèrent des blocs/ressources en autonomie. Chaque minion peut être amélioré pour augmenter sa vitesse ou sa production.
-3. **Économie** — un système d'achat et de vente couvrant tous les items du jeu, alimenté par une monnaie virtuelle (coins).
-
+1. **Isolated island** — the player starts on a small island in the middle of the void, with no resources around them.
+2. **Minions** — placeable, craftable entities that generate blocks/resources autonomously. Each minion can be upgraded to increase its speed or production.
+3. **Economy** — a buying and selling system covering all items in the game, powered by a virtual currency (coins).
