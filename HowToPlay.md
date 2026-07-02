@@ -199,3 +199,4 @@ Plus loin sur la même rangée se trouve un troisième PNJ, le **Pépiniériste*
 - Tu peux placer **autant de Minions que tu veux** sur ton île.
 - Les cultures et les arbres **poussent plus vite** que dans un monde normal (randomTickSpeed x3).
 - Les feuilles de chêne ont une chance de dropper une **Golden Apple** (1%) ou une **Enchanted Golden Apple** (0.5%) en plus des saplings et pommes habituels.
+- Le monde reste vide en dehors de ton île, mais le biome (Meadow) permet aux mobs de spawn normalement : animaux passifs le jour, monstres si ta zone n'est pas assez éclairée la nuit.
