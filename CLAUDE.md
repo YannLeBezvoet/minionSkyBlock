@@ -78,7 +78,7 @@ Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 
 ## Selling system
 
-The player drops items into the **sell chest** (-7 66 0). The scan is automatic every 20 ticks (≈1s) via `player/on_tick.mcfunction`.
+The player drops items into the **sell chest** (-8 66 0). The scan is automatic every 20 ticks (≈1s) via `player/on_tick.mcfunction`.
 
 The chest is **unbreakable**: `on_tick` checks every tick whether the block is missing and replaces it (+ kills dropped items within a 3-block radius).
 
