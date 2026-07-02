@@ -10,6 +10,9 @@ setworldspawn 0 66 0
 gamerule random_tick_speed 15
 gamerule send_command_feedback false
 
+# Coins partages entre tous les joueurs : stockes sur le fake player global #coins (jamais reinitialise si deja present)
+execute unless score #coins skyblock_coins matches -2147483648..2147483647 run scoreboard players set #coins skyblock_coins 0
+
 # Biome deja genere fige a la creation du monde (dimension json ne s'applique qu'aux nouveaux chunks) : re-biome retroactif
 execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15 minecraft:meadow replace minecraft:the_void
 
