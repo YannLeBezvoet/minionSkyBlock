@@ -123,8 +123,8 @@ Sur l'île se trouve une **station de vente** (plateforme avec un lingot d'or fl
 | Gold Ingot | 32 ¢ |
 | Emerald | 40 ¢ |
 | Diamond | 80 ¢ |
-| Golden Apple | 100 ¢ |
-| Enchanted Golden Apple | 250 ¢ |
+| Golden Apple | 50 ¢ |
+| Enchanted Golden Apple | 100 ¢ |
 
 > Tout autre item vaut 1 ¢ par défaut.
 
@@ -141,7 +141,9 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 | Oak Log | 1 | 150 ¢ |
 | Sand | 1 | 150 ¢ |
 | Gravel | 1 | 150 ¢ |
+| Pointed Dripstone | 1 | 5000 ¢ |
 | Water Bucket | 1 | 5000 ¢ |
+| Lava Bucket | 1 | 10000 ¢ |
 
 > Si tu n'as pas assez de Coins, l'achat est refusé sans débit.
 
@@ -198,5 +200,5 @@ Plus loin sur la même rangée se trouve un troisième PNJ, le **Pépiniériste*
 - Les Minions fonctionnent **même quand tu n'es pas connecté** tant que le serveur tourne.
 - Tu peux placer **autant de Minions que tu veux** sur ton île.
 - Les cultures et les arbres **poussent plus vite** que dans un monde normal (randomTickSpeed x3).
-- Les feuilles de chêne ont une chance de dropper une **Golden Apple** (1%) ou une **Enchanted Golden Apple** (0.5%) en plus des saplings et pommes habituels.
+- Les feuilles de chêne ont une chance de dropper une **Golden Apple** (0.5%) ou une **Enchanted Golden Apple** (0.25%) en plus des saplings et pommes habituels.
 - Le monde reste vide en dehors de ton île, mais le biome (Meadow) permet aux mobs de spawn normalement : animaux passifs le jour, monstres si ta zone n'est pas assez éclairée la nuit.

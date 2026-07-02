@@ -48,7 +48,7 @@
           "name": "minecraft:golden_apple",
           "conditions": [
             { "condition": "minecraft:survives_explosion" },
-            { "condition": "minecraft:random_chance", "chance": 0.01 }
+            { "condition": "minecraft:random_chance", "chance": 0.005 }
           ]
         }
       ]
@@ -61,7 +61,7 @@
           "name": "minecraft:enchanted_golden_apple",
           "conditions": [
             { "condition": "minecraft:survives_explosion" },
-            { "condition": "minecraft:random_chance", "chance": 0.005 }
+            { "condition": "minecraft:random_chance", "chance": 0.0025 }
           ]
         }
       ]
