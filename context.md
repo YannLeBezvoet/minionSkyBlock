@@ -13,7 +13,7 @@ Deployment: `./update.sh` → copies to `~/.minecraft/saves/New World/datapacks/
 
 **Implemented:**
 - Spawn island + starter chest + tree
-- Economy: auto-sell (chest -7 66 0), NPC shop (click on the interaction entity)
+- Economy: auto-sell (chest -8 66 0), NPC shop (click on the interaction entity)
 - T1 + T2 Minions: cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald
 - Minion crafting (JSON recipes): center redstone_torch (T1) / redstone_block (T2), T2 materials in block form
 - Placement (consume_item advancement), pickup (left-click)
