@@ -95,8 +95,8 @@ Pour crafter un T2, remplace la torche de redstone par un **bloc de redstone** e
 
 ## L'économie — Les Coins
 
-Toute la progression repose sur les **Coins** (¢), ta monnaie virtuelle.  
-Ton solde est affiché en permanence dans la barre d'action.
+Toute la progression repose sur les **Coins** (¢), une monnaie **partagée entre tous les joueurs** — il n'y a qu'un seul solde commun pour le serveur.  
+Ce solde est affiché en permanence dans la barre d'action.
 
 ### Vendre des ressources
 

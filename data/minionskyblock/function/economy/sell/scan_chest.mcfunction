@@ -55,6 +55,6 @@ function minionskyblock:economy/sell/scan_slot with storage minionskyblock:sell 
 data modify storage minionskyblock:sell scan set value {slot:"container.26"}
 function minionskyblock:economy/sell/scan_slot with storage minionskyblock:sell scan
 
-execute if score #sell_total skyblock_temp matches 1.. run scoreboard players operation @s skyblock_coins += #sell_total skyblock_temp
+execute if score #sell_total skyblock_temp matches 1.. run scoreboard players operation #coins skyblock_coins += #sell_total skyblock_temp
 execute if score #sell_total skyblock_temp matches 1.. run scoreboard players operation @s skyblock_last_sale = #sell_total skyblock_temp
 execute if score #sell_total skyblock_temp matches 1.. run title @s actionbar [{"text":"Vendu ! +","color":"gray"},{"score":{"name":"@s","objective":"skyblock_last_sale"},"color":"gold"},{"text":" coins","color":"gold"}]

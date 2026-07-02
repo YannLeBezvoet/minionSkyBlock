@@ -57,8 +57,8 @@ data/
 | Objectif | Type | Usage |
 |---|---|---|
 | `skyblock_joined` | dummy | 0=jamais connecté, 1=déjà connecté |
-| `skyblock_coins` | dummy | Monnaie du joueur |
-| `skyblock_last_sale` | dummy | Coins du dernier vente (pour actionbar) |
+| `skyblock_coins` | dummy | Monnaie **partagée entre tous les joueurs** — toujours lue/écrite sur le fake player global `#coins` (jamais `@s`), initialisé une fois dans `load.mcfunction` |
+| `skyblock_last_sale` | dummy | Coins du dernier vente (pour actionbar, reste par-joueur) |
 | `skyblock_temp` | dummy | Calculs temporaires — voir fake players ci-dessous |
 | `skyblock_shop` | trigger | Joueur tape `/trigger skyblock_shop set <id>` (achat catalogue, IDs 1-22) |
 | `skyblock_ptick` | dummy | Compteur tick par joueur (0→20), cadence les opérations lourdes |
@@ -137,8 +137,8 @@ execute if score @s skyblock_shop matches 1 run function minionskyblock:economy/
 
 `buy.mcfunction` est une macro générique (variables : `$(cost)`, `$(item)`, `$(qty)`, `$(name)`) :
 ```mcfunction
-$execute unless score @s skyblock_coins matches $(cost).. run return fail
-$scoreboard players remove @s skyblock_coins $(cost)
+$execute unless score #coins skyblock_coins matches $(cost).. run return fail
+$scoreboard players remove #coins skyblock_coins $(cost)
 $give @s $(item) $(qty)
 scoreboard players set #shop_result skyblock_temp 1
 $title @s actionbar {"text":"Acheté : $(name)  (-$(cost) coins)","color":"green"}
@@ -213,6 +213,7 @@ Puis `/reload` dans Minecraft. **Ne pas utiliser de symlink** — Minecraft les 
 ## Gotchas connus
 
 - **`#minecraft:tick` tag** : ne déclenche pas en 26.2. Utiliser l'advancement `minecraft:tick` per-joueur (voir section Tick).
+- **`score ... matches ..` (bornes vides)** : invalide en 26.2 pour tester l'existence d'un score — provoque "Expected value or range of values" et fait échouer le **chargement de toute la fonction** (même symptôme que le gotcha gamerule ci-dessous : si c'est `load.mcfunction`, rien n'est initialisé sur un monde neuf). Utiliser une plage explicite couvrant tout l'intervalle int, ex. `matches -2147483648..2147483647` (échoue quand même si le score n'existe pas, donc reste un test d'existence valide).
 - **`gamerule spawnRadius`** : supprimé en 26.2 — commande invalide, provoque "Failed to load function" pour tout le fichier qui la contient. Retiré de `load.mcfunction`.
 - **Gamerules en snake_case** : en 26.2, tous les noms de gamerule sont passés en snake_case (`randomTickSpeed` → `random_tick_speed`). L'ancien nom camelCase provoque "Incorrect argument for command at position N: gamerule" et fait échouer le **chargement de toute la fonction** (pas juste la ligne). Si la fonction cassée est `load.mcfunction`, elle disparaît du tag `#minecraft:load` (log : "Couldn't load tag minecraft:load as it is missing following references") et **rien n'est initialisé** (scoreboards, storages, world spawn) dans un monde fraîchement créé — alors qu'un monde déjà existant continue de fonctionner car il a conservé l'état créé avant la régression. Toujours vérifier `~/.minecraft/logs/latest.log` pour ce genre d'échec silencieux quand un bug ne touche que les nouveaux mondes.
 - **Fonctions macro `$`** : le préfixe `$` ne doit être mis **que sur les lignes qui contiennent au moins un `$(variable)`**. Une ligne `$` sans substitution provoque "Can't parse function" en 26.2.
