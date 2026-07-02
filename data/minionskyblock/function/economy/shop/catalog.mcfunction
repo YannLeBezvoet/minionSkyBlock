@@ -23,6 +23,6 @@ execute if score @s skyblock_shop matches 20 run function minionskyblock:economy
 execute if score @s skyblock_shop matches 21 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_emerald
 execute if score @s skyblock_shop matches 22 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop ore_diamond
 
-execute if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Coins insuffisants !","color":"red"}
+execute if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Not enough coins!","color":"red"}
 
 scoreboard players set @s skyblock_shop 0

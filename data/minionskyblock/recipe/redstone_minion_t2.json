@@ -25,12 +25,12 @@
           "italic": false
         },
         {
-          "text": "Clic droit pour placer sur l'ile.",
+          "text": "Right-click to place on the island.",
           "color": "dark_gray",
           "italic": false
         },
         {
-          "text": "Clic gauche pour ramasser.",
+          "text": "Left-click to pick up.",
           "color": "dark_gray",
           "italic": false
         }

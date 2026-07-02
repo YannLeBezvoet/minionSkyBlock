@@ -1,3 +1,3 @@
-# #minecraft:tick ne fonctionne pas en MC 26.2.
-# La logique de tick est dans player/on_tick.mcfunction
-# via l'advancement player/tick_loop (minecraft:tick per-joueur).
+# #minecraft:tick does not work in MC 26.2.
+# Tick logic lives in player/on_tick.mcfunction
+# via the player/tick_loop advancement (minecraft:tick per player).

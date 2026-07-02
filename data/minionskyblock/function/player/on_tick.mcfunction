@@ -35,7 +35,7 @@ execute as @e[tag=minion_interact_diamond,tag=tier_2] if data entity @s attack.p
 execute as @e[tag=minion_interact_emerald] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald
 execute as @e[tag=minion_interact_emerald,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald_t2
 
-# Avance le compteur global d'un cran une seule fois par tick serveur (gametime identique pour tous les joueurs dans un même tick)
+# Advance the global counter by one step, only once per server tick (gametime is identical for all players within the same tick)
 execute store result score #tick_now skyblock_temp run time query gametime
 execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run scoreboard players add #world_ptick skyblock_temp 1
 scoreboard players operation #tick_last_world skyblock_temp = #tick_now skyblock_temp
