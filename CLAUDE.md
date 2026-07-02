@@ -99,7 +99,7 @@ At the end of the function (block common to all items):
 ```mcfunction
 execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_count skyblock_temp *= #sell_value skyblock_temp
 execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
-$execute if score #sell_found skyblock_temp matches 1 run item replace block -7 66 0 $(slot) with minecraft:air
+$execute if score #sell_found skyblock_temp matches 1 run item replace block -8 66 0 $(slot) with minecraft:air
 ```
 
 **Default price**: any unlisted item is worth 1 coin (via `if items ... *` at the end of the catalog).
