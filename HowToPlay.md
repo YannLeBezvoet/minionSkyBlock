@@ -141,7 +141,7 @@ Clique sur **[Acheter]** en face de l'item voulu — les Coins sont débités au
 | Oak Log | 1 | 150 ¢ |
 | Sand | 1 | 150 ¢ |
 | Gravel | 1 | 150 ¢ |
-| Dripstone | 1 | 5000 ¢ |
+| Pointed Dripstone | 1 | 5000 ¢ |
 | Water Bucket | 1 | 5000 ¢ |
 | Lava Bucket | 1 | 10000 ¢ |
 
