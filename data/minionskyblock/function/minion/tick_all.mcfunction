@@ -22,3 +22,11 @@ execute as @e[tag=minion,tag=minion_diamond] unless entity @s[tag=tier_2] at @s 
 execute as @e[tag=minion,tag=minion_diamond,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion diamond_t2
 execute as @e[tag=minion,tag=minion_emerald] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion emerald_t1
 execute as @e[tag=minion,tag=minion_emerald,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion emerald_t2
+execute as @e[tag=minion,tag=minion_sand] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion sand_t1
+execute as @e[tag=minion,tag=minion_sand,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion sand_t2
+execute as @e[tag=minion,tag=minion_gravel] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion gravel_t1
+execute as @e[tag=minion,tag=minion_gravel,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion gravel_t2
+execute as @e[tag=minion,tag=minion_quartz] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion quartz_t1
+execute as @e[tag=minion,tag=minion_quartz,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion quartz_t2
+execute as @e[tag=minion,tag=minion_obsidian] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion obsidian_t1
+execute as @e[tag=minion,tag=minion_obsidian,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion obsidian_t2
