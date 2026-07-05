@@ -27,8 +27,6 @@ kill @e[tag=shop_npc]
 kill @e[tag=shop_npc_interaction]
 kill @e[tag=shop_npc_saplings]
 kill @e[tag=shop_npc_saplings_interaction]
-kill @e[tag=shop_npc_ore]
-kill @e[tag=shop_npc_ore_interaction]
 
 fill -9 65 -1 -7 65 1 minecraft:bedrock
 setblock -8 66 0 minecraft:chest[facing=east]
@@ -38,8 +36,6 @@ summon minecraft:item_display -8 67.8 0 {Tags:["sell_display"],item:{id:"minecra
 fill 7 65 -3 9 65 3 minecraft:bedrock
 summon minecraft:villager 8 66 2 {Tags:["shop_npc"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Merchant",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:cleric",type:"minecraft:plains",level:2}}
 summon minecraft:interaction 8 66 2 {Tags:["shop_npc_interaction"],width:1.0f,height:2.0f,response:1b}
-summon minecraft:villager 8 66 0 {Tags:["shop_npc_ore"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Miner",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:armorer",type:"minecraft:plains",level:2}}
-summon minecraft:interaction 8 66 0 {Tags:["shop_npc_ore_interaction"],width:1.0f,height:2.0f,response:1b}
 summon minecraft:villager 8 66 -2 {Tags:["shop_npc_saplings"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Nurseryman",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:farmer",type:"minecraft:plains",level:2}}
 summon minecraft:interaction 8 66 -2 {Tags:["shop_npc_saplings_interaction"],width:1.0f,height:2.0f,response:1b}
 

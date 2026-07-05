@@ -26,13 +26,17 @@ data/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
         on_tick.mcfunction         ← revoke tick_loop + chest protection + skyblock_ptick counter + shop trigger
       world/build_island.mcfunction← fill/setblock of the whole island + sell station
+      world/build_mining_island.mcfunction← far-away teleport-only island with a fully mineable floor
+      world/quarry_break_scan.mcfunction← per-tick: advances a mined floor block's stage (see Mining Island)
+      world/quarry_random_transform.mcfunction← per-second: ambient stage reversal + ore spawn (see Mining Island)
+      world/mining_island_repair.mcfunction← per-tick: patches any broken wall/ceiling block back to stone
       economy/
         display.mcfunction         ← coins actionbar every 20 ticks
         sell/
           scan_chest.mcfunction    ← resets #sell_total to 0, calls scan_slot 27×, credits
           scan_slot.mcfunction     ← macro $(slot): detects item + price, empties the slot
         shop/
-          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Miner+Nurseryman)
+          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Nurseryman)
           buy.mcfunction           ← generic macro: $(cost) $(item) $(qty) $(name)
 ```
 
@@ -48,9 +52,14 @@ data/
 | Sell chest (unbreakable) | -8 66 0 |
 | Item display (floating gold ingot) | -8 67.8 0 |
 | Merchant NPC (catalog purchases) | 8 66 2 |
-| Miner NPC (unit ore purchases) | 8 66 0 |
 | Nurseryman NPC (sapling purchases) | 8 66 -2 |
 | Bedrock platform (NPCs, x 7-9) | Z=-3 to 3 (centered on the island) |
+| Prospector NPC (teleport to Mining Island) | 8 66 0 (old Miner spot, bedrock already there) |
+| Mining Island (quarry, X/Z≈5,000,000 — teleport only, no walking route exists) | X=5,000,000 to 5,000,020, Z=4,999,990 to 5,000,010, Y=63-65 (floor); walls Y=65-71, ceiling Y=72 |
+| Quarry pit (349 tracked positions, `#qstage_1..349`) | whole interior floor: X=5,000,001-5,000,019, Z=4,999,991-5,000,009, Y=65, minus the NPC platform and rail (see Mining Island section) |
+| Mining Island support beams (oak fence + log) | Z=4,999,995 and Z=5,000,005, X=5,000,000/5,000,020 (posts), X=5,000,001-5,000,019 Y=71 (crossbeam) |
+| Mining Island decor minecart | 5000010.5 66.2 5000002.5 (on a short rail at Z=5,000,002) |
+| Prospector NPC on Mining Island (teleport back) | 5000010 66 4999998 |
 
 ## Scoreboards
 
@@ -75,6 +84,9 @@ Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 | `#world_ptick` | Global server tick counter (0→20), paces `tick_all` regardless of the number of players |
 | `#tick_now` | Gametime of the current tick — detects server tick changes |
 | `#tick_last_world` | Last recorded gametime, compared to `#tick_now` to deduplicate |
+| `#qstage_1` .. `#qstage_349` | Current stage of each of the 349 Mining Island quarry floor positions: `0`=ore, `1`=stone, `2`=cobblestone, `3`=bedrock. Source of truth independent of the actual placed block — needed because once a block is mined (air), its previous identity is otherwise lost. See Mining Island section |
+| `#qroll` / `#qroll2` | Scratch fake players for `random value` rolls in `world/quarry_random_transform.mcfunction` (chance-of-transform, then which-ore-type) — reused across all 349 positions sequentially, no collision risk (single-threaded) |
+| `#mining_light_fix2` | 0→1→2 one-time global toggle that fixes black chunks on the (always-forceloaded, far away) Mining Island — see Mining Island section. Named `_fix2` because the island was relocated once already (X=500-520 → X/Z=5,000,000): reusing the old counter (already at 2/done) would have skipped the fix at the new location, so it got a fresh name instead of being manually reset |
 
 ## Selling system
 
@@ -144,14 +156,12 @@ scoreboard players set #shop_result skyblock_temp 1
 $title @s actionbar {"text":"Bought: $(name)  (-$(cost) coins)","color":"green"}
 ```
 
-Current catalog:
+Current catalog (Merchant trimmed down to fluids + dripstone; IDs 1-4 freed up):
 
 | ID | Storage key | Item | Qty | Cost |
 | --- | --- | --- | --- | --- |
-| 1 | cobblestone | cobblestone | 1 | 100 |
-| 2 | oak_log | oak_log | 1 | 150 |
-| 3 | sand | sand | 1 | 150 |
-| 4 | gravel | gravel | 1 | 150 |
+| 5 | lava_bucket | lava_bucket | 1 | 10000 |
+| 6 | dripstone | pointed_dripstone | 1 | 5000 |
 | 7 | water_bucket | water_bucket | 1 | 5000 |
 | 8 | sapling_oak | oak_sapling | 1 | 5000 |
 | 9 | sapling_spruce | spruce_sapling | 1 | 5000 |
@@ -160,28 +170,20 @@ Current catalog:
 | 12 | sapling_acacia | acacia_sapling | 1 | 5000 |
 | 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
 | 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
-| 15 | ore_coal | coal | 1 | 200 |
-| 16 | ore_copper | raw_copper | 1 | 250 |
-| 17 | ore_iron | raw_iron | 1 | 300 |
-| 18 | ore_redstone | redstone | 1 | 500 |
-| 19 | ore_lapis | lapis_lazuli | 1 | 750 |
-| 20 | ore_gold | raw_gold | 1 | 750 |
-| 21 | ore_emerald | emerald | 1 | 2500 |
-| 22 | ore_diamond | diamond | 1 | 3000 |
+
+IDs 1-4 (`cobblestone`, `oak_log`, `sand`, `gravel`) and 15-22 (`ore_coal` through `ore_diamond`, the old Miner NPC's per-unit ore catalog) are free to reuse — both removed as redundant (raw blocks are cheaply farmable via Minions/the sell chest; ores via the Mining Island quarry pit, see below).
 
 To add an item:
 
 1. Add `data modify storage minionskyblock:shop <key> set value {...}` in `load.mcfunction`
 2. Add `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <key>` in `catalog.mcfunction`
-3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`/`open_menu_ore.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
+3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
 
-### Second NPC — Miner (unit ores)
+### Second NPC — Nurseryman (saplings)
 
-A second villager (`tag=shop_npc_ore`, interaction `tag=shop_npc_ore_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_ore.mcfunction` via `economy/shop/npc_clicked_ore.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells raw ores individually at a high price (coal, raw_copper, raw_iron, redstone, lapis_lazuli, raw_gold, emerald, diamond — `skyblock_shop` IDs 15 to 22), reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage. Designed as a practical outlet for ore minion drops (buying 1 raw_iron/raw_gold individually rather than mining it yourself).
+A second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
 
-### Third NPC — Nurseryman (saplings)
-
-A third villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -4`, further along the same row. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the other two NPCs). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
+There used to be a third NPC here too — the **Miner** (`8 66 0`, unit ore purchases, `skyblock_shop` IDs 15-22) — removed once the Mining Island quarry pit made buying individual ores redundant. `build_island.mcfunction` no longer summons it, but that function only runs once per world (see `build_island` gotcha below), so an unconditional `kill @e[tag=shop_npc_ore]` / `kill @e[tag=shop_npc_ore_interaction]` was added to `load.mcfunction` to retroactively remove it from worlds where it was already summoned — the same pattern used for the Mining Island's own removed decorations (see that section).
 
 ## First join
 
@@ -232,12 +234,55 @@ Then `/reload` in Minecraft. **Do not use a symlink** — Minecraft blocks them 
 - **`consume_item` + `minecraft:consumable`**: in 26.2, `minecraft:consumable` alone does not trigger `consume_item`. `minecraft:food` must also be added. **`can_always_eat:true` is mandatory** — without it, the item cannot be consumed when the hunger bar is full, so the trigger never fires. Full format: `minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true}` + `minecraft:consumable={consume_seconds:0.5f}`. Applies both to JSON recipes and `give` commands in pickup functions.
 - **`build_island` in `load.mcfunction`**: do not call `build_island` from `load.mcfunction` — this would rebuild the island on every `/reload` or restart, destroying the player's builds. `build_island` must only be called from `player/first_join.mcfunction`.
 
+## Mining Island
+
+A second, separate island (`world/build_mining_island.mcfunction`), placed at **X/Z≈5,000,000** (Y unchanged, ~65) — far enough that walking there is not a real option — and reachable **only by teleport**. A **Prospector** villager NPC on the starting island (`8 66 0`, `tag=shop_npc_prospector` — the old Miner's spot, reused after the Miner NPC was removed) teleports the player there on click; a second Prospector on the Mining Island (`5000010 66 4999998`, `tag=shop_npc_prospector_return`) teleports back. Same interaction-entity + `on_tick.mcfunction` click-detection mechanism as the other NPCs, but the click handlers (`economy/shop/npc_clicked_prospector[_return].mcfunction`) run a direct `teleport` (via `economy/shop/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction`) instead of opening a chat shop menu — no trigger/storage plumbing needed for a single fixed destination.
+
+Moving the Prospector from its original `8 66 -4` spot to `8 66 0` needed the same retroactive treatment as the Miner's removal: `build_mining_island.mcfunction` only runs once per world, so an unconditional kill-then-resummon at the new position was added to `load.mcfunction` (right after the Miner's retroactive kill) for worlds where it was already standing at the old spot.
+
+**Note on Y**: Minecraft's vertical axis is capped (well under a million, nowhere near it), so "far away" only ever applies to X/Z. The island's Y range (63-72) stayed the same as the original nearby version — only X/Z moved.
+
+Built retroactively from **`load.mcfunction`** (unlike `build_island`), guarded by `execute unless block 5000001 65 4999991 minecraft:stone run function .../build_mining_island` — a block check rather than the per-player `first_join` advancement. This matters because `first_join` only fires once ever per player: on a world where players already joined before this feature existed, that advancement will never fire again, so `build_island`'s own player-gated pattern would never build the mining island. `load.mcfunction` runs on every world load regardless of player history, so this guard is checked (and satisfied) retroactively.
+
+**The whole function is safe to re-run** (every `summon` is preceded by a matching `kill @e[tag=...]` at the top of the file). **If you add more to this function later, bump the guard check to a position that only the new content touches**, or it won't apply to already-built worlds — this is exactly why the guard is currently a floor position (`5000001 65 4999991`, the corner of the old bordered pit, which used to be `polished_andesite` and is now plain `stone` since the whole floor became mineable) rather than the original `5000000 68 5000000` wall check, which never changed across this revision and so wouldn't have triggered a rebuild. **If you ever relocate the island again, also give the black-chunks fix a new counter name** (see `#mining_light_fix2` below) rather than resetting the old one — it's simpler than reasoning about a counter that's already at "done". (Earlier prototypes of this feature — a nearby walking-bridge version, then a nearer X=500-520 location — existed only during development on a single test world and were manually torn down at the time; no migration/teardown logic is kept in the codebase for them.)
+
+The island itself looks like a real mine, not an open-air platform: perimeter stone walls (Y=65-71) and a flat stone ceiling (Y=72) fully enclose it (no door — arrival/departure is by teleport only, so none is needed), two oak-fence-and-log support beams break up the walls at Z=-5/Z=5 mineshaft-style, 16 wall torches light the room, a few cobwebs sit in the ceiling corners, and a decorative minecart sits parked on a short rail near the entrance.
+
+To avoid a flat "hollow cube" silhouette, several layers were added in `build_mining_island.mcfunction`, in order of how deep they cut into the geometry — two earlier surface-only attempts (a single-block-deep row of isolated accent blocks, then a full material-noise texture on the flat walls alone) were kept but judged insufficient on their own; the real fix turned out to require actually reshaping the room, not just its texture:
+
+- **Structural bulges + low-ceiling pockets** (inserted right after the cave shell, before everything else — this is genuine geometry, not decoration). Went through three iterations. Pass 1 (4/3 blocks deep, uniform) still read too much like a big square room. Pass 2 pushed to a flat 7/6-block-deep slab per side (torches/beams no longer dodged, on explicit request) — narrower, but reported back as "four big smooth rectangles": a fixed-depth fill has one flat front face regardless of how deep it goes. Pass 3 (current) fixes that: each bulge is now built column-by-column, with **each column getting its own randomized depth between 2 and 5 blocks** (and its own stone-family material) instead of one uniform depth — so the choke points are simultaneously *smaller on average* (max 5, down from 7/6) and *irregular* (jagged silhouette, no flat face at all). West/east columns vary along Y66-71 × Z4999997-5000002; north/south columns vary along Y66-71 × X5000007-5000012. Still narrows the room noticeably without any column reaching the Return NPC platform (X=5000008-5000012, Z=4999996-5000000) — worst case, west/east reach X5000005/X5000015 (NPC is X8-12, untouched); north/south reach Z4999995/Z5000005 (NPC is Z97-99, untouched). Two opposite corners additionally drop the ceiling from the usual Y=72 down to Y=69 (still leaving Y=66-68 clear, 3 blocks of headroom), for an uneven, hand-dug ceiling profile — these weren't part of the "smooth rectangle" complaint and were left as-is.
+- **Relief pass** (right after the bulges, still before the beams/torches/cobwebs so those cleanly overwrite their footprint) — this replaced an earlier "full-surface rock noise" pass that only swapped the *material* of flat wall/ceiling cells at a single fixed depth; per direct feedback with a screenshot, that read as smooth colored patches glued onto a flat plane, not actual rough rock. The relief pass instead gives every wall/ceiling cell (outside the choke-point bulges and low-ceiling pockets, which are already deeper) a random *depth* of 0, 1, or 2 blocks — some cells stay flush with the original flat plane, some poke 1 block into the room, some poke 2 — each filled with one of the stone-family blocks (cobblestone, mossy_cobblestone, andesite, diorite, deepslate, tuff, calcite, stone), so the silhouette itself is jagged rather than just differently colored. Skips the 16 wall torches and 4 ceiling cobweb corners (kept intact this time — losing all wall lighting would hurt more than help, unlike the choke points where depth was worth more than the fixtures). The beam crossbeam (Y=71, Z=4999995/5000005) can still get overwritten, consistent with the choke-point precedent; the fence posts (X=5000000/5000020 exactly) are untouched since this pass only ever adds depth on the room-facing side.
+- **Clustered boulders + stalactites** (after the cobwebs, room-facing side): ~65 blocks forming small connected blobs (not isolated single cubes) stick 1 block into the room from all 4 inner wall faces, plus 4 two-block `pointed_dripstone` stalactite clusters hang from the ceiling. Two of the four stalactite clusters happen to land inside the new low-ceiling pockets and end up hidden inside that solid mass (harmless — just a wasted placement, not worth special-casing) — the other two remain visible in the open, taller parts of the room, which incidentally reads as realistic (stalactites forming in the bigger cavern space rather than the cramped tunnel sections).
+
+Since the floor's 349 tracked `#qstage` positions are the one thing that can never move (every coordinate is hardcoded in `quarry_break_scan.mcfunction`/`quarry_random_transform.mcfunction`), **none of this geometry touches Y=65** — the bulges and pockets only ever start at Y=66, one block above the tracked floor, so the tracked block state and the ambient ore/stone/cobblestone/bedrock cycling keep working normally underneath regardless of what sits above. Because each wall bulge column can still be up to 5 blocks deep (even though depth now varies per column instead of being fixed), a floor tile can end up genuinely sealed in wherever the Y=66 row happens to be covered at that X/Z — reaching it means mining down through the bulge's own rock first (which, like the beams, isn't repaired if broken). Pass 3's per-column randomization makes the exact sealed footprint irregular and smaller on average than pass 2's uniform blocks, but the same underlying trade-off still applies wherever a column does reach full depth. This is treated as an intentional feature rather than a bug: it reads as "some ore veins are behind solid rock until you dig to them," consistent with a real mine, and the buried positions still tick along normally in the background (a player who eventually breaks through may find stage-advanced ore/cobblestone/bedrock waiting, not just plain stone). The two low-ceiling pockets don't have this problem — they only drop the ceiling (Y=69-71), Y=66-68 stays open above every floor tile underneath them, so nothing there is ever sealed off.
+
+Both layers stay strictly at Y≥66 (never Y=65, the tracked `#qstage` floor) — except the full-surface wall noise, which is safe at any Y including 65 since it's on the flat wall's own X/Z coordinate (X=5000000/5000020, Z=4999990/5000010), never the interior floor coordinates. The room-facing boulders/stalactites additionally skip Y=67 (wall torches), the beam columns/crossbeam, the ceiling cobweb corners, and the Return NPC/rail buffer box. Only the *boulders/stalactites* layer is uncovered by `mining_island_repair.mcfunction` (which only refills the flat wall/ceiling plane) — if one gets mined it just stays gone, the same accepted trade-off already used for the support beams; the full-surface noise **is** covered, since it lives directly on the plane repair already refills (just reverts to plain stone, losing that cell's texture, if ever mined).
+
+The walls and ceiling are plain `minecraft:stone`, not `bedrock` — kept that way for the aesthetic, but that means they're normally breakable in survival like any stone. `world/mining_island_repair.mcfunction` makes them **effectively unbreakable** the same way the sell chest already is (see Selling system): 5 `fill <wall/ceiling bounds> stone replace air` commands (one per wall face + one for the ceiling), called from `on_tick.mcfunction` inside the same once-per-real-tick dedup block as `quarry_break_scan` (so a broken wall block is patched back before the player can walk through, and the whole check is cheap — each `fill ... replace air` is one bulk command regardless of region size, not one command per block). This only refills *missing* blocks, so it doesn't fight the floor's `#qstage` system (the floor is a separate region, not covered by these 5 fills) and doesn't undo the oak-fence/oak-log support beams unless a beam post itself gets broken (in which case it comes back as plain stone, not fence — a minor cosmetic trade-off, not worth tracking beam state separately for).
+
+It offers an **active alternative to Minions**: **the entire interior floor** (349 positions — every X/Z inside the walls, X=5,000,001-5,000,019 by Z=4,999,991-5,000,009, minus the 9-block NPC bedrock platform and the 3-block decorative rail) is a mineable quarry where every block cycles through stages when mined, instead of just disappearing or regrowing on a timer. (An earlier revision tracked only a bordered 5×5 sub-patch — the border and separate floor-texture decorations were removed once the whole floor became trackable, since leaving them in place would have desynced their physical block from the `#qstage` default of "stone".)
+
+- **Stages** (tracked per position by `#qstage_1`..`#qstage_349` in `skyblock_temp`, independent of the actual block — see that table): `0`=ore, `1`=stone, `2`=cobblestone, `3`=bedrock (a dead end — unbreakable in survival, like all vanilla bedrock)
+- **On break** (`world/quarry_break_scan.mcfunction`, called from `on_tick.mcfunction` once per real server tick — reuses the existing `#tick_now`/`#tick_last_world` dedup so it's not duplicated per connected player, not paced any slower, so the block-replaces-itself feedback feels instant): per position, per stage `S` with target material `M` (0→stone, 1→cobblestone, 2→bedrock): `execute if score #qstage_N matches S if block <pos> air run setblock <pos> M`, **then** `execute if score #qstage_N matches S if block <pos> M run scoreboard players set #qstage_N S+1`. The second line's `if block <pos> M` (checking the *material just placed*, not `air` again) is the load-bearing trick — checking `air` a second time always fails since the first line already overwrote it, which is exactly the bug that shipped initially (cobblestone never advanced to bedrock, because every stage's score update silently no-opped forever). `stage==S && block==M` is a safe, unique signal for "line 1 just fired this tick", since nothing else in the datapack ever places `M` at these positions while the stage score still reads `S`. This part doesn't care which specific ore was mined (all of them collapse to the same `stone` target), so it never needs touching when the ore list or weighting changes.
+- **Ambient reversal** (`world/quarry_random_transform.mcfunction`, called from `tick_all.mcfunction`, once per second): per position, three independent rolls — `#qroll` (`random value 1..2000`, the stone→ore trigger, `matches 1..3` = **0.15%** chance), `#qroll2` (`random value 1..100`, picks *which* ore via weighted cumulative ranges — see `ORE_WEIGHTS` below), `#qroll3` (`random value 1..100`, the cobblestone/bedrock→stone trigger, `matches 1..5` = **5%** chance, **the highest-probability transform**). The stone→ore check runs *before* the cobblestone/bedrock→stone check in the file — since a position's stage can only ever satisfy one of the two conditions (`1` vs `2..3`) at the start of this pass, and the ore-check only ever moves a position *out of* stage 1 (never into 2 or 3), this ordering isn't strictly required for correctness the way it was with a *shared* roll in an earlier revision (see below) — kept anyway as the established, already-verified-safe pattern.
+  - `ORE_WEIGHTS` (least → most rare, mapped to cumulative ranges on `#qroll2`): coal 15, copper 12, iron 10, gold 6, lapis 4, diamond 2, emerald 1, redstone 1 — **sum to 51, not 100**. This is intentional: every ore was made twice as rare by halving each weight rather than only relatively rarer against each other, so `#qroll2` landing in the now-unassigned 52-100 gap matches no ore at all. Redstone was added after the fact at the minimum weight (tied with emerald); quartz/sand/gravel were removed from the pool entirely (not "ores"). Adjusting rarity or the pool only means editing this list and regenerating.
+  - **Gotcha this introduced**: the "advance stage to 0 (ore)" line must also check `if score #qroll2 matches 1..<TOTAL_WEIGHT>` (currently `1..51`), not just that the outer trigger (`#qroll`) fired — otherwise, whenever `#qroll2` lands in the unassigned gap, the stage would flip to "ore" while no `setblock` ran, leaving the position stuck reporting stage 0 with a plain stone block still sitting there. This was caught while implementing the halving (not present before, when the weights summed to exactly 100 and covered the whole `#qroll2` range with no gap) — if `ORE_WEIGHTS` is ever changed, **recompute and update `TOTAL_WEIGHT` in that line**, don't leave it stale.
+  - The 0.15% ore-trigger chain: flat "1 in 8, 1% total" → weighted 0.3% (`1..1000`, `matches 1..3`) → doubling the wait time (halving the odds) by doubling the roll range to `1..2000` while keeping `matches 1..3` — same numerator, double the denominator, exactly half the probability. This is why `#qroll` is a separate fake player from `#qroll3` (the revert check, still `1..100`) even though both used to share a single `#qroll` back when their ranges matched.
+- No macros/loops here: even at 349 positions, both functions are literal, hardcoded `execute` chains — generated with a script (position list + exclusion zones + `ORE_WEIGHTS` + the two trigger thresholds are the only inputs) and volume/line-count checked, not written by hand. The sequencing bugs in an earlier revision were caught by manually tracing all 6 break/no-break scenarios per stage, not by the generator; the generator only scales a pattern already verified correct. This is consistent with this codebase's preference for explicit repetition over abstraction (see `scan_slot.mcfunction` for the same style elsewhere), though at this position count each function is ~2,000-4,600 lines — if the pit is ever expanded further (more positions, or more ore types), consider a storage-array + recursive-function approach instead of continuing to scale literal per-position lines.
+- To resize the mineable area, change the ore pool/weights, or retune the odds: regenerate both functions (position list + exclusion zones + `ORE_WEIGHTS` + trigger thresholds are the only inputs) and update the `#qstage_N` init count in `load.mcfunction` to match
+
+Because the island is far from spawn and reached only by teleport (no player ever walks there through normally-loaded chunks), its chunks are kept **permanently forceloaded** (`forceload add 4999995 4999990 5000025 5000010` in `load.mcfunction`, re-added on every load) — otherwise `quarry_break_scan`/`quarry_random_transform` would silently do nothing while no player is physically present. The starting island's own `forceload add -16 -16 15 15` (in `first_join.mcfunction`) was left untouched. **If the island is ever relocated again, remember to `forceload remove` the old region** — forceloaded chunks stay forceloaded forever once added, even if the datapack stops re-adding them.
+
+Being new, never-visited chunks, the Mining Island needs its own black-chunks fix (see gotcha below) — but since it must apply retroactively too, it can't reuse the per-player tag mechanism (`skyblock_light_fix`/`skyblock_light_fix2`) used for the spawn island. Instead it's a **global** 0→1→2 toggle on `#mining_light_fix2` (init in `load.mcfunction`, ticked in `on_tick.mcfunction`): tick where the score is 0 fills the region with stone and advances to 1, the tick after fills it back to air and advances to 2 (done forever after).
+
+To add a new vein: pick a bounding box on the Mining Island, `fill` it with a border block + the resource in `build_mining_island.mcfunction`, add a `#vein_<name>` counter (init in `load.mcfunction`, increment + regen check in `tick_all.mcfunction`).
+
 ## Minions phase
 
 - Entity: tagged Armor Stand (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
 - Placement: custom crafted item → right-click → function detects via advancement and spawns the Armor Stand
 - Central tick: a single function iterates over all `@e[tag=minion]` (no per-entity schedule)
-- Implemented types: cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald — Tier I and Tier II
+- Implemented types: cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald, sand, gravel, quartz, obsidian — Tier I and Tier II
 
 ### Minion storage (`minionskyblock:minion`)
 
@@ -274,6 +319,10 @@ Timers by type and tier:
 | lapis | 45 | 22 |
 | diamond | 120 | 60 |
 | emerald | 120 | 60 |
+| sand | 10 | 5 |
+| gravel | 10 | 5 |
+| quartz | 50 | 25 |
+| obsidian | 180 | 90 |
 
 ### Collection into an adjacent chest
 
@@ -281,7 +330,7 @@ Timers by type and tier:
 
 Loot tables: `loot_table/minion/drop/<type>.json` (resolution path: `minionskyblock:minion/drop/<type>`).
 
-Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald.
+Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald, sand → sand, gravel → gravel, quartz → quartz, obsidian → obsidian.
 
 If the chest is full, items overflow onto the ground.
 
@@ -305,6 +354,10 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | `lapis_minion_t1.json` | lapis_lazuli | iron_pickaxe |
 | `diamond_minion_t1.json` | diamond | diamond_pickaxe |
 | `emerald_minion_t1.json` | emerald | diamond_pickaxe |
+| `sand_minion_t1.json` | sand | stone_shovel |
+| `gravel_minion_t1.json` | gravel | stone_shovel |
+| `quartz_minion_t1.json` | quartz | stone_pickaxe |
+| `obsidian_minion_t1.json` | obsidian | diamond_pickaxe |
 
 **Tier II** — 8× material (block form) + redstone_block at the center:
 
@@ -322,6 +375,10 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | `lapis_minion_t2.json` | lapis_block | diamond_pickaxe |
 | `diamond_minion_t2.json` | diamond_block | diamond_pickaxe |
 | `emerald_minion_t2.json` | emerald_block | diamond_pickaxe |
+| `sand_minion_t2.json` | glass | iron_shovel |
+| `gravel_minion_t2.json` | flint | iron_shovel |
+| `quartz_minion_t2.json` | quartz_block | iron_pickaxe |
+| `obsidian_minion_t2.json` | crying_obsidian | diamond_pickaxe |
 
 Components on each resulting item:
 

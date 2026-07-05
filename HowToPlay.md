@@ -101,6 +101,36 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ---
 
+## Mining Island
+
+A third NPC, the **Prospector**, stands between the Merchant and the Nurseryman on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (rugged stone walls with jagged outcroppings, a low ceiling with hanging stalactites, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
+
+The walls and ceiling repair themselves almost instantly if you break them, so you can't tunnel out; the main mineable area is the floor, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
+
+- Mine an **ore** → it turns into **stone**
+- Mine that **stone** → it turns into **cobblestone**
+- Mine that **cobblestone** → it turns into **bedrock** — a dead end, you can't break it any further for now
+
+Left alone, the floor slowly heals itself, though it takes its time:
+
+- Bedrock and cobblestone have a small chance each second to revert back to stone — still the more likely of the two outcomes, but a slow one
+- Stone has a much smaller chance each second to turn into a fresh ore, picked at random — rarer ores show up far less often than common ones:
+
+| Ore | Rarity |
+|---|---|
+| Coal | most common |
+| Copper | |
+| Iron | |
+| Gold | |
+| Lapis Lazuli | |
+| Diamond | |
+| Emerald | rarest (tied) |
+| Redstone | rarest (tied) |
+
+So the mine is never truly "empty" — dig long enough and bedrock spots you left behind will turn workable again, and patient waiting is occasionally rewarded with an ore, mostly coal and copper but every so often something much better. A hands-on alternative (or complement) to letting a Minion do it passively.
+
+---
+
 ## The economy — Coins
 
 All progression relies on **Coins** (¢), a currency **shared between all players** — there is only one common balance for the server.
@@ -147,34 +177,15 @@ Click **[Buy]** next to the desired item — the Coins are debited automatically
 
 | Item | Quantity | Cost |
 |---|---|---|
-| Cobblestone | 1 | 100 ¢ |
-| Oak Log | 1 | 150 ¢ |
-| Sand | 1 | 150 ¢ |
-| Gravel | 1 | 150 ¢ |
-| Pointed Dripstone | 1 | 5000 ¢ |
 | Water Bucket | 1 | 5000 ¢ |
 | Lava Bucket | 1 | 10000 ¢ |
+| Pointed Dripstone | 1 | 5000 ¢ |
 
 > If you don't have enough Coins, the purchase is refused with no debit.
 
-### Buying ores from the Miner
-
-Right next to the Merchant is a second NPC, the **Miner**. He sells raw ores individually — handy for topping up your minions' drops without having to mine everything yourself.
-
-| Item | Quantity | Cost |
-|---|---|---|
-| Coal | 1 | 200 ¢ |
-| Raw Copper | 1 | 250 ¢ |
-| Raw Iron | 1 | 300 ¢ |
-| Redstone | 1 | 500 ¢ |
-| Lapis Lazuli | 1 | 750 ¢ |
-| Raw Gold | 1 | 750 ¢ |
-| Emerald | 1 | 2500 ¢ |
-| Diamond | 1 | 3000 ¢ |
-
 ### Buying saplings
 
-Further along the same row is a third NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
+Right next to the Merchant is a second NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
 
 | Item | Quantity | Cost |
 |---|---|---|
