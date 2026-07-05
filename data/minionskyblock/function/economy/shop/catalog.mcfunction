@@ -11,6 +11,7 @@ execute if score @s skyblock_shop matches 12 run function minionskyblock:economy
 execute if score @s skyblock_shop matches 13 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sapling_dark_oak
 execute if score @s skyblock_shop matches 14 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sapling_cherry
 
-execute if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Not enough coins!","color":"red"}
+execute unless score @s skyblock_shop matches 5..14 run title @s actionbar {"text":"Invalid shop selection!","color":"red"}
+execute if score @s skyblock_shop matches 5..14 if score #shop_result skyblock_temp matches 0 run title @s actionbar {"text":"Not enough coins!","color":"red"}
 
 scoreboard players set @s skyblock_shop 0
