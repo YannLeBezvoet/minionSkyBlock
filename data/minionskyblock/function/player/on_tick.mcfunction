@@ -7,10 +7,13 @@ execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light
 
 # Black-chunks fix for the (far away, always-forceloaded) Mining Island: global two-tick toggle, not tied to any player's join history
 # (v2: the island moved from X=500-520 to X/Z=5,000,000 — a fresh counter avoids needing to reset the old, already-completed one)
-execute if score #mining_light_fix2 skyblock_temp matches 0 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:stone
-execute if score #mining_light_fix2 skyblock_temp matches 0 run scoreboard players set #mining_light_fix2 skyblock_temp 1
-execute if score #mining_light_fix2 skyblock_temp matches 1 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:air
-execute if score #mining_light_fix2 skyblock_temp matches 1 run scoreboard players set #mining_light_fix2 skyblock_temp 2
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_last skyblock_temp matches -2147483648..2147483647 run scoreboard players set #mining_light_fix2_tick_last skyblock_temp -1
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 store result score #mining_light_fix2_tick_now skyblock_temp run time query gametime
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 0 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:stone
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 0 run scoreboard players set #mining_light_fix2 skyblock_temp 1
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 1 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:air
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 1 run scoreboard players set #mining_light_fix2 skyblock_temp 2
+execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp run scoreboard players operation #mining_light_fix2_tick_last skyblock_temp = #mining_light_fix2_tick_now skyblock_temp
 
 execute unless block -8 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-8,y=66,z=0,distance=..3]
 execute unless block -8 66 0 minecraft:chest run setblock -8 66 0 minecraft:chest[facing=east]
