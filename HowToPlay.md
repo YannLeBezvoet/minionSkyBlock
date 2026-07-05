@@ -103,7 +103,7 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ## Mining Island
 
-A third NPC, the **Prospector**, stands between the Merchant and the Nurseryman on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (stone walls, a low ceiling, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
+A third NPC, the **Prospector**, stands between the Merchant and the Nurseryman on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (rugged stone walls with jagged outcroppings, a low ceiling with hanging stalactites, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
 
 The walls and ceiling are **unbreakable**. Only the floor is mineable, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
 
