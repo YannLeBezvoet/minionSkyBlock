@@ -57,6 +57,7 @@ execute as @e[tag=minion_interact_obsidian,tag=tier_2] if data entity @s attack.
 execute store result score #tick_now skyblock_temp run time query gametime
 execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run scoreboard players add #world_ptick skyblock_temp 1
 execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run function minionskyblock:world/quarry_break_scan
+execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run function minionskyblock:world/mining_island_repair
 scoreboard players operation #tick_last_world skyblock_temp = #tick_now skyblock_temp
 execute if score #world_ptick skyblock_temp matches 20.. run function minionskyblock:minion/tick_all
 execute if score #world_ptick skyblock_temp matches 20.. run scoreboard players set #world_ptick skyblock_temp 0
