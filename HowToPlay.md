@@ -52,6 +52,10 @@ The material follows a progression logic:
 | Lapis | Lapis Lazuli | Lapis Block |
 | Diamond | Diamond | Diamond Block |
 | Emerald | Emerald | Emerald Block |
+| Sand | Sand | Glass |
+| Gravel | Gravel | Flint |
+| Quartz | Quartz | Quartz Block |
+| Obsidian | Obsidian | Crying Obsidian |
 
 > The result is a special item with a colored name and an enchanted glint — this is your Minion, ready to be placed.
 
@@ -88,6 +92,10 @@ Each Minion exists in **Tier I** and **Tier II**. Tier II is faster and has a be
 | Lapis | 45 ticks | 22 ticks |
 | Diamond | 120 ticks | 60 ticks |
 | Emerald | 120 ticks | 60 ticks |
+| Sand | 10 ticks | 5 ticks |
+| Gravel | 10 ticks | 5 ticks |
+| Quartz | 50 ticks | 25 ticks |
+| Obsidian | 180 ticks | 90 ticks |
 
 To craft a T2, replace the redstone torch with a **redstone block** and the materials with their block form.
 
@@ -117,11 +125,13 @@ On the island there is a **selling station** (a platform with a floating gold in
 | Rotten Flesh | 3 ¢ |
 | Bone, String | 6 ¢ |
 | Coal | 6 ¢ |
+| Quartz | 10 ¢ |
 | Apple | 8 ¢ |
 | Bread | 12 ¢ |
 | Iron Ingot | 20 ¢ |
 | Gold Ingot | 32 ¢ |
 | Emerald | 40 ¢ |
+| Obsidian | 60 ¢ |
 | Diamond | 80 ¢ |
 | Golden Apple | 50 ¢ |
 | Enchanted Golden Apple | 100 ¢ |
@@ -185,11 +195,12 @@ Further along the same row is a third NPC, the **Nurseryman**. He sells all type
 3. **Coal Minion T1** — generates sellable coal, easy to craft
 4. **Wheat Minion T1** — wheat to sell, craft with 8 wheat + redstone torch
 5. **Oak Wood Minion T1** — planks instead of logs for T1
-6. Upgrade your first Minions to **T2** (block materials + redstone block)
-7. **Iron Minion** — expensive to craft (8 iron ingots) but generates raw iron
-8. **Gold / Redstone / Lapis Minions** — mid-tier ores, require real ingots or dust
-9. **Diamond / Emerald Minions** — endgame, very expensive recipes but valuable drops
-10. Place **chests** next to your Minions for automatic collection with no intervention
+6. **Sand / Gravel Minions T1** — cheap and fast, another easy source of Coins early on
+7. Upgrade your first Minions to **T2** (block materials + redstone block)
+8. **Iron Minion** — expensive to craft (8 iron ingots) but generates raw iron
+9. **Gold / Redstone / Lapis / Quartz Minions** — mid-tier resources, require real ingots or dust
+10. **Diamond / Emerald / Obsidian Minions** — endgame, very expensive recipes (and, for Obsidian, a long timer) but valuable drops
+11. Place **chests** next to your Minions for automatic collection with no intervention
 
 ---
 
