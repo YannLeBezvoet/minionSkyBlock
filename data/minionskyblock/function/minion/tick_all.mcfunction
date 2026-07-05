@@ -30,3 +30,7 @@ execute as @e[tag=minion,tag=minion_quartz] unless entity @s[tag=tier_2] at @s r
 execute as @e[tag=minion,tag=minion_quartz,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion quartz_t2
 execute as @e[tag=minion,tag=minion_obsidian] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion obsidian_t1
 execute as @e[tag=minion,tag=minion_obsidian,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion obsidian_t2
+
+# Mining island quarry pit: once per second, bedrock/cobblestone have a high chance to revert to stone,
+# and stone has a small chance to become an ore (see world/quarry_random_transform.mcfunction)
+function minionskyblock:world/quarry_random_transform

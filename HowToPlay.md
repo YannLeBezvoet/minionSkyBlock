@@ -101,6 +101,36 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ---
 
+## Mining Island
+
+A fourth NPC, the **Prospector**, stands just past the other three on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (stone walls, a low ceiling, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
+
+The **entire floor** of the Mining Island is mineable, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
+
+- Mine an **ore** → it turns into **stone**
+- Mine that **stone** → it turns into **cobblestone**
+- Mine that **cobblestone** → it turns into **bedrock** — a dead end, you can't break it any further for now
+
+Left alone, the floor slowly heals itself, though it takes its time:
+
+- Bedrock and cobblestone have a small chance each second to revert back to stone — still the more likely of the two outcomes, but a slow one
+- Stone has a much smaller chance each second to turn into a fresh ore, picked at random — rarer ores show up far less often than common ones:
+
+| Ore | Rarity |
+|---|---|
+| Coal | most common |
+| Copper | |
+| Iron | |
+| Gold | |
+| Lapis Lazuli | |
+| Diamond | |
+| Emerald | rarest (tied) |
+| Redstone | rarest (tied) |
+
+So the mine is never truly "empty" — dig long enough and bedrock spots you left behind will turn workable again, and patient waiting is occasionally rewarded with an ore, mostly coal and copper but every so often something much better. A hands-on alternative (or complement) to letting a Minion do it passively.
+
+---
+
 ## The economy — Coins
 
 All progression relies on **Coins** (¢), a currency **shared between all players** — there is only one common balance for the server.
