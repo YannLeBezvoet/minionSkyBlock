@@ -156,14 +156,12 @@ scoreboard players set #shop_result skyblock_temp 1
 $title @s actionbar {"text":"Bought: $(name)  (-$(cost) coins)","color":"green"}
 ```
 
-Current catalog:
+Current catalog (Merchant trimmed down to fluids + dripstone; IDs 1-4 freed up):
 
 | ID | Storage key | Item | Qty | Cost |
 | --- | --- | --- | --- | --- |
-| 1 | cobblestone | cobblestone | 1 | 100 |
-| 2 | oak_log | oak_log | 1 | 150 |
-| 3 | sand | sand | 1 | 150 |
-| 4 | gravel | gravel | 1 | 150 |
+| 5 | lava_bucket | lava_bucket | 1 | 10000 |
+| 6 | dripstone | pointed_dripstone | 1 | 5000 |
 | 7 | water_bucket | water_bucket | 1 | 5000 |
 | 8 | sapling_oak | oak_sapling | 1 | 5000 |
 | 9 | sapling_spruce | spruce_sapling | 1 | 5000 |
@@ -173,7 +171,7 @@ Current catalog:
 | 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
 | 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
 
-IDs 15-22 (`ore_coal` through `ore_diamond`) used to be the Miner NPC's per-unit ore catalog — removed once the Mining Island quarry pit made buying individual ores redundant (see below). IDs are free to reuse.
+IDs 1-4 (`cobblestone`, `oak_log`, `sand`, `gravel`) and 15-22 (`ore_coal` through `ore_diamond`, the old Miner NPC's per-unit ore catalog) are free to reuse — both removed as redundant (raw blocks are cheaply farmable via Minions/the sell chest; ores via the Mining Island quarry pit, see below).
 
 To add an item:
 

@@ -177,13 +177,9 @@ Click **[Buy]** next to the desired item — the Coins are debited automatically
 
 | Item | Quantity | Cost |
 |---|---|---|
-| Cobblestone | 1 | 100 ¢ |
-| Oak Log | 1 | 150 ¢ |
-| Sand | 1 | 150 ¢ |
-| Gravel | 1 | 150 ¢ |
-| Pointed Dripstone | 1 | 5000 ¢ |
 | Water Bucket | 1 | 5000 ¢ |
 | Lava Bucket | 1 | 10000 ¢ |
+| Pointed Dripstone | 1 | 5000 ¢ |
 
 > If you don't have enough Coins, the purchase is refused with no debit.
 

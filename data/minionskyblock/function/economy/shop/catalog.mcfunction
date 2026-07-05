@@ -1,9 +1,5 @@
 scoreboard players set #shop_result skyblock_temp 0
 
-execute if score @s skyblock_shop matches 1 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop cobblestone
-execute if score @s skyblock_shop matches 2 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop oak_log
-execute if score @s skyblock_shop matches 3 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop sand
-execute if score @s skyblock_shop matches 4 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop gravel
 execute if score @s skyblock_shop matches 5 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop lava_bucket
 execute if score @s skyblock_shop matches 6 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop dripstone
 execute if score @s skyblock_shop matches 7 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop water_bucket

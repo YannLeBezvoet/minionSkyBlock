@@ -427,10 +427,6 @@ data modify storage minionskyblock:minion quartz_t2 set value {block:"minecraft:
 data modify storage minionskyblock:minion obsidian_t2 set value {block:"minecraft:obsidian",drop:"minecraft:obsidian",timer:90,tool:"minecraft:diamond_pickaxe",item:"minecraft:diamond_pickaxe",color:"dark_purple",name:"Obsidian Minion",type:"obsidian",tier:2b,tier_display:"II",placement_advancement:"place_obsidian_t2"}
 
 # Purchase catalog (skyblock_shop trigger ID -> data)
-data modify storage minionskyblock:shop cobblestone set value {cost:100,item:"minecraft:cobblestone",qty:1,name:"Cobblestone"}
-data modify storage minionskyblock:shop oak_log set value {cost:150,item:"minecraft:oak_log",qty:1,name:"Oak Log"}
-data modify storage minionskyblock:shop sand set value {cost:150,item:"minecraft:sand",qty:1,name:"Sand"}
-data modify storage minionskyblock:shop gravel set value {cost:150,item:"minecraft:gravel",qty:1,name:"Gravel"}
 data modify storage minionskyblock:shop dripstone set value {cost:5000,item:"minecraft:pointed_dripstone",qty:1,name:"Pointed Dripstone"}
 data modify storage minionskyblock:shop water_bucket set value {cost:5000,item:"minecraft:water_bucket",qty:1,name:"Water Bucket"}
 data modify storage minionskyblock:shop lava_bucket set value {cost:10000,item:"minecraft:lava_bucket",qty:1,name:"Lava Bucket"}
