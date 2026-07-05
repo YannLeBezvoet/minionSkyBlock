@@ -36,7 +36,7 @@ data/
           scan_chest.mcfunction    ← resets #sell_total to 0, calls scan_slot 27×, credits
           scan_slot.mcfunction     ← macro $(slot): detects item + price, empties the slot
         shop/
-          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Miner+Nurseryman)
+          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Nurseryman)
           buy.mcfunction           ← generic macro: $(cost) $(item) $(qty) $(name)
 ```
 
@@ -52,10 +52,9 @@ data/
 | Sell chest (unbreakable) | -8 66 0 |
 | Item display (floating gold ingot) | -8 67.8 0 |
 | Merchant NPC (catalog purchases) | 8 66 2 |
-| Miner NPC (unit ore purchases) | 8 66 0 |
 | Nurseryman NPC (sapling purchases) | 8 66 -2 |
 | Bedrock platform (NPCs, x 7-9) | Z=-3 to 3 (centered on the island) |
-| Prospector NPC (teleport to Mining Island) | 8 66 -4 (bedrock at Z=-4) |
+| Prospector NPC (teleport to Mining Island) | 8 66 0 (old Miner spot, bedrock already there) |
 | Mining Island (quarry, X/Z≈5,000,000 — teleport only, no walking route exists) | X=5,000,000 to 5,000,020, Z=4,999,990 to 5,000,010, Y=63-65 (floor); walls Y=65-71, ceiling Y=72 |
 | Quarry pit (349 tracked positions, `#qstage_1..349`) | whole interior floor: X=5,000,001-5,000,019, Z=4,999,991-5,000,009, Y=65, minus the NPC platform and rail (see Mining Island section) |
 | Mining Island support beams (oak fence + log) | Z=4,999,995 and Z=5,000,005, X=5,000,000/5,000,020 (posts), X=5,000,001-5,000,019 Y=71 (crossbeam) |
@@ -173,28 +172,20 @@ Current catalog:
 | 12 | sapling_acacia | acacia_sapling | 1 | 5000 |
 | 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
 | 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
-| 15 | ore_coal | coal | 1 | 200 |
-| 16 | ore_copper | raw_copper | 1 | 250 |
-| 17 | ore_iron | raw_iron | 1 | 300 |
-| 18 | ore_redstone | redstone | 1 | 500 |
-| 19 | ore_lapis | lapis_lazuli | 1 | 750 |
-| 20 | ore_gold | raw_gold | 1 | 750 |
-| 21 | ore_emerald | emerald | 1 | 2500 |
-| 22 | ore_diamond | diamond | 1 | 3000 |
+
+IDs 15-22 (`ore_coal` through `ore_diamond`) used to be the Miner NPC's per-unit ore catalog — removed once the Mining Island quarry pit made buying individual ores redundant (see below). IDs are free to reuse.
 
 To add an item:
 
 1. Add `data modify storage minionskyblock:shop <key> set value {...}` in `load.mcfunction`
 2. Add `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <key>` in `catalog.mcfunction`
-3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`/`open_menu_ore.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
+3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
 
-### Second NPC — Miner (unit ores)
+### Second NPC — Nurseryman (saplings)
 
-A second villager (`tag=shop_npc_ore`, interaction `tag=shop_npc_ore_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_ore.mcfunction` via `economy/shop/npc_clicked_ore.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells raw ores individually at a high price (coal, raw_copper, raw_iron, redstone, lapis_lazuli, raw_gold, emerald, diamond — `skyblock_shop` IDs 15 to 22), reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage. Designed as a practical outlet for ore minion drops (buying 1 raw_iron/raw_gold individually rather than mining it yourself).
+A second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
 
-### Third NPC — Nurseryman (saplings)
-
-A third villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -4`, further along the same row. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the other two NPCs). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
+There used to be a third NPC here too — the **Miner** (`8 66 0`, unit ore purchases, `skyblock_shop` IDs 15-22) — removed once the Mining Island quarry pit made buying individual ores redundant. `build_island.mcfunction` no longer summons it, but that function only runs once per world (see `build_island` gotcha below), so an unconditional `kill @e[tag=shop_npc_ore]` / `kill @e[tag=shop_npc_ore_interaction]` was added to `load.mcfunction` to retroactively remove it from worlds where it was already summoned — the same pattern used for the Mining Island's own removed decorations (see that section).
 
 ## First join
 
@@ -247,7 +238,9 @@ Then `/reload` in Minecraft. **Do not use a symlink** — Minecraft blocks them 
 
 ## Mining Island
 
-A second, separate island (`world/build_mining_island.mcfunction`), placed at **X/Z≈5,000,000** (Y unchanged, ~65) — far enough that walking there is not a real option — and reachable **only by teleport**. A **Prospector** villager NPC on the starting island (`8 66 -4`, `tag=shop_npc_prospector`) teleports the player there on click; a second Prospector on the Mining Island (`5000010 66 4999998`, `tag=shop_npc_prospector_return`) teleports back. Same interaction-entity + `on_tick.mcfunction` click-detection mechanism as the other NPCs, but the click handlers (`economy/shop/npc_clicked_prospector[_return].mcfunction`) run a direct `teleport` (via `economy/shop/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction`) instead of opening a chat shop menu — no trigger/storage plumbing needed for a single fixed destination.
+A second, separate island (`world/build_mining_island.mcfunction`), placed at **X/Z≈5,000,000** (Y unchanged, ~65) — far enough that walking there is not a real option — and reachable **only by teleport**. A **Prospector** villager NPC on the starting island (`8 66 0`, `tag=shop_npc_prospector` — the old Miner's spot, reused after the Miner NPC was removed) teleports the player there on click; a second Prospector on the Mining Island (`5000010 66 4999998`, `tag=shop_npc_prospector_return`) teleports back. Same interaction-entity + `on_tick.mcfunction` click-detection mechanism as the other NPCs, but the click handlers (`economy/shop/npc_clicked_prospector[_return].mcfunction`) run a direct `teleport` (via `economy/shop/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction`) instead of opening a chat shop menu — no trigger/storage plumbing needed for a single fixed destination.
+
+Moving the Prospector from its original `8 66 -4` spot to `8 66 0` needed the same retroactive treatment as the Miner's removal: `build_mining_island.mcfunction` only runs once per world, so an unconditional kill-then-resummon at the new position was added to `load.mcfunction` (right after the Miner's retroactive kill) for worlds where it was already standing at the old spot.
 
 **Note on Y**: Minecraft's vertical axis is capped (well under a million, nowhere near it), so "far away" only ever applies to X/Z. The island's Y range (63-72) stayed the same as the original nearby version — only X/Z moved.
 

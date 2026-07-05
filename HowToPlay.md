@@ -103,7 +103,7 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ## Mining Island
 
-A fourth NPC, the **Prospector**, stands just past the other three on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (stone walls, a low ceiling, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
+A third NPC, the **Prospector**, stands between the Merchant and the Nurseryman on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (stone walls, a low ceiling, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
 
 The walls and ceiling are **unbreakable**. Only the floor is mineable, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
 
@@ -187,24 +187,9 @@ Click **[Buy]** next to the desired item — the Coins are debited automatically
 
 > If you don't have enough Coins, the purchase is refused with no debit.
 
-### Buying ores from the Miner
-
-Right next to the Merchant is a second NPC, the **Miner**. He sells raw ores individually — handy for topping up your minions' drops without having to mine everything yourself.
-
-| Item | Quantity | Cost |
-|---|---|---|
-| Coal | 1 | 200 ¢ |
-| Raw Copper | 1 | 250 ¢ |
-| Raw Iron | 1 | 300 ¢ |
-| Redstone | 1 | 500 ¢ |
-| Lapis Lazuli | 1 | 750 ¢ |
-| Raw Gold | 1 | 750 ¢ |
-| Emerald | 1 | 2500 ¢ |
-| Diamond | 1 | 3000 ¢ |
-
 ### Buying saplings
 
-Further along the same row is a third NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
+Right next to the Merchant is a second NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
 
 | Item | Quantity | Cost |
 |---|---|---|

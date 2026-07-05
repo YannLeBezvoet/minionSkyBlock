@@ -4,10 +4,10 @@ kill @e[tag=shop_npc_prospector_return]
 kill @e[tag=shop_npc_prospector_return_interaction]
 kill @e[tag=mining_island_decor_minecart]
 
-# Prospector NPC on the starting island: teleports to/from the Mining Island
-fill 7 65 -4 9 65 -4 minecraft:bedrock
-summon minecraft:villager 8 66 -4 {Tags:["shop_npc_prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
-summon minecraft:interaction 8 66 -4 {Tags:["shop_npc_prospector_interaction"],width:1.0f,height:2.0f,response:1b}
+# Prospector NPC on the starting island: teleports to/from the Mining Island — placed at the old Miner's
+# spot (bedrock already there from the original NPC row, no new bedrock fill needed)
+summon minecraft:villager 8 66 0 {Tags:["shop_npc_prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
+summon minecraft:interaction 8 66 0 {Tags:["shop_npc_prospector_interaction"],width:1.0f,height:2.0f,response:1b}
 
 # Mining Island: a separate quarry far from the starting island, reachable only via the Prospector's teleport.
 # The whole interior floor (inside the walls) is the quarry pit — every one of its 349 tracked positions

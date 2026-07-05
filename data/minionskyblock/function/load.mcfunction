@@ -13,6 +13,20 @@ gamerule send_command_feedback false
 # Coins shared across all players: stored on the global fake player #coins (never reset if already present)
 execute unless score #coins skyblock_coins matches -2147483648..2147483647 run scoreboard players set #coins skyblock_coins 0
 
+# Remove the Miner NPC (obsolete now that ores are mineable directly on the Mining Island) — safe to run
+# every load, no-op once gone. build_island.mcfunction itself no longer summons it, but that function
+# only ever runs once per world, so this retroactive kill is needed for worlds that already have it.
+kill @e[tag=shop_npc_ore]
+kill @e[tag=shop_npc_ore_interaction]
+
+# Move the Prospector NPC to the old Miner's spot (8 66 0). Same story as above: build_mining_island.mcfunction
+# only runs once per world, so this retroactive kill-then-resummon is needed for worlds where it's already
+# standing at its old position. Safe to run every load.
+kill @e[tag=shop_npc_prospector]
+kill @e[tag=shop_npc_prospector_interaction]
+summon minecraft:villager 8 66 0 {Tags:["shop_npc_prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
+summon minecraft:interaction 8 66 0 {Tags:["shop_npc_prospector_interaction"],width:1.0f,height:2.0f,response:1b}
+
 # Mining island quarry pit: per-position stage (0=ore, 1=stone, 2=cobblestone, 3=bedrock) for all 349 floor positions, never reset if already present
 execute unless score #qstage_1 skyblock_temp matches -2147483648..2147483647 run scoreboard players set #qstage_1 skyblock_temp 1
 execute unless score #qstage_2 skyblock_temp matches -2147483648..2147483647 run scoreboard players set #qstage_2 skyblock_temp 1
@@ -427,13 +441,3 @@ data modify storage minionskyblock:shop sapling_jungle set value {cost:5000,item
 data modify storage minionskyblock:shop sapling_acacia set value {cost:5000,item:"minecraft:acacia_sapling",qty:1,name:"Acacia Sapling"}
 data modify storage minionskyblock:shop sapling_dark_oak set value {cost:5000,item:"minecraft:dark_oak_sapling",qty:1,name:"Dark Oak Sapling"}
 data modify storage minionskyblock:shop sapling_cherry set value {cost:5000,item:"minecraft:cherry_sapling",qty:1,name:"Cherry Sapling"}
-
-# Ore purchase catalog (Miner NPC, skyblock_shop IDs 15-22, sold per unit)
-data modify storage minionskyblock:shop ore_coal set value {cost:200,item:"minecraft:coal",qty:1,name:"Coal"}
-data modify storage minionskyblock:shop ore_copper set value {cost:250,item:"minecraft:raw_copper",qty:1,name:"Raw Copper"}
-data modify storage minionskyblock:shop ore_iron set value {cost:300,item:"minecraft:raw_iron",qty:1,name:"Raw Iron"}
-data modify storage minionskyblock:shop ore_redstone set value {cost:500,item:"minecraft:redstone",qty:1,name:"Redstone"}
-data modify storage minionskyblock:shop ore_lapis set value {cost:750,item:"minecraft:lapis_lazuli",qty:1,name:"Lapis Lazuli"}
-data modify storage minionskyblock:shop ore_gold set value {cost:750,item:"minecraft:raw_gold",qty:1,name:"Raw Gold"}
-data modify storage minionskyblock:shop ore_emerald set value {cost:2500,item:"minecraft:emerald",qty:1,name:"Emerald"}
-data modify storage minionskyblock:shop ore_diamond set value {cost:3000,item:"minecraft:diamond",qty:1,name:"Diamond"}
