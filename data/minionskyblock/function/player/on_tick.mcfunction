@@ -22,38 +22,38 @@ execute as @e[tag=shop_npc_interaction,limit=1] if data entity @s interaction.pl
 execute as @e[tag=shop_npc_saplings_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_saplings
 execute as @e[tag=shop_npc_prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_prospector
 execute as @e[tag=shop_npc_prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_prospector_return
-execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_cobblestone
-execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_cobblestone_t2
-execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_dirt
-execute as @e[tag=minion_interact_dirt,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_dirt_t2
-execute as @e[tag=minion_interact_iron] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_iron
-execute as @e[tag=minion_interact_iron,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_iron_t2
-execute as @e[tag=minion_interact_oak_wood] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_oak_wood
-execute as @e[tag=minion_interact_oak_wood,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_oak_wood_t2
-execute as @e[tag=minion_interact_wheat] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_wheat
-execute as @e[tag=minion_interact_wheat,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_wheat_t2
-execute as @e[tag=minion_interact_coal] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_coal
-execute as @e[tag=minion_interact_coal,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_coal_t2
-execute as @e[tag=minion_interact_copper] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_copper
-execute as @e[tag=minion_interact_copper,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_copper_t2
-execute as @e[tag=minion_interact_gold] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gold
-execute as @e[tag=minion_interact_gold,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gold_t2
-execute as @e[tag=minion_interact_redstone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_redstone
-execute as @e[tag=minion_interact_redstone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_redstone_t2
-execute as @e[tag=minion_interact_lapis] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_lapis
-execute as @e[tag=minion_interact_lapis,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_lapis_t2
-execute as @e[tag=minion_interact_diamond] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_diamond
-execute as @e[tag=minion_interact_diamond,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_diamond_t2
-execute as @e[tag=minion_interact_emerald] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald
-execute as @e[tag=minion_interact_emerald,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_emerald_t2
-execute as @e[tag=minion_interact_sand] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_sand
-execute as @e[tag=minion_interact_sand,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_sand_t2
-execute as @e[tag=minion_interact_gravel] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gravel
-execute as @e[tag=minion_interact_gravel,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_gravel_t2
-execute as @e[tag=minion_interact_quartz] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_quartz
-execute as @e[tag=minion_interact_quartz,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_quartz_t2
-execute as @e[tag=minion_interact_obsidian] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_obsidian
-execute as @e[tag=minion_interact_obsidian,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup_obsidian_t2
+execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t1
+execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t2
+execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion dirt_t1
+execute as @e[tag=minion_interact_dirt,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion dirt_t2
+execute as @e[tag=minion_interact_iron] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion iron_t1
+execute as @e[tag=minion_interact_iron,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion iron_t2
+execute as @e[tag=minion_interact_oak_wood] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion oak_wood_t1
+execute as @e[tag=minion_interact_oak_wood,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion oak_wood_t2
+execute as @e[tag=minion_interact_wheat] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion wheat_t1
+execute as @e[tag=minion_interact_wheat,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion wheat_t2
+execute as @e[tag=minion_interact_coal] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion coal_t1
+execute as @e[tag=minion_interact_coal,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion coal_t2
+execute as @e[tag=minion_interact_copper] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion copper_t1
+execute as @e[tag=minion_interact_copper,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion copper_t2
+execute as @e[tag=minion_interact_gold] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion gold_t1
+execute as @e[tag=minion_interact_gold,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion gold_t2
+execute as @e[tag=minion_interact_redstone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion redstone_t1
+execute as @e[tag=minion_interact_redstone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion redstone_t2
+execute as @e[tag=minion_interact_lapis] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion lapis_t1
+execute as @e[tag=minion_interact_lapis,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion lapis_t2
+execute as @e[tag=minion_interact_diamond] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion diamond_t1
+execute as @e[tag=minion_interact_diamond,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion diamond_t2
+execute as @e[tag=minion_interact_emerald] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion emerald_t1
+execute as @e[tag=minion_interact_emerald,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion emerald_t2
+execute as @e[tag=minion_interact_sand] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion sand_t1
+execute as @e[tag=minion_interact_sand,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion sand_t2
+execute as @e[tag=minion_interact_gravel] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion gravel_t1
+execute as @e[tag=minion_interact_gravel,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion gravel_t2
+execute as @e[tag=minion_interact_quartz] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion quartz_t1
+execute as @e[tag=minion_interact_quartz,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion quartz_t2
+execute as @e[tag=minion_interact_obsidian] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion obsidian_t1
+execute as @e[tag=minion_interact_obsidian,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion obsidian_t2
 
 # Advance the global counter by one step, only once per server tick (gametime is identical for all players within the same tick)
 execute store result score #tick_now skyblock_temp run time query gametime

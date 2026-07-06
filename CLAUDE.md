@@ -396,8 +396,7 @@ Components on each resulting item:
 - `advancement/minion/place_<type>_t2.json` — filter `{minion_type:"...", minion_tier:2}`, reward → `minion/place_<type>_t2`
 - `function/minion/place_<type>[_t2].mcfunction` — **1 line**: `function minionskyblock:minion/place with storage minionskyblock:minion <type>_t[12]`
 - `function/minion/place.mcfunction` — **generic macro**: revokes `$(placement_advancement)` + summons armor_stand with `tier_$(tier)` tag + summons interaction with `tier_$(tier)` tag + title. Variables: `$(type)`, `$(name)`, `$(color)`, `$(tool)`, `$(tier)`, `$(placement_advancement)`
-- `function/minion/pickup_<type>[_t2].mcfunction` — **1 line** to the corresponding storage
-- `function/minion/pickup.mcfunction` — **generic macro**: kills armor_stand `tag=minion_$(type),tag=tier_$(tier)` + gives item + title. Variables: `$(type)`, `$(name)`, `$(color)`, `$(item)`, `$(tier)`, `$(tier_display)`
+- `function/minion/pickup.mcfunction` — **generic macro**: kills armor_stand `tag=minion_$(type),tag=tier_$(tier)` + gives item + title. Variables: `$(type)`, `$(name)`, `$(color)`, `$(item)`, `$(tier)`, `$(tier_display)`. Called **directly** from `on_tick.mcfunction` with `with storage minionskyblock:minion <type>_t[12]` (no `pickup_<type>.mcfunction` wrapper needed, unlike `place_<type>` — `execute run function` accepts `with storage` inline, only advancement `rewards.function` cannot)
 
 **Backward compatibility**: minions placed before tiers were added (interaction entity without a `tier_<n>` tag) are treated as T1 via `unless entity @s[tag=tier_2]` in `on_tick.mcfunction`.
 
@@ -410,7 +409,7 @@ Interaction entity NBT: `Tags:["minion_interact","minion_interact_<type>","tier_
 1. Add the T1 and T2 entries in `load.mcfunction` (with all fields: `block`, `drop`, `timer`, `tool`, `item`, `color`, `name`, `type`, `tier`, `tier_display`, `placement_advancement`)
 2. Create `loot_table/minion/drop/<type>.json`
 3. Create `advancement/minion/place_<type>.json` and `place_<type>_t2.json`
-4. Create `function/minion/place_<type>.mcfunction`, `place_<type>_t2.mcfunction`, `pickup_<type>.mcfunction`, `pickup_<type>_t2.mcfunction` (1 line each)
+4. Create `function/minion/place_<type>.mcfunction`, `place_<type>_t2.mcfunction` (1 line each — no `pickup_<type>` wrapper needed, see above)
 5. Add 2 lines in `tick_all.mcfunction` (T1 with `unless entity @s[tag=tier_2]`, T2 with `tag=tier_2`)
-6. Add 4 lines in `on_tick.mcfunction` (T1 + T2 for pickup, with `unless entity @s[tag=tier_2]` for T1)
+6. Add 2 lines in `on_tick.mcfunction` (T1 + T2 for pickup, calling `minion/pickup` directly `with storage`, with `unless entity @s[tag=tier_2]` for T1)
 7. Create recipes `recipe/<type>_minion_t1.json` and `recipe/<type>_minion_t2.json`
