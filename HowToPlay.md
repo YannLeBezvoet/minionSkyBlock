@@ -64,6 +64,11 @@ The material follows a progression logic:
 **Right-click** with the Minion in hand to **place** it on your island.
 A small Armor Stand appears with its tool in hand: it starts working immediately.
 
+> **Decorated minions**: every Minion wears a themed armor set.
+> - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
+> - **Obsidian** (the most expensive Minion) wears full **Netherite** armor; Tier II also gets the redstone Flow trim.
+> - **Cobblestone, Dirt, Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
+
 ### How it works
 
 - If there is **no chest** next to it, the Minion places the harvested blocks directly around itself (to be picked up by hand).
