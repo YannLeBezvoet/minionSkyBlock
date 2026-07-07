@@ -13,7 +13,7 @@ Start on a tiny island in the void, automate resource gathering with Minions, an
 - **Zero install friction** — it's a data pack, not a mod. No Forge/Fabric, no client-side changes for your friends on a realm.
 - **Idle progression** — Minions keep working while you're offline, exactly like the SkyBlock formula that made the mode popular.
 - **A real economy** — sell what you gather, buy what you need, and watch your coin count grow.
-- **Actively maintained** — built and tuned against the latest Minecraft Java release.
+- **Actively maintained** — built and tuned for recent Minecraft: Java Edition releases (see `pack.mcmeta` for the supported pack format range).
 
 ## Gameplay loop
 
