@@ -1,6 +1,6 @@
 # MinionSkyBlock
 
-**A free, open-source reproduction of the Hypixel SkyBlock gameplay loop — as a pure Minecraft Java data pack, no mods required.**
+**A free, open-source data pack for Minecraft: Java Edition inspired by Hypixel SkyBlock’s gameplay loop — no mods required.**
 
 Start on a tiny island in the void, automate resource gathering with Minions, and build your fortune through a full player-driven economy — solo or with friends on a realm.
 
