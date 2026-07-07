@@ -7,7 +7,7 @@ scoreboard objectives add skyblock_ptick dummy
 scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
-gamerule random_tick_speed 15
+gamerule random_tick_speed 6
 gamerule send_command_feedback false
 
 # Coins shared across all players: stored on the global fake player #coins (never reset if already present)
