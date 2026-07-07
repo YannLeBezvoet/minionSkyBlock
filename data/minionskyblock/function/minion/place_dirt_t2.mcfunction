@@ -1,1 +1,2 @@
 function minionskyblock:minion/place with storage minionskyblock:minion dirt_t2
+data merge entity @e[type=armor_stand,tag=minion_dirt,tag=tier_2,distance=..3,limit=1,sort=nearest] {equipment:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":12157507}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":12157507}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":12157507}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":12157507}}}}
