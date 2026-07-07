@@ -67,7 +67,7 @@ A small Armor Stand appears with its tool in hand: it starts working immediately
 ### How it works
 
 - If there is **no chest** next to it, the Minion places the harvested blocks directly around itself (to be picked up by hand).
-- If there is **a chest** adjacent (in the 4 cardinal directions, same Y level), the Minion automatically deposits its resources into it. When the chest is full, the items drop on the ground.
+- If there is **a chest** adjacent (in the 4 cardinal directions or the 4 diagonals, same Y level), the Minion automatically deposits its resources into it. When the chest is full, the items drop on the ground.
 
 ### Picking up a Minion
 
