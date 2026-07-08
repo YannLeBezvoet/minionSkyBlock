@@ -202,6 +202,12 @@ Right next to the Merchant is a second NPC, the **Nurseryman**. He sells all typ
 | Dark Oak Sapling | 1 | 5000 ¢ |
 | Cherry Sapling | 1 | 5000 ¢ |
 
+### Wild bee hives (honey)
+
+Growing a tree from a sapling with **bone meal** has a small chance (≈8%) of spawning a **wild bee hive** right next to you, complete with bees and a couple of flowers for them to pollinate. Growth from natural random ticks doesn't trigger this — you need to actively bonemeal.
+
+Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or shears for honeycomb — bring a campfire underneath if you don't want to anger the bees). This is currently the only source of honey on the island.
+
 ---
 
 ## Suggested progression
