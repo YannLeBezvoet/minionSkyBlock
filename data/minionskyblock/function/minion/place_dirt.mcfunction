@@ -1,3 +1,1 @@
 function minionskyblock:minion/place with storage minionskyblock:minion dirt_t1
-execute at @s align xz run data merge entity @e[type=armor_stand,tag=minion_new,limit=1,sort=nearest] {equipment:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8806446}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8806446}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8806446}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8806446}}}}
-execute at @s align xz run tag @e[type=armor_stand,tag=minion_new,limit=1,sort=nearest] remove minion_new
