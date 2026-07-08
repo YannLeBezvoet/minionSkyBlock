@@ -1,2 +1,3 @@
 function minionskyblock:minion/place with storage minionskyblock:minion diamond_t1
-execute at @s align xz run data merge entity @e[type=armor_stand,tag=minion_diamond,tag=tier_1,distance=..1,limit=1,sort=nearest] {equipment:{head:{id:"minecraft:diamond_helmet",count:1},chest:{id:"minecraft:diamond_chestplate",count:1},legs:{id:"minecraft:diamond_leggings",count:1},feet:{id:"minecraft:diamond_boots",count:1}}}
+execute at @s align xz run data merge entity @e[type=armor_stand,tag=minion_new,limit=1,sort=nearest] {equipment:{head:{id:"minecraft:diamond_helmet",count:1},chest:{id:"minecraft:diamond_chestplate",count:1},legs:{id:"minecraft:diamond_leggings",count:1},feet:{id:"minecraft:diamond_boots",count:1}}}
+execute at @s align xz run tag @e[type=armor_stand,tag=minion_new,limit=1,sort=nearest] remove minion_new
