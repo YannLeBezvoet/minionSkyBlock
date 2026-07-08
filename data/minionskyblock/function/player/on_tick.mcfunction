@@ -70,5 +70,7 @@ execute if score @s skyblock_ptick matches 20.. run function minionskyblock:econ
 execute if score @s skyblock_ptick matches 20.. run function minionskyblock:economy/sell/scan_chest
 execute if score @s skyblock_ptick matches 20.. run scoreboard players set @s skyblock_ptick 0
 
+execute if score @s skyblock_hive_cd matches 1.. run scoreboard players remove @s skyblock_hive_cd 1
+
 scoreboard players enable @s skyblock_shop
 execute if score @s skyblock_shop matches 1.. run function minionskyblock:economy/shop/catalog

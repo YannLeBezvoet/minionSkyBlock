@@ -19,6 +19,7 @@ data/
     advancement/player/
       first_join.json              ← trigger:tick, reward → player/first_join
       tick_loop.json               ← trigger:tick, reward → player/on_tick (self-revoking)
+      bonemeal_sapling.json        ← trigger:item_used_on_block (bone_meal on a sapling), reward → world/bonemeal_sapling (self-revoking, see Wild bee hives)
     function/
       load.mcfunction              ← scoreboards + setworldspawn + init minion storage + init shop storage
       tick.mcfunction              ← comments only (tag non-functional in 26.2)
@@ -31,6 +32,11 @@ data/
       world/quarry_break_scan.mcfunction← per-tick: advances a mined floor block's stage (see Mining Island)
       world/quarry_random_transform.mcfunction← per-second: ambient stage reversal + ore spawn (see Mining Island)
       world/mining_island_repair.mcfunction← per-tick: patches any broken wall/ceiling block back to stone
+      world/bonemeal_sapling.mcfunction← reward for bonemeal_sapling advancement: revokes it, then gates on the per-player skyblock_hive_cd cooldown (see Wild bee hives)
+      world/wild_hive_gate.mcfunction← sets skyblock_hive_cd to 100 (5s), calls wild_hive_chance
+      world/wild_hive_chance.mcfunction← rolls #hive_roll (8%), branches to wild_hive_spawn
+      world/wild_hive_spawn.mcfunction← finds a clear spot near the player (caret-relative), branches to wild_hive_place
+      world/wild_hive_place.mcfunction← setblocks the beehive + 2 dandelions + summons 2 bees + actionbar
       economy/
         display.mcfunction         ← coins actionbar every 20 ticks
         sell/
@@ -72,6 +78,7 @@ data/
 | `skyblock_temp` | dummy | Temporary calculations — see fake players below |
 | `skyblock_shop` | trigger | Player types `/trigger skyblock_shop set <id>` (catalog purchase, IDs 1-22) |
 | `skyblock_ptick` | dummy | Per-player tick counter (0→20), paces heavy operations |
+| `skyblock_hive_cd` | dummy | Per-player cooldown (counts down from 100 to 0, 1/tick), throttles wild bee hive rolls — see Wild bee hives |
 
 Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 
@@ -88,6 +95,7 @@ Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 | `#qstage_1` .. `#qstage_349` | Current stage of each of the 349 Mining Island quarry floor positions: `0`=ore, `1`=stone, `2`=cobblestone, `3`=bedrock. Source of truth independent of the actual placed block — needed because once a block is mined (air), its previous identity is otherwise lost. See Mining Island section |
 | `#qroll` / `#qroll2` | Scratch fake players for `random value` rolls in `world/quarry_random_transform.mcfunction` (chance-of-transform, then which-ore-type) — reused across all 349 positions sequentially, no collision risk (single-threaded) |
 | `#mining_light_fix2` | 0→1→2 one-time global toggle that fixes black chunks on the (always-forceloaded, far away) Mining Island — see Mining Island section. Named `_fix2` because the island was relocated once already (X=500-520 → X/Z=5,000,000): reusing the old counter (already at 2/done) would have skipped the fix at the new location, so it got a fresh name instead of being manually reset |
+| `#hive_roll` | Scratch fake player for the `random value 1..100` roll in `world/wild_hive_chance.mcfunction` — see Wild bee hives |
 
 ## Selling system
 
@@ -186,6 +194,22 @@ A second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_i
 
 There used to be a third NPC here too — the **Miner** (`8 66 0`, unit ore purchases, `skyblock_shop` IDs 15-22) — removed once the Mining Island quarry pit made buying individual ores redundant. `build_island.mcfunction` no longer summons it, but that function only runs once per world (see `build_island` gotcha below), so an unconditional `kill @e[tag=shop_npc_ore]` / `kill @e[tag=shop_npc_ore_interaction]` was added to `load.mcfunction` to retroactively remove it from worlds where it was already summoned — the same pattern used for the Mining Island's own removed decorations (see that section).
 
+## Wild bee hives (honey source)
+
+Every minion needs a manual "bootstrap" resource the player gathers by hand before automating it (mine cobblestone, farm wheat, etc.), but the void-world island has no natural source of honey. Solution: bonemealing a sapling into a tree has a small chance to spawn a **wild beehive** next to the player, with 2 bees and 2 dandelions for them to pollinate. Harvesting the hive once it fills is pure vanilla (right-click with a glass bottle for `honey_bottle`, or shears for honeycomb — shears anger the bees unless there's a campfire underneath). This is a bootstrap resource for a future Honey Minion (not yet implemented).
+
+Mechanism: `advancement/player/bonemeal_sapling.json` (trigger `minecraft:item_used_on_block`, item `minecraft:bone_meal`, location = one of the 7 sapling blocks, explicit list — not an assumed tag) → self-revoking reward `world/bonemeal_sapling.mcfunction` (same self-revoke pattern as `tick_loop`).
+
+**Verified in 26.2** (see Known Gotchas below for the `location` predicate array quirk this also surfaced): this trigger fires on **every** bonemeal application on a sapling, successful growth or not — do not assume "trigger fired" means "the interaction's intended effect happened" for this trigger in this version. A first attempt tried to confirm actual growth with a 6-step caret raycast from the player's eyes (checking the look vector for a `#minecraft:logs` hit), on the theory that a sapling's block position becomes the trunk's bottom log in-place on growth. **This proved too unreliable in practice** — real testing mostly hit "other solid block" (almost certainly canopy leaves, which aren't part of `#minecraft:logs`) or missed the target rather than resolving to a clean sapling/log answer, likely because the player's exact interaction ray (using sub-block hitbox collision) doesn't line up with a block-stepped approximation once a much taller tree has grown into the same airspace. That approach (and its debug instrumentation) was removed.
+
+**Current approach — per-player cooldown, not growth confirmation**: `world/bonemeal_sapling.mcfunction` gates on a per-player `skyblock_hive_cd` score (`unless score @s skyblock_hive_cd matches 1..`) before calling `world/wild_hive_gate.mcfunction`, which sets the cooldown to `100` (5s) and calls `world/wild_hive_chance.mcfunction`. The cooldown decrements once per tick in `player/on_tick.mcfunction` (`execute if score @s skyblock_hive_cd matches 1.. run scoreboard players remove @s skyblock_hive_cd 1`). This directly fixes the concrete, reproducible bug (spamming bonemeal on one still-growing sapling rolling a hive on every single click) without depending on fragile block-hit geometry. Trade-off, accepted as a reasonable "good enough" for a rare bonus feature: a hive can occasionally still roll on a bonemeal application that didn't visibly grow the sapling (no verification that growth *actually* happened, only that the player hasn't rolled again in the last 5 seconds) — the alternative (perfect growth confirmation) does not have a robust command-only implementation in this version, per the raycast experiment above.
+
+`world/wild_hive_chance.mcfunction` rolls `#hive_roll` (`random value 1..100`, 8% success, `matches 1..8`) → on success, `world/wild_hive_spawn.mcfunction` picks a spot beside the player using caret notation (`^3 ^ ^-1`, same height, 3 to the side, 1 back — avoids landing on top of the tree the player is facing), gated on that spot and its two flower offsets being air **and solid ground directly beneath the hive spot** (`unless block ~ ~-1 ~ minecraft:air` — without this, hives could spawn floating over the void near the island's edge) → `world/wild_hive_place.mcfunction` places the beehive + 2 dandelions + 2 bees (`Tags:["wild_bee"]`, `PersistenceRequired:1b`) and an actionbar message. If the spot is obstructed, the roll is silently wasted — acceptable for a rare bonus event, no different from the "good enough" placement tolerance already used for Mining Island decor.
+
+**Scope decision**: only bonemeal-assisted growth is detected, not natural random-tick growth — Minecraft has no datapack hook for the latter at all. Since this island's `randomTickSpeed` is already x3 (see `HowToPlay.md`), many trees will grow on their own and won't trigger this — the player needs to actively bonemeal for a shot at a hive.
+
+**Bees get no explicit `HivePos`** — SNBT doesn't support `~` inside entity data (only in the command's position argument), and it isn't needed: bees automatically adopt the nearest valid, empty hive with flowers in range on their own.
+
 ## First join
 
 Handled by an **advancement** (`advancement/player/first_join.json`, trigger `minecraft:tick`) → reward function `player/first_join`. More reliable than `@a[scores={skyblock_joined=0}]`, which does not match untracked players.
@@ -232,7 +256,8 @@ Then `/reload` in Minecraft. **Do not use a symlink** — Minecraft blocks them 
 - **tellraw `clickEvent`**: in 26.2 (post-1.21.5), the field is called `"click_event"` (snake_case), not `"clickEvent"`. The sub-field `"value"` becomes `"command"`. Format: `{"click_event":{"action":"run_command","command":"/trigger ..."}}`. Same for `"hoverEvent"` → `"hover_event"` (to verify).
 - **Multiple spaces in commands**: in 26.2, the parser rejects consecutive spaces between command tokens (`cobblestone  set` or `matches 1  run` → "Incorrect argument"). Use a single space between each token. **Never visually align arguments with spaces.**
 - **Recipe ingredients (recipe JSON)**: in 26.2, ingredients in `key` must be a **simple string** (`"minecraft:cobblestone"`), not an object `{"id":"minecraft:cobblestone"}`. The object causes `Not a string: {"id":...}` on load. Even the post-1.21 format `{"item":"...","components":{...}}` is not supported in `key` — the recipe is silently disabled with no error. **It is therefore impossible to filter by durability (`minecraft:damage: 0`) in recipe ingredients in 26.2.**
-- **`item_used_on_block` trigger**: in 26.2, this trigger only fires if the item has a successful interaction with the block (shovel on grass → yes, pickaxe on anything → no). For universal detection, use `consume_item` instead.
+- **`item_used_on_block` trigger**: in 26.2, this trigger only fires if the item has a successful interaction with the block (shovel on grass → yes, pickaxe on anything → no). For universal detection, use `consume_item` instead. **Caveat found via the Wild bee hives feature**: "successful interaction" is looser than "the intended effect happened" — bone meal on a sapling fires this trigger on *every* application, whether or not that specific application actually grows the sapling into a tree (the game still shows the use-item animation and consumes bonemeal even when its internal growth-chance roll fails). Don't use this trigger alone to infer an outcome. In this pack's case, a robust block-state check to verify the outcome (e.g. a raycast to confirm the sapling became a log) turned out impractical too — see Wild bee hives for why a per-player cooldown was used instead.
+- **Advancement `location` predicate (item_used_on_block, and likely other location-based triggers)**: in 26.2, `conditions.location` must be a **JSON array** of predicate objects, not a single object — `"location": {"block": {...}}` fails with `Not a json array: ...`. Each array element also must use the generic condition-wrapper shape now shared with loot table conditions (see `data/minecraft/loot_table/blocks/oak_leaves.json` for the same `"condition": "minecraft:..."` pattern): `"location": [{"condition": "minecraft:location_check", "predicate": {"block": {"blocks": [...]}}}]`. A single unwrapped object fails with `Not a json array`; a single wrapped object without the outer array fails with `Failed to parse either. First: No key condition in MapLike[...]`.
 - **`consume_item` + `minecraft:consumable`**: in 26.2, `minecraft:consumable` alone does not trigger `consume_item`. `minecraft:food` must also be added. **`can_always_eat:true` is mandatory** — without it, the item cannot be consumed when the hunger bar is full, so the trigger never fires. Full format: `minecraft:food={nutrition:0,saturation:0.0f,can_always_eat:true}` + `minecraft:consumable={consume_seconds:0.5f}`. Applies both to JSON recipes and `give` commands in pickup functions.
 - **`build_island` in `load.mcfunction`**: do not call `build_island` from `load.mcfunction` — this would rebuild the island on every `/reload` or restart, destroying the player's builds. `build_island` must only be called from `player/first_join.mcfunction`.
 
