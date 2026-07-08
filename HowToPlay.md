@@ -62,7 +62,7 @@ The material follows a progression logic:
 ### Placement
 
 **Right-click** with the Minion in hand to **place** it on your island.
-A small Armor Stand appears with its tool in hand: it starts working immediately.
+A small Armor Stand appears with its tool in hand: it starts working immediately, facing the same cardinal direction (North/South/East/West) you were facing when you placed it.
 
 > **Decorated minions**: every Minion wears a themed armor set.
 > - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
