@@ -41,11 +41,17 @@ NPC_PLATFORM_Z = range(4999997, 5000000)
 RAIL_X = range(5000009, 5000012)
 RAIL_Z = (5000002,)
 
-# (fake-player key, ore block, weight) — least to most rare. Weights sum to 51,
-# not 100: every ore was deliberately halved in rarity, leaving #qroll2's
-# 52-100 range unassigned (see quarry_random_transform's "ore-trigger chain"
-# note in CLAUDE.md). Edit here to change the pool or retune rarity.
+# (fake-player key, ore block, weight) — least to most rare. Weights sum to 81,
+# not 100: every entry was deliberately kept below its "true" rarity, leaving
+# #qroll2's 82-100 range unassigned (see quarry_random_transform's "ore-trigger
+# chain" note in CLAUDE.md). Edit here to change the pool or retune rarity.
+# "gravel" isn't an ore, but it rides the same stone->X stage-0 transform so
+# breaking it cycles back to stone exactly like an ore would — it's the
+# Mining Island's bootstrap source for the Gravel Minion (see CLAUDE.md's
+# Mining Island section). Kept the most common entry, above coal, since it's
+# meant to be a fast, low-value bootstrap material rather than a real ore.
 ORE_WEIGHTS = [
+    ("gravel", "minecraft:gravel", 30),
     ("coal", "minecraft:coal_ore", 15),
     ("copper", "minecraft:copper_ore", 12),
     ("iron", "minecraft:iron_ore", 10),
