@@ -123,7 +123,8 @@ Left alone, the floor slowly heals itself, though it takes its time:
 
 | Ore | Rarity |
 |---|---|
-| Coal | most common |
+| Gravel | most common |
+| Coal | |
 | Copper | |
 | Iron | |
 | Gold | |
@@ -132,7 +133,9 @@ Left alone, the floor slowly heals itself, though it takes its time:
 | Emerald | rarest (tied) |
 | Redstone | rarest (tied) |
 
-So the mine is never truly "empty" — dig long enough and bedrock spots you left behind will turn workable again, and patient waiting is occasionally rewarded with an ore, mostly coal and copper but every so often something much better. A hands-on alternative (or complement) to letting a Minion do it passively.
+So the mine is never truly "empty" — dig long enough and bedrock spots you left behind will turn workable again, and patient waiting is occasionally rewarded with an ore (or a patch of gravel), mostly gravel and coal but every so often something much better. A hands-on alternative (or complement) to letting a Minion do it passively.
+
+> **Bonus**: mining a gravel patch with a **shovel** has a small chance (10%) to give you **sand** instead. This is currently the only way to get sand or gravel at all — there's no other source on the island, so a trip to the Mining Island is the way to bootstrap your first Sand and Gravel Minions.
 
 ---
 
