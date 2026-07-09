@@ -69,6 +69,13 @@ ORE_ROLL_MATCH = (1, 3)
 # random value 1..100, matches 1..5 -> 5% chance per second to revert to stone
 REVERT_ROLL_RANGE = (1, 100)
 REVERT_ROLL_MATCH = (1, 5)
+# random value 1..100, matches 1..70 -> when a stone position rolls "become ore"
+# (the ORE_ROLL check above) and has an orthogonal neighbor already showing an
+# ore/gravel block, 70% chance to copy that neighbor's type instead of rolling
+# independently in ORE_WEIGHTS. Creates 2-5 block ore patches instead of lone
+# blocks. Falls back to the independent weighted roll when no neighbor has ore
+# yet, or this roll fails — so isolated "seed" ore blocks can still appear.
+PATCH_COPY_CHANCE = 70
 
 STAGE_TARGETS = [(0, "minecraft:stone"), (1, "minecraft:cobblestone"), (2, "minecraft:bedrock")]
 
@@ -100,6 +107,17 @@ def ore_cumulative_ranges():
     return ranges
 
 
+def build_position_index(positions):
+    """(x, z) -> 1-based #qstage_N / #qore_N index, for orthogonal-neighbor lookups."""
+    return {(x, z): idx for idx, (x, y, z) in enumerate(positions, start=1)}
+
+
+def orthogonal_neighbor_indices(x, z, pos_index):
+    """Indices of tracked N/S/E/W neighbors (skips excluded/boundary cells)."""
+    candidates = [(x - 1, z), (x + 1, z), (x, z - 1), (x, z + 1)]
+    return [pos_index[c] for c in candidates if c in pos_index]
+
+
 def generate_break_scan(positions):
     lines = []
     for idx, (x, y, z) in enumerate(positions, start=1):
@@ -110,6 +128,14 @@ def generate_break_scan(positions):
                 f"execute if score {stage} matches {from_stage} if block {pos} minecraft:air "
                 f"run setblock {pos} {target}"
             )
+            if from_stage == 0:
+                # Ore/gravel just got mined into stone: clear this position's
+                # remembered ore type before the stage advances below, so a
+                # future neighbor can't "copy" a type that's no longer here.
+                lines.append(
+                    f"execute if score {stage} matches {from_stage} if block {pos} {target} "
+                    f"run scoreboard players set #qore_{idx} skyblock_temp 0"
+                )
             lines.append(
                 f"execute if score {stage} matches {from_stage} if block {pos} {target} "
                 f"run scoreboard players set {stage} {from_stage + 1}"
@@ -123,26 +149,68 @@ def generate_random_transform(positions):
     om_lo, om_hi = ORE_ROLL_MATCH
     rr_lo, rr_hi = REVERT_ROLL_RANGE
     rm_lo, rm_hi = REVERT_ROLL_MATCH
+    ore_trigger = f"if score #qroll skyblock_temp matches {score_range(om_lo, om_hi)}"
+    pos_index = build_position_index(positions)
 
     lines = []
     for idx, (x, y, z) in enumerate(positions, start=1):
         pos = f"{x} {y} {z}"
         stage = f"#qstage_{idx} skyblock_temp"
+        qore = f"#qore_{idx} skyblock_temp"
 
         lines.append(f"execute store result score #qroll skyblock_temp run random value {score_range(or_lo, or_hi)}")
         lines.append(f"execute store result score #qroll2 skyblock_temp run random value 1..100")
         lines.append(f"execute store result score #qroll3 skyblock_temp run random value {score_range(rr_lo, rr_hi)}")
+        lines.append(f"execute store result score #qroll4 skyblock_temp run random value 1..100")
+        lines.append("scoreboard players set #patch_target skyblock_temp 0")
 
-        for key, block, lo, hi in ranges:
+        # Patch growth: if an orthogonal neighbor already shows an ore/gravel
+        # type, roll PATCH_COPY_CHANCE% to adopt that same type (first
+        # matching neighbor wins — order is arbitrary, N/S/E/W).
+        for n_idx in orthogonal_neighbor_indices(x, z, pos_index):
             lines.append(
-                f"execute if score {stage} matches 1 "
-                f"if score #qroll skyblock_temp matches {score_range(om_lo, om_hi)} "
-                f"if score #qroll2 skyblock_temp matches {score_range(lo, hi)} "
+                f"execute if score {stage} matches 1 {ore_trigger} "
+                f"if score #patch_target skyblock_temp matches 0 "
+                f"if score #qroll4 skyblock_temp matches 1..{PATCH_COPY_CHANCE} "
+                f"if score #qore_{n_idx} skyblock_temp matches 1..{len(ORE_WEIGHTS)} "
+                f"run scoreboard players operation #patch_target skyblock_temp = #qore_{n_idx} skyblock_temp"
+            )
+
+        for weight_idx, (key, block, lo, hi) in enumerate(ranges, start=1):
+            lines.append(
+                f"execute if score {stage} matches 1 {ore_trigger} "
+                f"if score #patch_target skyblock_temp matches {weight_idx} "
                 f"run setblock {pos} {block}"
             )
         lines.append(
-            f"execute if score {stage} matches 1 "
-            f"if score #qroll skyblock_temp matches {score_range(om_lo, om_hi)} "
+            f"execute if score {stage} matches 1 {ore_trigger} "
+            f"if score #patch_target skyblock_temp matches 1..{len(ORE_WEIGHTS)} "
+            f"run scoreboard players operation {qore} = #patch_target skyblock_temp"
+        )
+        lines.append(
+            f"execute if score {stage} matches 1 {ore_trigger} "
+            f"if score #patch_target skyblock_temp matches 1..{len(ORE_WEIGHTS)} "
+            f"run scoreboard players set {stage} 0"
+        )
+
+        # Independent weighted roll — only when no neighbor copy happened
+        # above (#patch_target still 0). Same ORE_WEIGHTS odds as before.
+        for weight_idx, (key, block, lo, hi) in enumerate(ranges, start=1):
+            lines.append(
+                f"execute if score {stage} matches 1 {ore_trigger} "
+                f"if score #patch_target skyblock_temp matches 0 "
+                f"if score #qroll2 skyblock_temp matches {score_range(lo, hi)} "
+                f"run setblock {pos} {block}"
+            )
+            lines.append(
+                f"execute if score {stage} matches 1 {ore_trigger} "
+                f"if score #patch_target skyblock_temp matches 0 "
+                f"if score #qroll2 skyblock_temp matches {score_range(lo, hi)} "
+                f"run scoreboard players set {qore} {weight_idx}"
+            )
+        lines.append(
+            f"execute if score {stage} matches 1 {ore_trigger} "
+            f"if score #patch_target skyblock_temp matches 0 "
             f"if score #qroll2 skyblock_temp matches {score_range(1, TOTAL_WEIGHT)} "
             f"run scoreboard players set {stage} 0"
         )
@@ -171,6 +239,17 @@ def generate_qstage_init(positions):
     return lines
 
 
+def generate_qore_init(positions):
+    lines = []
+    for idx in range(1, len(positions) + 1):
+        qore = f"#qore_{idx} skyblock_temp"
+        lines.append(
+            f"execute unless score {qore} matches -2147483648..2147483647 "
+            f"run scoreboard players set {qore} 0"
+        )
+    return lines
+
+
 def write_lines(path: Path, lines):
     path.write_text("\n".join(lines) + "\n")
 
@@ -179,6 +258,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true", help="diff against the committed files instead of writing")
     parser.add_argument("--qstage-init", action="store_true", help="print the load.mcfunction #qstage_N init snippet")
+    parser.add_argument("--qore-init", action="store_true", help="print the load.mcfunction #qore_N init snippet")
     args = parser.parse_args()
 
     positions = build_positions()
@@ -188,6 +268,10 @@ def main():
 
     if args.qstage_init:
         print("\n".join(generate_qstage_init(positions)))
+        return
+
+    if args.qore_init:
+        print("\n".join(generate_qore_init(positions)))
         return
 
     break_scan_lines = generate_break_scan(positions)
