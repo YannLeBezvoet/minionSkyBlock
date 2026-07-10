@@ -1,4 +1,4 @@
-fill -7 60 -7 7 75 7 minecraft:air
+fill -9 57 -7 9 75 7 minecraft:air
 
 place template minionskyblock:island -9 57 -5
 
