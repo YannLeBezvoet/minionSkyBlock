@@ -64,6 +64,8 @@ The material follows a progression logic:
 **Right-click** with the Minion in hand to **place** it on your island.
 A small Armor Stand appears with its tool in hand: it starts working immediately, facing the same cardinal direction (North/South/East/West) you were facing when you placed it.
 
+> **One Minion per block**: if you're standing on the same block as an existing Minion, placement is cancelled and the Minion item is given back to you — Minions can no longer stack on top of each other.
+>
 > **Decorated minions**: every Minion wears a themed armor set.
 > - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
 > - **Obsidian** (the most expensive Minion) wears full **Netherite** armor; Tier II also gets the redstone Flow trim.
