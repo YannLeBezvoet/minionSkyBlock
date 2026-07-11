@@ -1,9 +1,5 @@
 scoreboard objectives add skyblock_joined dummy
-scoreboard objectives add skyblock_coins dummy
-scoreboard objectives add skyblock_last_sale dummy
 scoreboard objectives add skyblock_temp dummy
-scoreboard objectives add skyblock_shop trigger
-scoreboard objectives add skyblock_ptick dummy
 scoreboard objectives add skyblock_hive_cd dummy
 scoreboard objectives add minion_timer dummy
 
@@ -11,22 +7,19 @@ setworldspawn 0 66 0
 gamerule random_tick_speed 6
 gamerule send_command_feedback false
 
-# Coins shared across all players: stored on the global fake player #coins (never reset if already present)
-execute unless score #coins skyblock_coins matches -2147483648..2147483647 run scoreboard players set #coins skyblock_coins 0
-
 # Remove the Miner NPC (obsolete now that ores are mineable directly on the Mining Island) — safe to run
 # every load, no-op once gone. build_island.mcfunction itself no longer summons it, but that function
 # only ever runs once per world, so this retroactive kill is needed for worlds that already have it.
 kill @e[tag=shop_npc_ore]
 kill @e[tag=shop_npc_ore_interaction]
 
-# Move the Prospector NPC to the old Miner's spot (8 66 0). Same story as above: build_mining_island.mcfunction
-# only runs once per world, so this retroactive kill-then-resummon is needed for worlds where it's already
-# standing at its old position. Safe to run every load.
+# Move the Prospector NPC to 5 66 0 (island NBT reworked, NPC platform shifted). Same story as above:
+# build_mining_island.mcfunction only runs once per world, so this retroactive kill-then-resummon is
+# needed for worlds where it's already standing at its old position. Safe to run every load.
 kill @e[tag=shop_npc_prospector]
 kill @e[tag=shop_npc_prospector_interaction]
-summon minecraft:villager 8 66 0 {Tags:["shop_npc_prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
-summon minecraft:interaction 8 66 0 {Tags:["shop_npc_prospector_interaction"],width:1.0f,height:2.0f,response:1b}
+summon minecraft:villager 5 66 0 {Tags:["shop_npc_prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
+summon minecraft:interaction 5 66 0 {Tags:["shop_npc_prospector_interaction"],width:1.0f,height:2.0f,response:1b}
 
 # Mining island quarry pit: per-position stage (0=ore, 1=stone, 2=cobblestone, 3=bedrock) for all 349 floor positions, never reset if already present
 execute unless score #qstage_1 skyblock_temp matches -2147483648..2147483647 run scoreboard players set #qstage_1 skyblock_temp 1
@@ -776,15 +769,3 @@ data modify storage minionskyblock:minion diamond_t2 set value {block:"minecraft
 data modify storage minionskyblock:minion emerald_t2 set value {block:"minecraft:emerald_ore",drop:"minecraft:emerald",timer:60,tool:"minecraft:diamond_pickaxe",item:"minecraft:diamond_pickaxe",color:"green",name:"Emerald Minion",type:"emerald",tier:2b,tier_display:"II",placement_advancement:"place_emerald_t2",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":3407756}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":3407756}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":3407756}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":3407756}}}}
 data modify storage minionskyblock:minion quartz_t2 set value {block:"minecraft:nether_quartz_ore",drop:"minecraft:quartz",timer:25,tool:"minecraft:stone_pickaxe",item:"minecraft:iron_pickaxe",color:"white",name:"Quartz Minion",type:"quartz",tier:2b,tier_display:"II",placement_advancement:"place_quartz_t2",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":16776693}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":16776693}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":16776693}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":16776693}}}}
 data modify storage minionskyblock:minion obsidian_t2 set value {block:"minecraft:obsidian",drop:"minecraft:obsidian",timer:90,tool:"minecraft:diamond_pickaxe",item:"minecraft:diamond_pickaxe",color:"dark_purple",name:"Obsidian Minion",type:"obsidian",tier:2b,tier_display:"II",placement_advancement:"place_obsidian_t2",armor:{head:{id:"minecraft:netherite_helmet",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:flow"}}},chest:{id:"minecraft:netherite_chestplate",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:flow"}}},legs:{id:"minecraft:netherite_leggings",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:flow"}}},feet:{id:"minecraft:netherite_boots",count:1,components:{"minecraft:trim":{material:"minecraft:redstone",pattern:"minecraft:flow"}}}}}
-
-# Purchase catalog (skyblock_shop trigger ID -> data)
-data modify storage minionskyblock:shop dripstone set value {cost:5000,item:"minecraft:pointed_dripstone",qty:1,name:"Pointed Dripstone"}
-data modify storage minionskyblock:shop water_bucket set value {cost:5000,item:"minecraft:water_bucket",qty:1,name:"Water Bucket"}
-data modify storage minionskyblock:shop lava_bucket set value {cost:10000,item:"minecraft:lava_bucket",qty:1,name:"Lava Bucket"}
-data modify storage minionskyblock:shop sapling_oak set value {cost:5000,item:"minecraft:oak_sapling",qty:1,name:"Oak Sapling"}
-data modify storage minionskyblock:shop sapling_spruce set value {cost:5000,item:"minecraft:spruce_sapling",qty:1,name:"Spruce Sapling"}
-data modify storage minionskyblock:shop sapling_birch set value {cost:5000,item:"minecraft:birch_sapling",qty:1,name:"Birch Sapling"}
-data modify storage minionskyblock:shop sapling_jungle set value {cost:5000,item:"minecraft:jungle_sapling",qty:1,name:"Jungle Sapling"}
-data modify storage minionskyblock:shop sapling_acacia set value {cost:5000,item:"minecraft:acacia_sapling",qty:1,name:"Acacia Sapling"}
-data modify storage minionskyblock:shop sapling_dark_oak set value {cost:5000,item:"minecraft:dark_oak_sapling",qty:1,name:"Dark Oak Sapling"}
-data modify storage minionskyblock:shop sapling_cherry set value {cost:5000,item:"minecraft:cherry_sapling",qty:1,name:"Cherry Sapling"}

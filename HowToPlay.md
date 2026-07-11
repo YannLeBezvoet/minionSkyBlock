@@ -1,6 +1,6 @@
 # How to Play — MinionSkyBlock
 
-MinionSkyBlock is a Minecraft datapack (Java **26.2**) inspired by SkyBlock mode. You start on a small floating island in the void and must grow your economy by crafting **Minions** — small automatons that gather resources on your behalf while you explore or build.
+MinionSkyBlock is a Minecraft datapack (Java **26.2**) inspired by SkyBlock mode. You start on a small floating island in the void and must automate resource gathering by crafting **Minions** — small automatons that gather resources on your behalf while you explore or build.
 
 ---
 
@@ -10,7 +10,6 @@ On your first login, you spawn on your island with 5 bread so you don't starve. 
 
 - a starter chest with a few basic resources
 - a tree to chop down
-- a **selling station** on the platform at the bottom-left of the island
 
 Start by chopping your tree and mining your cobblestone to have enough for your first Minion.
 
@@ -110,7 +109,7 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ## Mining Island
 
-A third NPC, the **Prospector**, stands between the Merchant and the Nurseryman on your starting island. Talk to him to be teleported to a separate **Mining Island**, far away from your island — an enclosed underground-style quarry (rugged stone walls with jagged outcroppings, a low ceiling with hanging stalactites, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
+The **Prospector**, an NPC on your starting island, teleports you to a separate **Mining Island** when you talk to him — far away from your island — an enclosed underground-style quarry (rugged stone walls with jagged outcroppings, a low ceiling with hanging stalactites, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
 
 The walls and ceiling repair themselves almost instantly if you break them, so you can't tunnel out; the main mineable area is the floor, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
 
@@ -141,73 +140,7 @@ So the mine is never truly "empty" — dig long enough and bedrock spots you lef
 
 ---
 
-## The economy — Coins
-
-All progression relies on **Coins** (¢), a currency **shared between all players** — there is only one common balance for the server.
-This balance is permanently displayed in the action bar.
-
-### Selling resources
-
-On the island there is a **selling station** (a platform with a floating gold ingot). It contains an **unbreakable sell chest**.
-
-1. Drop your resources into this chest
-2. The scan is automatic every second — items are converted into Coins and the chest is emptied
-
-**Selling prices:**
-
-| Item | Price |
-|---|---|
-| Default | 1 ¢ |
-| Sand, Gravel, Wheat Seeds | 2 ¢ |
-| Wheat | 4 ¢ |
-| Oak Log (and other logs) | 5 ¢ |
-| Charcoal | 5 ¢ |
-| Rotten Flesh | 3 ¢ |
-| Bone, String | 6 ¢ |
-| Coal | 6 ¢ |
-| Quartz | 10 ¢ |
-| Apple | 8 ¢ |
-| Bread | 12 ¢ |
-| Iron Ingot | 20 ¢ |
-| Gold Ingot | 32 ¢ |
-| Emerald | 40 ¢ |
-| Obsidian | 60 ¢ |
-| Diamond | 80 ¢ |
-| Golden Apple | 50 ¢ |
-| Enchanted Golden Apple | 100 ¢ |
-
-> Any other item is worth 1 ¢ by default.
-
-### Buying resources
-
-Click the **Merchant NPC** at the selling station to open the shop in chat.
-Click **[Buy]** next to the desired item — the Coins are debited automatically.
-
-**Catalog:**
-
-| Item | Quantity | Cost |
-|---|---|---|
-| Water Bucket | 1 | 5000 ¢ |
-| Lava Bucket | 1 | 10000 ¢ |
-| Pointed Dripstone | 1 | 5000 ¢ |
-
-> If you don't have enough Coins, the purchase is refused with no debit.
-
-### Buying saplings
-
-Right next to the Merchant is a second NPC, the **Nurseryman**. He sells all types of vanilla saplings, useful since your island only grows oak trees.
-
-| Item | Quantity | Cost |
-|---|---|---|
-| Oak Sapling | 1 | 5000 ¢ |
-| Spruce Sapling | 1 | 5000 ¢ |
-| Birch Sapling | 1 | 5000 ¢ |
-| Jungle Sapling | 1 | 5000 ¢ |
-| Acacia Sapling | 1 | 5000 ¢ |
-| Dark Oak Sapling | 1 | 5000 ¢ |
-| Cherry Sapling | 1 | 5000 ¢ |
-
-### Wild bee hives (honey)
+## Wild bee hives (honey)
 
 Growing a tree from a sapling with **bone meal** has a small chance (≈8%) of spawning a **wild bee hive** right next to you, complete with bees and a couple of flowers for them to pollinate. Growth from natural random ticks doesn't trigger this — you need to actively bonemeal.
 
@@ -218,11 +151,11 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 ## Suggested progression
 
 1. **Cobblestone Minion T1** first — cheap recipe (8 cobblestone + redstone torch)
-2. Sell the cobblestone to buy seeds and extra wood
-3. **Coal Minion T1** — generates sellable coal, easy to craft
-4. **Wheat Minion T1** — wheat to sell, craft with 8 wheat + redstone torch
+2. Keep chopping your tree and mining by hand while it works, to gather enough for your next Minions
+3. **Coal Minion T1** — easy to craft, coal is handy for torches and smelting
+4. **Wheat Minion T1** — craft with 8 wheat + redstone torch, feeds you and stocks up for a future Wheat Minion T2
 5. **Oak Wood Minion T1** — planks instead of logs for T1
-6. **Sand / Gravel Minions T1** — cheap and fast, another easy source of Coins early on
+6. **Sand / Gravel Minions T1** — cheap and fast; bootstrap your first sand/gravel with a trip to the Mining Island (see Mining Island)
 7. Upgrade your first Minions to **T2** (block materials + redstone block)
 8. **Iron Minion** — expensive to craft (8 iron ingots) but generates raw iron
 9. **Gold / Redstone / Lapis / Quartz Minions** — mid-tier resources, require real ingots or dust
@@ -234,7 +167,6 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 ## Tips
 
 - A Minion **cannot be broken** by other players (only you can pick it up via left-click).
-- The sell chest is **unbreakable** — if someone destroys it, it repositions itself automatically.
 - Minions work **even when you're offline** as long as the server is running.
 - You can place **as many Minions as you want** on your island.
 - Crops and trees **grow faster** than in a normal world (randomTickSpeed x3).

@@ -15,13 +15,8 @@ execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #min
 execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 1 run scoreboard players set #mining_light_fix2 skyblock_temp 2
 execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp run scoreboard players operation #mining_light_fix2_tick_last skyblock_temp = #mining_light_fix2_tick_now skyblock_temp
 
-execute unless block -8 66 0 minecraft:chest run kill @e[type=minecraft:item,x=-8,y=66,z=0,distance=..3]
-execute unless block -8 66 0 minecraft:chest run setblock -8 66 0 minecraft:chest[facing=east]
-
-execute as @e[tag=shop_npc_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked
-execute as @e[tag=shop_npc_saplings_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_saplings
-execute as @e[tag=shop_npc_prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_prospector
-execute as @e[tag=shop_npc_prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:economy/shop/npc_clicked_prospector_return
+execute as @e[tag=shop_npc_prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked
+execute as @e[tag=shop_npc_prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked_return
 execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t1
 execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t2
 execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion dirt_t1
@@ -64,13 +59,4 @@ scoreboard players operation #tick_last_world skyblock_temp = #tick_now skyblock
 execute if score #world_ptick skyblock_temp matches 20.. run function minionskyblock:minion/tick_all
 execute if score #world_ptick skyblock_temp matches 20.. run scoreboard players set #world_ptick skyblock_temp 0
 
-scoreboard players add @s skyblock_ptick 1
-
-execute if score @s skyblock_ptick matches 20.. run function minionskyblock:economy/display
-execute if score @s skyblock_ptick matches 20.. run function minionskyblock:economy/sell/scan_chest
-execute if score @s skyblock_ptick matches 20.. run scoreboard players set @s skyblock_ptick 0
-
 execute if score @s skyblock_hive_cd matches 1.. run scoreboard players remove @s skyblock_hive_cd 1
-
-scoreboard players enable @s skyblock_shop
-execute if score @s skyblock_shop matches 1.. run function minionskyblock:economy/shop/catalog

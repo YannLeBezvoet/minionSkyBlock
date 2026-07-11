@@ -34,3 +34,15 @@ The current three-layer geometry (structural bulges/low-ceiling pockets, relief 
 
 - A third NPC, the **Miner** (`8 66 0`, unit ore purchases, `skyblock_shop` IDs 15-22), was removed once the Mining Island quarry pit made buying individual ores redundant. Its spot was reused for the Prospector NPC.
 - `build_island.mcfunction` and `build_mining_island.mcfunction` only run once per world, so their obsolete summons were retroactively killed via unconditional `kill @e[tag=...]` commands added to `load.mcfunction`, rather than by editing the (no-longer-executed for existing worlds) build functions themselves.
+
+## Economy removal (2026-07-11)
+
+The entire coin-based economy was removed on explicit request: the Merchant NPC (catalog purchases), the Nurseryman NPC (sapling purchases), the sell chest and its automatic scan, the coins actionbar display, and the `skyblock_coins`/`skyblock_last_sale`/`skyblock_shop` scoreboards plus the `minionskyblock:shop` storage. The whole `economy/` function folder (`display`, `sell/scan_chest`, `sell/scan_slot`, `shop/catalog`, `shop/buy`, `shop/npc_clicked[_saplings]`, `shop/open_menu[_saplings]`) was deleted.
+
+The **Prospector** NPCs were kept — they only ever teleported the player to/from the Mining Island, no coins involved — but their click/teleport functions lived under `economy/shop/` purely for historical reasons (the folder used to hold every NPC interaction). They were moved to `world/prospector_clicked[_return].mcfunction` and `world/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction` so nothing player-facing was left under the now-deleted `economy/` path.
+
+`skyblock_ptick` (the per-player 20-tick pacer) was removed too: its only two consumers were the coins actionbar and the sell-chest scan, both gone, so keeping the counter running would have been dead code.
+
+The physical terrain — the sell station's bedrock platform, the two empty chest shells baked into `island.nbt`, and the NPC bedrock platform at `8 66 ±2/0` — was deliberately left untouched. Editing it requires an in-game structure block resave (see "Initial island generation" in CLAUDE.md), not a code change; the sell chest itself was never part of the structure (it was a plain `setblock` in the old `on_tick.mcfunction` chest-protection logic, now removed), so no chest remains at `-8 66 0` unless a player already has an ordinary one there from before this change. The bedrock platforms just read as unused decorative terrain now.
+
+Buying lava/water buckets, pointed dripstone, and non-oak saplings has no in-pack replacement — those items simply aren't obtainable anymore. This was an accepted consequence of the removal, not an oversight.
