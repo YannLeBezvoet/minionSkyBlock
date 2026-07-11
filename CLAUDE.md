@@ -21,13 +21,13 @@ data/
       tick_loop.json               ← trigger:tick, reward → player/on_tick (self-revoking)
       bonemeal_sapling.json        ← trigger:item_used_on_block (bone_meal on a sapling), reward → world/bonemeal_sapling (self-revoking, see Wild bee hives)
     function/
-      load.mcfunction              ← scoreboards + setworldspawn + init minion storage + init shop storage
+      load.mcfunction              ← scoreboards + setworldspawn + init minion storage
       tick.mcfunction              ← comments only (tag non-functional in 26.2)
       debug.mcfunction             ← manual-only diagnostic (tellraw of key scores/blocks) — not called by any tag/advancement, run it by hand with `/function minionskyblock:debug`
       player/
         first_join.mcfunction      ← forceload + build_island + tp + items + title
-        on_tick.mcfunction         ← revoke tick_loop + chest protection + skyblock_ptick counter + shop trigger
-      world/build_island.mcfunction← places the `minionskyblock:island` structure (terrain) + entities/chest contents (see "Initial island generation")
+        on_tick.mcfunction         ← revoke tick_loop + Prospector click detection + minion pickup
+      world/build_island.mcfunction← places the `minionskyblock:island` structure (terrain) + chest contents (see "Initial island generation")
       world/build_mining_island.mcfunction← far-away teleport-only island with a fully mineable floor
       world/quarry_break_scan.mcfunction← per-tick: advances a mined floor block's stage (see Mining Island)
       world/quarry_random_transform.mcfunction← per-second: ambient stage reversal + ore spawn (see Mining Island)
@@ -37,14 +37,10 @@ data/
       world/wild_hive_chance.mcfunction← rolls #hive_roll (8%), branches to wild_hive_spawn
       world/wild_hive_spawn.mcfunction← finds a clear spot near the player (caret-relative), branches to wild_hive_place
       world/wild_hive_place.mcfunction← setblocks the beehive + 2 dandelions + summons 2 bees + actionbar
-      economy/
-        display.mcfunction         ← coins actionbar every 20 ticks
-        sell/
-          scan_chest.mcfunction    ← resets #sell_total to 0, calls scan_slot 27×, credits
-          scan_slot.mcfunction     ← macro $(slot): detects item + price, empties the slot
-        shop/
-          catalog.mcfunction       ← routes skyblock_shop trigger to buy.mcfunction via storage (Merchant+Nurseryman)
-          buy.mcfunction           ← generic macro: $(cost) $(item) $(qty) $(name)
+      world/prospector_clicked.mcfunction← click handler for the outbound Prospector NPC, calls prospector_teleport_out
+      world/prospector_clicked_return.mcfunction← click handler for the Mining Island's return Prospector NPC, calls prospector_teleport_back
+      world/prospector_teleport_out.mcfunction← teleports the player to the Mining Island
+      world/prospector_teleport_back.mcfunction← teleports the player back to the starting island
 ```
 
 ## Key coordinates (island centered on 0,65,0)
@@ -55,13 +51,9 @@ data/
 | Island surface (grass) | Y=65 |
 | Starter chest | -2 66 0 |
 | Tree (trunk base) | 2 66 1 |
-| Bedrock platform (sell station) | -9 to -7, Y=65, Z=-1 to 1 |
-| Sell chest (unbreakable) | -8 66 0 |
-| Item display (floating gold ingot) | -8 67.8 0 |
-| Merchant NPC (catalog purchases) | 8 66 2 |
-| Nurseryman NPC (sapling purchases) | 8 66 -2 |
+| Bedrock platform (former sell station, now unused terrain — see "Economy removal" in HISTORY.md) | -9 to -7, Y=65, Z=-1 to 1 |
 | Bedrock platform (NPCs, x 7-9) | Z=-3 to 3 (centered on the island) |
-| Prospector NPC (teleport to Mining Island) | 8 66 0 (old Miner spot, bedrock already there) |
+| Prospector NPC (teleport to Mining Island) | 5 66 0 (moved from 8 66 0 after the island.nbt rework) |
 | Mining Island (quarry, X/Z≈5,000,000 — teleport only, no walking route exists) | X=5,000,000 to 5,000,020, Z=4,999,990 to 5,000,010, Y=63-65 (floor); walls Y=65-71, ceiling Y=72 |
 | Quarry pit (349 tracked positions, `#qstage_1..349`) | whole interior floor: X=5,000,001-5,000,019, Z=4,999,991-5,000,009, Y=65, minus the NPC platform and rail (see Mining Island section) |
 | Mining Island support beams (oak fence + log) | Z=4,999,995 and Z=5,000,005, X=5,000,000/5,000,020 (posts), X=5,000,001-5,000,019 Y=71 (crossbeam) |
@@ -73,22 +65,13 @@ data/
 | Objective | Type | Usage |
 |---|---|---|
 | `skyblock_joined` | dummy | 0=never connected, 1=already connected |
-| `skyblock_coins` | dummy | Currency **shared between all players** — always read/written on the global fake player `#coins` (never `@s`), initialized once in `load.mcfunction` |
-| `skyblock_last_sale` | dummy | Coins from the last sale (for the actionbar, stays per-player) |
 | `skyblock_temp` | dummy | Temporary calculations — see fake players below |
-| `skyblock_shop` | trigger | Player types `/trigger skyblock_shop set <id>` (catalog purchase, IDs 1-22) |
-| `skyblock_ptick` | dummy | Per-player tick counter (0→20), paces heavy operations |
 | `skyblock_hive_cd` | dummy | Per-player cooldown (counts down from 100 to 0, 1/tick), throttles wild bee hive rolls — see Wild bee hives |
 
 Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 
 | Fake player | Usage |
 |---|---|
-| `#sell_count` | Quantity of an item in a sell chest slot |
-| `#sell_value` | Unit price of the detected item |
-| `#sell_found` | 1 as soon as an item is identified in the slot (short-circuits subsequent checks) |
-| `#sell_total` | Cumulative coins for a selling session |
-| `#shop_result` | 1 if a purchase succeeded |
 | `#world_ptick` | Global server tick counter (0→20), paces `tick_all` regardless of the number of players |
 | `#tick_now` | Gametime of the current tick — detects server tick changes |
 | `#tick_last_world` | Last recorded gametime, compared to `#tick_now` to deduplicate |
@@ -98,103 +81,6 @@ Fake players in `skyblock_temp` (global, Minecraft is single-threaded):
 | `#patch_target` | Scratch fake player: this tick's resolved patch-copy target (`0`=no copy, `1..9`=`ORE_WEIGHTS` index) in `world/quarry_random_transform.mcfunction`, reused sequentially like `#qroll`/`#qroll2` |
 | `#mining_light_fix2` | 0→1→2 one-time global toggle that fixes black chunks on the (always-forceloaded, far away) Mining Island — see Mining Island section. Named `_fix2` because the island was relocated once already (X=500-520 → X/Z=5,000,000): reusing the old counter (already at 2/done) would have skipped the fix at the new location, so it got a fresh name instead of being manually reset |
 | `#hive_roll` | Scratch fake player for the `random value 1..100` roll in `world/wild_hive_chance.mcfunction` — see Wild bee hives |
-
-## Selling system
-
-The player drops items into the **sell chest** (-8 66 0). The scan is automatic every 20 ticks (≈1s) via `player/on_tick.mcfunction`.
-
-The chest is **unbreakable**: `on_tick` checks every tick whether the block is missing and replaces it (+ kills dropped items within a 3-block radius).
-
-`scan_chest.mcfunction` calls `scan_slot` (macro `$(slot)`) for the 27 slots.
-
-`scan_slot.mcfunction` — uniform pattern of **3 lines per item** (only the 1st has `$`):
-
-```mcfunction
-$execute if score #sell_found skyblock_temp matches 0 store result score #sell_count skyblock_temp if items block -8 66 0 $(slot) minecraft:cobblestone
-execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_value skyblock_temp 1
-execute if score #sell_found skyblock_temp matches 0 if score #sell_count skyblock_temp matches 1.. run scoreboard players set #sell_found skyblock_temp 1
-```
-
-The `#sell_found` flag short-circuits all subsequent checks as soon as an item is identified.
-
-At the end of the function (block common to all items):
-
-```mcfunction
-execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_count skyblock_temp *= #sell_value skyblock_temp
-execute if score #sell_found skyblock_temp matches 1 run scoreboard players operation #sell_total skyblock_temp += #sell_count skyblock_temp
-$execute if score #sell_found skyblock_temp matches 1 run item replace block -8 66 0 $(slot) with minecraft:air
-```
-
-**Default price**: any unlisted item is worth 1 coin (via `if items ... *` at the end of the catalog).
-
-To add an item: copy a 3-line block in `scan_slot.mcfunction`, change the item and the price.
-
-Unit prices (in `economy/sell/scan_slot.mcfunction`):
-
-| Item | Coins | Item | Coins |
-|---|---|---|---|
-| cobblestone, dirt | 1 | bone, string | 6 |
-| sand, gravel | 2 | coal | 6 |
-| wheat_seeds | 2 | iron_ingot | 20 |
-| wheat | 4 | gold_ingot | 32 |
-| all logs | 5 | emerald | 40 |
-| charcoal, rotten_flesh | 5, 3 | diamond | 80 |
-| apple | 8 | oak_sapling | 10 |
-| bread | 12 | | |
-
-To add an item: one line in `economy/sell/scan_slot.mcfunction`.
-
-## Buying system
-
-`/trigger skyblock_shop set <id>` — handled in `economy/shop/catalog.mcfunction`.
-
-Each item's data lives in the `minionskyblock:shop` storage (initialized in `load.mcfunction`):
-```mcfunction
-data modify storage minionskyblock:shop cobblestone set value {cost:128,item:"minecraft:cobblestone",qty:64,name:"Cobblestone ×64"}
-```
-
-`catalog.mcfunction` routes the ID to `buy.mcfunction` via the storage:
-```mcfunction
-execute if score @s skyblock_shop matches 1 run function minionskyblock:economy/shop/buy with storage minionskyblock:shop cobblestone
-```
-
-`buy.mcfunction` is a generic macro (variables: `$(cost)`, `$(item)`, `$(qty)`, `$(name)`):
-```mcfunction
-$execute unless score #coins skyblock_coins matches $(cost).. run return fail
-$scoreboard players remove #coins skyblock_coins $(cost)
-$give @s $(item) $(qty)
-scoreboard players set #shop_result skyblock_temp 1
-$title @s actionbar {"text":"Bought: $(name)  (-$(cost) coins)","color":"green"}
-```
-
-Current catalog (Merchant trimmed down to fluids + dripstone; IDs 1-4 freed up):
-
-| ID | Storage key | Item | Qty | Cost |
-| --- | --- | --- | --- | --- |
-| 5 | lava_bucket | lava_bucket | 1 | 10000 |
-| 6 | dripstone | pointed_dripstone | 1 | 5000 |
-| 7 | water_bucket | water_bucket | 1 | 5000 |
-| 8 | sapling_oak | oak_sapling | 1 | 5000 |
-| 9 | sapling_spruce | spruce_sapling | 1 | 5000 |
-| 10 | sapling_birch | birch_sapling | 1 | 5000 |
-| 11 | sapling_jungle | jungle_sapling | 1 | 5000 |
-| 12 | sapling_acacia | acacia_sapling | 1 | 5000 |
-| 13 | sapling_dark_oak | dark_oak_sapling | 1 | 5000 |
-| 14 | sapling_cherry | cherry_sapling | 1 | 5000 |
-
-IDs 1-4 (`cobblestone`, `oak_log`, `sand`, `gravel`) and 15-22 (`ore_coal` through `ore_diamond`, the old Miner NPC's per-unit ore catalog) are free to reuse — both removed as redundant (raw blocks are cheaply farmable via Minions/the sell chest; ores via the Mining Island quarry pit, see below). **Note**: this assumption was briefly wrong for sand/gravel specifically — the Sand/Gravel Minion T1 recipes need 8× sand/8× gravel to craft, and nothing in the generated world produced either block, a bootstrap dead end. Fixed by the Mining Island's `gravel` ore-pool entry + the sand-from-gravel loot table override, see "Sand from gravel (bootstrap source)" below — IDs 1-4 stay free, this wasn't fixed by restoring the shop purchase.
-
-To add an item:
-
-1. Add `data modify storage minionskyblock:shop <key> set value {...}` in `load.mcfunction`
-2. Add `execute if score @s skyblock_shop matches <id> run function minionskyblock:economy/shop/buy with storage minionskyblock:shop <key>` in `catalog.mcfunction`
-3. Add a `[Buy]` line in `open_menu.mcfunction` (or `open_menu_saplings.mcfunction`) — price and name are read automatically from storage via `{"nbt":"<key>.cost","storage":"minionskyblock:shop"}` and `{"nbt":"<key>.name","storage":"minionskyblock:shop"}`
-
-### Second NPC — Nurseryman (saplings)
-
-A second villager (`tag=shop_npc_saplings`, interaction `tag=shop_npc_saplings_interaction`) is placed at `8 66 -2`, right next to (to the right of) the Merchant. It routes to its own menu `economy/shop/open_menu_saplings.mcfunction` via `economy/shop/npc_clicked_saplings.mcfunction` (same mechanism as the Merchant, see `player/on_tick.mcfunction`). It sells the 7 vanilla saplings (oak/spruce/birch/jungle/acacia/dark_oak/cherry) at 5000 coins each, `skyblock_shop` IDs 8 to 14, reusing the same generic `buy.mcfunction` and the same `minionskyblock:shop` storage.
-
-There used to be a third NPC here too — the **Miner** (`8 66 0`, unit ore purchases, `skyblock_shop` IDs 15-22) — removed once the Mining Island quarry pit made buying individual ores redundant. `build_island.mcfunction` no longer summons it, but that function only runs once per world (see `build_island` gotcha below), so an unconditional `kill @e[tag=shop_npc_ore]` / `kill @e[tag=shop_npc_ore_interaction]` was added to `load.mcfunction` to retroactively remove it from worlds where it was already summoned — the same pattern used for the Mining Island's own removed decorations (see that section).
 
 ## Wild bee hives (honey source)
 
@@ -224,7 +110,6 @@ The per-player tick is handled via a **self-revoking advancement**:
 
 - `advancement/player/tick_loop.json`: trigger `minecraft:tick` → reward `player/on_tick`
 - `function/player/on_tick.mcfunction`: revokes the advancement first → immediate re-trigger on the next tick
-- `skyblock_ptick` counter (per player, in `skyblock_temp`) paces heavy operations at 20 ticks
 - Global `#world_ptick` counter paces `tick_all` every 20 **server** ticks, independent of the number of players. Mechanism: `time query gametime` stored in `#tick_now` compared to `#tick_last_world` — if different, `#world_ptick` advances by one. This prevents minion timers from incrementing N times per tick with N players connected.
 
 `tick.mcfunction` exists but contains only comments (non-functional tag, kept for compatibility with `data/minecraft/tags/function/tick.json`).
@@ -238,7 +123,7 @@ fill -7 60 -7 7 75 7 minecraft:air
 place template minionskyblock:island -9 57 -5
 ```
 
-`-9 57 -5` is the structure's origin: the world position that maps to the structure's local `(0,0,0)` (its minimum X/Y/Z corner). It sits lower than the visible island (surface is Y=65, see Key coordinates) because the structure's bounding box extends down to the bottom of the rounded cobblestone underside and the hanging dripstone. Everything else in `build_island.mcfunction` — the `kill` lines for stale entities, the NPC/item-display `summon`s, and the starter chest's `item replace` lines — stays as commands, same as any real datapack: structures place blocks, not entities or container contents.
+`-9 57 -5` is the structure's origin: the world position that maps to the structure's local `(0,0,0)` (its minimum X/Y/Z corner). It sits lower than the visible island (surface is Y=65, see Key coordinates) because the structure's bounding box extends down to the bottom of the rounded cobblestone underside and the hanging dripstone. Everything else in `build_island.mcfunction` — the starter chest's `item replace` lines — stays as commands, same as any real datapack: structures place blocks, not entities or container contents.
 
 `island.nbt` is authored **in-game with a structure block**, not generated by a script: build/edit the terrain in a test world, use a structure block in **Save** mode (`minionskyblock:island` as its structure name) covering the same bounds, hit Save, then copy the exported file from `.../saves/<world>/generated/minionskyblock/structures/island.nbt` over `data/minionskyblock/structure/island.nbt` in this repo.
 
@@ -280,7 +165,7 @@ Then `/reload` in Minecraft. **Do not use a symlink** — Minecraft blocks them 
 
 ## Mining Island
 
-A second, separate island (`world/build_mining_island.mcfunction`), placed at **X/Z≈5,000,000** (Y unchanged, ~65) — far enough that walking there is not a real option — and reachable **only by teleport**. A **Prospector** villager NPC on the starting island (`8 66 0`, `tag=shop_npc_prospector` — the old Miner's spot) teleports the player there on click; a second Prospector on the Mining Island (`5000010 66 4999998`, `tag=shop_npc_prospector_return`) teleports back. Same interaction-entity + `on_tick.mcfunction` click-detection mechanism as the other NPCs, but the click handlers (`economy/shop/npc_clicked_prospector[_return].mcfunction`) run a direct `teleport` (via `economy/shop/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction`) instead of opening a chat shop menu.
+A second, separate island (`world/build_mining_island.mcfunction`), placed at **X/Z≈5,000,000** (Y unchanged, ~65) — far enough that walking there is not a real option — and reachable **only by teleport**. A **Prospector** villager NPC on the starting island (`5 66 0`, `tag=shop_npc_prospector`) teleports the player there on click; a second Prospector on the Mining Island (`5000010 66 4999998`, `tag=shop_npc_prospector_return`) teleports back. Same interaction-entity click-detection mechanism as the minion pickup handlers in `on_tick.mcfunction`, but the click handlers (`world/prospector_clicked[_return].mcfunction`) run a direct `teleport` (via `world/prospector_teleport_out.mcfunction` / `prospector_teleport_back.mcfunction`) instead of opening a chat shop menu (there is no shop anymore, see HISTORY.md's "Economy removal").
 
 **Note on Y**: Minecraft's vertical axis is capped well under a million, so "far away" only ever applies to X/Z; the island's Y range (63-72) is unrelated to that.
 
@@ -300,17 +185,17 @@ Since the floor's 349 tracked `#qstage` positions can never move (every coordina
 
 Both layers stay strictly at Y≥66 (never Y=65) — except the full-surface wall noise, which is safe at any Y including 65 since it's on the flat wall's own X/Z coordinate, never the interior floor coordinates. The room-facing boulders/stalactites additionally skip the wall torches (Y=67), the beam columns/crossbeam, the ceiling cobweb corners, and the Return NPC/rail buffer box. Only the boulders/stalactites layer is uncovered by `mining_island_repair.mcfunction` (which only refills the flat wall/ceiling plane) — if one gets mined it just stays gone, same trade-off as the support beams; the full-surface noise **is** covered, since it lives directly on the plane repair already refills (reverts to plain stone, losing texture, if mined).
 
-The walls and ceiling are plain `minecraft:stone`, not `bedrock` — kept for the aesthetic, but that means they're breakable in survival like any stone. `world/mining_island_repair.mcfunction` makes them **effectively unbreakable** the same way the sell chest already is (see Selling system): 5 `fill <wall/ceiling bounds> stone replace air` commands (one per wall face + one for the ceiling), called from `on_tick.mcfunction` inside the same once-per-real-tick dedup block as `quarry_break_scan`. This only refills *missing* blocks, so it doesn't fight the floor's `#qstage` system and doesn't undo the support beams unless a beam post itself gets broken (comes back as plain stone, not fence).
+The walls and ceiling are plain `minecraft:stone`, not `bedrock` — kept for the aesthetic, but that means they're breakable in survival like any stone. `world/mining_island_repair.mcfunction` makes them **effectively unbreakable**: 5 `fill <wall/ceiling bounds> stone replace air` commands (one per wall face + one for the ceiling), called from `on_tick.mcfunction` inside the same once-per-real-tick dedup block as `quarry_break_scan`. This only refills *missing* blocks, so it doesn't fight the floor's `#qstage` system and doesn't undo the support beams unless a beam post itself gets broken (comes back as plain stone, not fence).
 
 It offers an **active alternative to Minions**: **the entire interior floor** (349 positions — X=5,000,001-5,000,019 by Z=4,999,991-5,000,009, minus the 9-block NPC bedrock platform and the 3-block decorative rail) is a mineable quarry where every block cycles through stages when mined, instead of just disappearing or regrowing on a timer.
 
 - **Stages** (tracked per position by `#qstage_1`..`#qstage_349` in `skyblock_temp`, independent of the actual block — see that table): `0`=ore or gravel, `1`=stone, `2`=cobblestone, `3`=bedrock (a dead end — unbreakable in survival, like all vanilla bedrock)
 - **On break** (`world/quarry_break_scan.mcfunction`, called from `on_tick.mcfunction` once per real server tick — reuses the existing `#tick_now`/`#tick_last_world` dedup so it's not duplicated per connected player): per position, per stage `S` with target material `M` (0→stone, 1→cobblestone, 2→bedrock): `execute if score #qstage_N matches S if block <pos> air run setblock <pos> M`, **then** `execute if score #qstage_N matches S if block <pos> M run scoreboard players set #qstage_N S+1`. The second line's `if block <pos> M` (checking the *material just placed*, not `air` again) is the load-bearing trick — checking `air` a second time always fails since the first line already overwrote it. `stage==S && block==M` is a safe, unique signal for "line 1 just fired this tick", since nothing else in the datapack ever places `M` at these positions while the stage score still reads `S`. For `S=0` specifically (ore/gravel mined into stone), a third line resets `#qore_N` to `0` — inserted *before* the stage-advance line so it can still check `stage matches 0` (see patch growth below).
 - **Ambient reversal** (`world/quarry_random_transform.mcfunction`, called from `tick_all.mcfunction`, once per second): per position, three independent rolls — `#qroll` (`random value 1..2000`, the stone→ore trigger, `matches 1..3` = **0.15%** chance), `#qroll2` (`random value 1..100`, picks *which* ore via weighted cumulative ranges — see `ORE_WEIGHTS` below), `#qroll3` (`random value 1..100`, the cobblestone/bedrock→stone trigger, `matches 1..5` = **5%** chance, **the highest-probability transform**). The stone→ore check runs before the cobblestone/bedrock→stone check in the file.
-  - `ORE_WEIGHTS` (least → most rare, mapped to cumulative ranges on `#qroll2`): **gravel 30**, coal 15, copper 12, iron 10, gold 6, lapis 4, diamond 2, emerald 1, redstone 1 — **sum to 81, not 100**, intentional: `#qroll2` landing in the unassigned 82-100 gap matches no ore at all (every entry is effectively less likely than its raw weight suggests). Adjusting rarity or the pool only means editing this list and regenerating. `gravel` isn't a real ore, but it rides the exact same stage-0 slot (stone → gravel, then gravel breaks back down to stone like any ore) — it's the Mining Island's bootstrap source for the Gravel Minion (see Selling/Buying and Minions sections; the Sand Minion's own bootstrap is downstream of this, see "Sand from gravel" below), kept as the single most common entry since it's meant to be a cheap, fast material rather than a real find.
+  - `ORE_WEIGHTS` (least → most rare, mapped to cumulative ranges on `#qroll2`): **gravel 30**, coal 15, copper 12, iron 10, gold 6, lapis 4, diamond 2, emerald 1, redstone 1 — **sum to 81, not 100**, intentional: `#qroll2` landing in the unassigned 82-100 gap matches no ore at all (every entry is effectively less likely than its raw weight suggests). Adjusting rarity or the pool only means editing this list and regenerating. `gravel` isn't a real ore, but it rides the exact same stage-0 slot (stone → gravel, then gravel breaks back down to stone like any ore) — it's the Mining Island's bootstrap source for the Gravel Minion (see Minions phase; the Sand Minion's own bootstrap is downstream of this, see "Sand from gravel" below), kept as the single most common entry since it's meant to be a cheap, fast material rather than a real find.
   - **Gotcha**: the "advance stage to 0 (ore)" line must also check `if score #qroll2 matches 1..<TOTAL_WEIGHT>` (currently `1..81`), not just that the outer trigger (`#qroll`) fired — otherwise, whenever `#qroll2` lands in the unassigned gap, the stage would flip to "ore" while no `setblock` ran, leaving the position stuck reporting stage 0 with a plain stone block still sitting there. If `ORE_WEIGHTS` is ever changed, **recompute and update `TOTAL_WEIGHT` in that line**, don't leave it stale.
 - **Patch growth** (same file, evaluated before the independent `#qroll2` roll above): each stone position that rolls the stone→ore trigger first checks its orthogonal (N/S/E/W) neighbors' `#qore_N` score. If a neighbor already shows an ore/gravel type, `#qroll4` (`random value 1..100`, `PATCH_COPY_CHANCE`=**70%**, in `generate_quarry.py`) decides whether to copy that neighbor's type into `#patch_target` instead of rolling `ORE_WEIGHTS` independently — first matching neighbor wins (arbitrary N/S/E/W order), result stored via `scoreboard players operation #patch_target = #qore_N`. Only when no neighbor has ore, or the copy roll fails (`#patch_target` stays `0`), does the position fall back to the original independent weighted roll. Either path sets `#qore_<this position>` to the chosen index so future neighbors can chain off it. This produces 2-5 block ore/gravel clusters instead of single isolated blocks (e.g. a lone gravel block), without changing the overall 0.15%/s stone→ore rate — only which type spreads where. A stray "seed" block with no matching neighbor yet is still possible and expected (that's how a new patch starts).
-- No macros/loops here: even at 349 positions, both functions are literal, hardcoded `execute` chains — generated with a script, not written by hand. Consistent with this codebase's preference for explicit repetition over abstraction (see `scan_slot.mcfunction`), though at this position count each function is now ~2,400-14,200 lines (patch growth roughly tripled `quarry_random_transform.mcfunction`, see `PATCH_COPY_CHANCE` above) — if the pit is ever expanded further, consider a storage-array + recursive-function approach instead of continuing to scale literal per-position lines.
+- No macros/loops here: even at 349 positions, both functions are literal, hardcoded `execute` chains — generated with a script, not written by hand. Consistent with this codebase's preference for explicit repetition over abstraction (see the per-type minion storage entries in `load.mcfunction`), though at this position count each function is now ~2,400-14,200 lines (patch growth roughly tripled `quarry_random_transform.mcfunction`, see `PATCH_COPY_CHANCE` above) — if the pit is ever expanded further, consider a storage-array + recursive-function approach instead of continuing to scale literal per-position lines.
 - **The generator is checked in at `tools/generate_quarry.py`** (position list + exclusion zones + `ORE_WEIGHTS` + the trigger thresholds, including `PATCH_COPY_CHANCE`, live there as constants). To resize the mineable area, change the ore pool/weights, or retune the odds: edit those constants, run `python3 tools/generate_quarry.py` to rewrite both `.mcfunction` files, and `python3 tools/generate_quarry.py --qstage-init` / `--qore-init` to print the updated `#qstage_N` / `#qore_N` init blocks to paste into `load.mcfunction` (left hand-maintained since that file has unrelated content the script must not touch). Run `python3 tools/generate_quarry.py --check` first to confirm the script still reproduces the current files before relying on a regeneration. **Do not read these two generated `.mcfunction` files in full** — at thousands of lines each, editing the generator and regenerating is always the right move instead of opening them directly.
 
 Because the island is far from spawn and reached only by teleport (no player ever walks there through normally-loaded chunks), its chunks are kept **permanently forceloaded** (`forceload add 4999995 4999990 5000025 5000010` in `load.mcfunction`, re-added on every load) — otherwise `quarry_break_scan`/`quarry_random_transform` would silently do nothing while no player is physically present. The starting island's own `forceload add -16 -16 15 15` (in `first_join.mcfunction`) was left untouched.
