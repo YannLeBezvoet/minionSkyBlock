@@ -6,7 +6,7 @@ Start on a tiny island in the void and automate resource gathering with Minions 
 
 > 📦 Repository: **[github.com/YannLeBezvoet/minionSkyBlock](https://github.com/YannLeBezvoet/minionSkyBlock)**
 
-![Island screenshot](img/Island.png "Island")
+![Island screenshot](img/island.png "Island")
 
 ## Why you'll like it
 
