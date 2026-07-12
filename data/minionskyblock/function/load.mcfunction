@@ -733,6 +733,19 @@ execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15
 forceload add 4999995 4999990 5000025 5000010
 execute unless block 5000001 65 4999991 minecraft:stone run function minionskyblock:world/build_mining_island
 
+# POC: standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json), separate
+# from the far-away-in-overworld Mining Island above. Custom dimension_type (no tracked quarry system,
+# no sky/surface reachable, real overworld-style terrain/gameplay — see CLAUDE.md's Mining dimension
+# section). Not wired into gameplay yet — test manually with /function minionskyblock:world/mining_dimension_poc_tp
+# and .../mining_dimension_poc_return.
+# Needs its own forceload (same reason as the Mining Island above): chunk 0,0 has never been visited by
+# a player, so without a ticket, fill/setblock/if block silently no-op on it from a cross-dimension
+# execute in — this is what caused the very first POC test to drop the player into pure void.
+# Guard checks for a torch, not stone: with real terrain generation, stone can already be there naturally
+# even before our own build ever runs, which would make a stone-based guard falsely think it's done.
+execute in minionskyblock:mining run forceload add 0 0 0 0
+execute in minionskyblock:mining unless block 1 -29 1 minecraft:torch run function minionskyblock:world/build_mining_dimension_poc
+
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
 data modify storage minionskyblock:minion dirt_t1 set value {block:"minecraft:dirt",drop:"minecraft:dirt",timer:10,tool:"minecraft:wooden_shovel",item:"minecraft:stone_shovel",color:"dark_green",name:"Dirt Minion",type:"dirt",tier:1b,tier_display:"I",placement_advancement:"place_dirt",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8806446}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8806446}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8806446}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8806446}}}}
