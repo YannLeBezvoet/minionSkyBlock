@@ -9,19 +9,21 @@
       "layers": [
         {
           "block": "minecraft:bedrock",
-          "height": 1
+          "height": 4
         },
         {
           "block": "minecraft:stone",
-          "height": 126
+          "height": 120
         },
         {
           "block": "minecraft:bedrock",
-          "height": 1
+          "height": 4
         }
       ],
       "structure_overrides": [
-        "minecraft:mineshaft"
+        "minionskyblock:mineshafts",
+        "minionskyblock:strongholds",
+        "minionskyblock:trial_chambers"
       ]
     }
   }

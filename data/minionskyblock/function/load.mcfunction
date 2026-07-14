@@ -734,9 +734,10 @@ forceload add 4999995 4999990 5000025 5000010
 execute unless block 5000001 65 4999991 minecraft:stone run function minionskyblock:world/build_mining_island
 
 # POC: standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json), separate
-# from the far-away-in-overworld Mining Island above. minecraft:flat generator (bedrock floor Y=0, solid
-# stone Y=1-126 with plains ore generation + mineshafts, bedrock ceiling Y=127), no tracked quarry system
-# — see CLAUDE.md's Mining dimension section. Not wired into gameplay yet — test manually with
+# from the far-away-in-overworld Mining Island above. minecraft:flat generator (4-thick bedrock floor
+# Y=-64..-61, solid stone Y=-60..59 with plains ore generation + mineshaft/ancient_city/stronghold/
+# trial_chambers, 4-thick bedrock ceiling Y=60..63), no tracked quarry system — see CLAUDE.md's Mining
+# dimension section. Not wired into gameplay yet — test manually with
 # /function minionskyblock:world/mining_dimension_poc_tp and .../mining_dimension_poc_return.
 # Needs its own forceload (same reason as the Mining Island above): chunk 0,0 has never been visited by
 # a player, so without a ticket, fill/setblock/if block silently no-op on it from a cross-dimension
@@ -744,7 +745,7 @@ execute unless block 5000001 65 4999991 minecraft:stone run function minionskybl
 # Guard checks for a torch, not stone: the flat generator's own layers already place stone at the guard
 # coordinates, which would make a stone-based guard falsely think the room was already built.
 execute in minionskyblock:mining run forceload add 0 0 0 0
-execute in minionskyblock:mining unless block 1 61 1 minecraft:torch run function minionskyblock:world/build_mining_dimension_poc
+execute in minionskyblock:mining unless block 1 21 1 minecraft:torch run function minionskyblock:world/build_mining_dimension_poc
 
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
