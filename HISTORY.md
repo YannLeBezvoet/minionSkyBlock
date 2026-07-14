@@ -2,6 +2,18 @@
 
 Past iterations and superseded designs, kept for archaeology (why something looks the way it does). Not auto-loaded by Claude Code — see [CLAUDE.md](CLAUDE.md) for the current state of everything referenced here.
 
+## Mining dimension POC — arrival room
+
+The arrival room in `minionskyblock:mining` (see CLAUDE.md's "Mining dimension" section) originally used to be carved by hand from `build_mining_dimension_poc.mcfunction` with plain `fill`/`setblock` commands (a bare stone box, air interior, 4 corner torches) rather than a structure file. It was replaced by placing the `minionskyblock:miningspawn` structure (an octagonal chiseled-stone-bricks-and-black-stained-glass room with a soul-torch ring, authored in-game with a structure block — same workflow as `island.nbt`), at the same `0 20 0` origin/bounding box so no other coordinates in the pack needed to change.
+
+## Mining Island removal (2026-07-14)
+
+The entire Mining Island feature was removed on explicit request, in favor of the in-progress Mining dimension POC (see CLAUDE.md's "Mining dimension" section) as its eventual replacement. Deleted: `world/build_mining_island.mcfunction`, `world/quarry_break_scan.mcfunction`, `world/quarry_random_transform.mcfunction`, `world/mining_island_repair.mcfunction`, the two Prospector NPCs and their click/teleport functions (`world/prospector_clicked[_return].mcfunction`, `world/prospector_teleport_out.mcfunction`, `world/prospector_teleport_back.mcfunction`), the `tools/generate_quarry.py` generator, and every related scoreboard init block in `load.mcfunction` (`#qstage_1..349`, `#qore_1..349`, `#mining_light_fix2`) plus its forceload/black-chunks-fix logic in `on_tick.mcfunction` and its `quarry_random_transform` call in `tick_all.mcfunction`.
+
+This removes the pack's only source of coal, copper, iron, gold, lapis, redstone, diamond, emerald, and (via "Sand from gravel" — see CLAUDE.md) sand/gravel — every ore-based Minion is currently unbootstrappable from a fresh world. The `data/minecraft/loot_table/blocks/gravel.json` gravel→sand override was deliberately left in place rather than deleted, since it's harmless dead weight without a gravel source and is the correct behavior to have ready again once a new source (the Mining dimension, most likely) is wired in. HowToPlay.md's "Suggested progression" section was updated with an explicit "Currently unobtainable" note rather than silently leaving stale instructions that reference a Mining Island trip.
+
+The README's "Mining Island" pitch paragraph and quarry screenshot reference were removed too; the `img/quarry.png` image file itself was left untouched (an asset-cleanup decision, not a code one).
+
 ## Mining Island location
 
 Earlier prototypes of the Mining Island existed only during development on a single test world and were manually torn down at the time (no migration/teardown logic is kept in the codebase for them):

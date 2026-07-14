@@ -5,18 +5,9 @@ execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_f
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:stone
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run tag @s add skyblock_light_fix2
 
-# Black-chunks fix for the (far away, always-forceloaded) Mining Island: global two-tick toggle, not tied to any player's join history
-# (v2: the island moved from X=500-520 to X/Z=5,000,000 — a fresh counter avoids needing to reset the old, already-completed one)
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_last skyblock_temp matches -2147483648..2147483647 run scoreboard players set #mining_light_fix2_tick_last skyblock_temp -1
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 store result score #mining_light_fix2_tick_now skyblock_temp run time query gametime
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 0 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:stone
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 0 run scoreboard players set #mining_light_fix2 skyblock_temp 1
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 1 run fill 4999995 73 4999990 5000025 73 5000010 minecraft:air
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp if score #mining_light_fix2 skyblock_temp matches 1 run scoreboard players set #mining_light_fix2 skyblock_temp 2
-execute if score #mining_light_fix2 skyblock_temp matches 0..1 unless score #mining_light_fix2_tick_now skyblock_temp = #mining_light_fix2_tick_last skyblock_temp run scoreboard players operation #mining_light_fix2_tick_last skyblock_temp = #mining_light_fix2_tick_now skyblock_temp
+execute as @e[tag=prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked
+execute as @e[tag=prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked_return
 
-execute as @e[tag=shop_npc_prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked
-execute as @e[tag=shop_npc_prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked_return
 execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t1
 execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t2
 execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion dirt_t1
@@ -53,8 +44,6 @@ execute as @e[tag=minion_interact_obsidian,tag=tier_2] if data entity @s attack.
 # Advance the global counter by one step, only once per server tick (gametime is identical for all players within the same tick)
 execute store result score #tick_now skyblock_temp run time query gametime
 execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run scoreboard players add #world_ptick skyblock_temp 1
-execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run function minionskyblock:world/quarry_break_scan
-execute unless score #tick_now skyblock_temp = #tick_last_world skyblock_temp run function minionskyblock:world/mining_island_repair
 scoreboard players operation #tick_last_world skyblock_temp = #tick_now skyblock_temp
 execute if score #world_ptick skyblock_temp matches 20.. run function minionskyblock:minion/tick_all
 execute if score #world_ptick skyblock_temp matches 20.. run scoreboard players set #world_ptick skyblock_temp 0

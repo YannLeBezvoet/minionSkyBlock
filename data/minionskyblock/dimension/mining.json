@@ -1,0 +1,30 @@
+{
+  "type": "minionskyblock:mining",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:plains",
+      "lakes": false,
+      "features": true,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 4
+        },
+        {
+          "block": "minecraft:stone",
+          "height": 120
+        },
+        {
+          "block": "minecraft:bedrock",
+          "height": 4
+        }
+      ],
+      "structure_overrides": [
+        "minionskyblock:mineshafts",
+        "minionskyblock:strongholds",
+        "minionskyblock:trial_chambers"
+      ]
+    }
+  }
+}
