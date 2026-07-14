@@ -17,19 +17,20 @@ kill @e[tag=shop_npc_ore_interaction]
 # Biome already generated is frozen at world creation (dimension json only applies to new chunks): retroactive re-biome
 execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15 minecraft:meadow replace minecraft:the_void
 
-# POC: standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json).
+# Standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json).
 # minecraft:flat generator (4-thick bedrock floor Y=-64..-61, solid stone Y=-60..59 with plains ore
-# generation + mineshaft/ancient_city/stronghold/trial_chambers, 4-thick bedrock ceiling Y=60..63), no
-# tracked quarry system — see CLAUDE.md's Mining dimension section. Not wired into gameplay yet — test
-# manually with /function minionskyblock:world/mining_dimension_poc_tp and .../mining_dimension_poc_return.
+# generation + mineshaft/stronghold/trial_chambers, 4-thick bedrock ceiling Y=60..63), no
+# tracked quarry system — see CLAUDE.md's Mining dimension section. Reached in-game via the
+# Prospector NPC; /function minionskyblock:world/mining_tp and .../mining_return are manual-only
+# shortcuts for quick testing (same convention as debug.mcfunction).
 # Needs its own forceload: chunk 0,0 has never been visited by a player, so without a ticket,
 # fill/setblock/if block silently no-op on it from a cross-dimension execute in — this is what caused
-# the very first POC test to drop the player into pure void.
+# the very first test to drop the player into pure void.
 # Guard checks for a soul_wall_torch (part of the miningspawn structure's torch ring), not stone: the
 # flat generator's own layers already place stone at the guard coordinates, which would make a
 # stone-based guard falsely think the room was already built.
 execute in minionskyblock:mining run forceload add 0 0 0 0
-execute in minionskyblock:mining unless block 4 24 1 minecraft:soul_wall_torch run function minionskyblock:world/build_mining_dimension_poc
+execute in minionskyblock:mining unless block 4 24 1 minecraft:soul_wall_torch run function minionskyblock:world/build_arrival_room
 
 # Prospector NPC: real player-facing entry point into the Mining dimension, available from the very
 # start (nothing to build/craft — see CLAUDE.md's Mining dimension section). One NPC stands on the
