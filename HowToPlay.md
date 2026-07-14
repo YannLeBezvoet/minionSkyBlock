@@ -107,39 +107,6 @@ To craft a T2, replace the redstone torch with a **redstone block** and the mate
 
 ---
 
-## Mining Island
-
-The **Prospector**, an NPC on your starting island, teleports you to a separate **Mining Island** when you talk to him — far away from your island — an enclosed underground-style quarry (rugged stone walls with jagged outcroppings, a low ceiling with hanging stalactites, wooden support beams, wall torches, cobwebs, and a parked minecart). A second Prospector waits there to teleport you back home.
-
-The walls and ceiling repair themselves almost instantly if you break them, so you can't tunnel out; the main mineable area is the floor, and unlike ordinary stone, every block **changes into something else every time you mine it** instead of just disappearing:
-
-- Mine an **ore** → it turns into **stone**
-- Mine that **stone** → it turns into **cobblestone**
-- Mine that **cobblestone** → it turns into **bedrock** — a dead end, you can't break it any further for now
-
-Left alone, the floor slowly heals itself, though it takes its time:
-
-- Bedrock and cobblestone have a small chance each second to revert back to stone — still the more likely of the two outcomes, but a slow one
-- Stone has a much smaller chance each second to turn into a fresh ore, picked at random — rarer ores show up far less often than common ones:
-
-| Ore | Rarity |
-|---|---|
-| Gravel | most common |
-| Coal | |
-| Copper | |
-| Iron | |
-| Gold | |
-| Lapis Lazuli | |
-| Diamond | |
-| Emerald | rarest (tied) |
-| Redstone | rarest (tied) |
-
-So the mine is never truly "empty" — dig long enough and bedrock spots you left behind will turn workable again, and patient waiting is occasionally rewarded with an ore (or a patch of gravel), mostly gravel and coal but every so often something much better. A hands-on alternative (or complement) to letting a Minion do it passively.
-
-> **Bonus**: mining a gravel patch with a **shovel** has a small chance (10%) to give you **sand** instead. This is currently the only way to get sand or gravel at all — there's no other source on the island, so a trip to the Mining Island is the way to bootstrap your first Sand and Gravel Minions.
-
----
-
 ## Wild bee hives (honey)
 
 Growing a tree from a sapling with **bone meal** has a small chance (≈8%) of spawning a **wild bee hive** right next to you, complete with bees and a couple of flowers for them to pollinate. Growth from natural random ticks doesn't trigger this — you need to actively bonemeal.
@@ -152,15 +119,12 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 
 1. **Cobblestone Minion T1** first — cheap recipe (8 cobblestone + redstone torch)
 2. Keep chopping your tree and mining by hand while it works, to gather enough for your next Minions
-3. **Coal Minion T1** — easy to craft, coal is handy for torches and smelting
-4. **Wheat Minion T1** — craft with 8 wheat + redstone torch, feeds you and stocks up for a future Wheat Minion T2
-5. **Oak Wood Minion T1** — planks instead of logs for T1
-6. **Sand / Gravel Minions T1** — cheap and fast; bootstrap your first sand/gravel with a trip to the Mining Island (see Mining Island)
-7. Upgrade your first Minions to **T2** (block materials + redstone block)
-8. **Iron Minion** — expensive to craft (8 iron ingots) but generates raw iron
-9. **Gold / Redstone / Lapis / Quartz Minions** — mid-tier resources, require real ingots or dust
-10. **Diamond / Emerald / Obsidian Minions** — endgame, very expensive recipes (and, for Obsidian, a long timer) but valuable drops
-11. Place **chests** next to your Minions for automatic collection with no intervention
+3. **Wheat Minion T1** — craft with 8 wheat + redstone torch, feeds you and stocks up for a future Wheat Minion T2
+4. **Oak Wood Minion T1** — planks instead of logs for T1
+5. Upgrade your first Minions to **T2** (block materials + redstone block)
+6. Place **chests** next to your Minions for automatic collection with no intervention
+
+> **Currently unobtainable**: the Mining Island (this pack's only source of coal, copper, iron, gold, lapis, redstone, diamond, emerald, and gravel/sand) has been removed. Until a new ore source is wired in (see the in-progress Mining Dimension), the Coal/Copper/Iron/Gold/Redstone/Lapis/Diamond/Emerald/Sand/Gravel/Quartz/Obsidian Minions have no way to be bootstrapped from a fresh world — their recipes and behavior are documented above for reference, but nothing in the game world currently drops their T1 materials.
 
 ---
 
