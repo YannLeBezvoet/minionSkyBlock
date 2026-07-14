@@ -5,6 +5,9 @@ execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_f
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:stone
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run tag @s add skyblock_light_fix2
 
+execute as @e[tag=prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked
+execute as @e[tag=prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked_return
+
 execute as @e[tag=minion_interact_cobblestone] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t1
 execute as @e[tag=minion_interact_cobblestone,tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion cobblestone_t2
 execute as @e[tag=minion_interact_dirt] unless entity @s[tag=tier_2] if data entity @s attack.player at @s run function minionskyblock:minion/pickup with storage minionskyblock:minion dirt_t1

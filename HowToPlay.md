@@ -124,7 +124,15 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 5. Upgrade your first Minions to **T2** (block materials + redstone block)
 6. Place **chests** next to your Minions for automatic collection with no intervention
 
-> **Currently unobtainable**: the Mining Island (this pack's only source of coal, copper, iron, gold, lapis, redstone, diamond, emerald, and gravel/sand) has been removed. Until a new ore source is wired in (see the in-progress Mining Dimension), the Coal/Copper/Iron/Gold/Redstone/Lapis/Diamond/Emerald/Sand/Gravel/Quartz/Obsidian Minions have no way to be bootstrapped from a fresh world — their recipes and behavior are documented above for reference, but nothing in the game world currently drops their T1 materials.
+> Coal/Copper/Iron/Gold/Redstone/Lapis/Diamond/Emerald/Sand/Gravel/Quartz/Obsidian Minions need their raw materials gathered by hand first — see **Mining dimension** below for where to find them.
+
+---
+
+## Mining dimension
+
+Talk to the **Prospector** standing on your island (near the bedrock platform) to teleport into a separate mining dimension — a huge stone expanse with normal ore veins, mineshafts, strongholds, and trial chambers to explore, generated much more densely than a regular world. This is available from the very start: nothing to build or craft first.
+
+You arrive in a small safe room; everywhere outside it is solid stone waiting to be mined. A second Prospector inside that room teleports you back to your island whenever you're ready. Bring your own tools and light source — the dimension has no sky and no natural light.
 
 ---
 

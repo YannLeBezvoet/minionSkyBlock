@@ -31,6 +31,20 @@ execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15
 execute in minionskyblock:mining run forceload add 0 0 0 0
 execute in minionskyblock:mining unless block 4 24 1 minecraft:soul_wall_torch run function minionskyblock:world/build_mining_dimension_poc
 
+# Prospector NPC: real player-facing entry point into the Mining dimension, available from the very
+# start (nothing to build/craft — see CLAUDE.md's Mining dimension section). One NPC stands on the
+# island's NPC platform and teleports the player into the mining dimension's arrival room; a second
+# NPC waits in that room and teleports back. Kill-then-resummon every load: safe/idempotent, and keeps
+# both in sync if either is ever repositioned.
+kill @e[tag=prospector]
+kill @e[tag=prospector_interaction]
+summon minecraft:villager 5 66 0 {Tags:["prospector"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[90f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
+summon minecraft:interaction 5 66 0 {Tags:["prospector_interaction"],width:1.0f,height:2.0f,response:1b}
+execute in minionskyblock:mining run kill @e[tag=prospector_return]
+execute in minionskyblock:mining run kill @e[tag=prospector_return_interaction]
+execute in minionskyblock:mining run summon minecraft:villager 4 21 2 {Tags:["prospector_return"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[0f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
+execute in minionskyblock:mining run summon minecraft:interaction 4 21 2 {Tags:["prospector_return_interaction"],width:1.0f,height:2.0f,response:1b}
+
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
 data modify storage minionskyblock:minion dirt_t1 set value {block:"minecraft:dirt",drop:"minecraft:dirt",timer:10,tool:"minecraft:wooden_shovel",item:"minecraft:stone_shovel",color:"dark_green",name:"Dirt Minion",type:"dirt",tier:1b,tier_display:"I",placement_advancement:"place_dirt",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8806446}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8806446}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8806446}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8806446}}}}
