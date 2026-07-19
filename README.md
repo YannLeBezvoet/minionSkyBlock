@@ -16,7 +16,7 @@ Start on a tiny island in the void and automate resource gathering with Minions 
 
 ## Gameplay loop
 
-Two fundamental pillars:
+Three fundamental pillars:
 
 1. **Isolated island** — you start on a small island in the middle of the void, with no resources around you.
 2. **Minions** — placeable, craftable entities that generate blocks/resources autonomously. Each minion can be upgraded to increase its speed or production.
