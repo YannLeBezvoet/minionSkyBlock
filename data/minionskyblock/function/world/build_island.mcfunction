@@ -9,3 +9,5 @@ item replace block -2 66 0 container.3 with minecraft:wooden_shovel 1
 item replace block -2 66 0 container.4 with minecraft:bread 16
 item replace block -2 66 0 container.5 with minecraft:bone_meal 8
 item replace block -2 66 0 container.6 with minecraft:oak_sapling 1
+
+scoreboard players set #world_island_built skyblock_temp 1
