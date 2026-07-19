@@ -20,8 +20,10 @@ Two fundamental pillars:
 
 1. **Isolated island** — you start on a small island in the middle of the void, with no resources around you.
 2. **Minions** — placeable, craftable entities that generate blocks/resources autonomously. Each minion can be upgraded to increase its speed or production.
+3. **Mining dimension** — a dedicated dimension full of resources to mine, reachable via the Prospector NPC on your island.
 
 ![Minions screenshot](img/minions.png "Minions")
+![Mining screenshot](img/mining.png "Mining")
 
 ## Getting started
 
