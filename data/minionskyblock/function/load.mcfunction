@@ -29,21 +29,20 @@ execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15
 # Guard checks for a soul_wall_torch (part of the miningspawn structure's torch ring), not stone: the
 # flat generator's own layers already place stone at the guard coordinates, which would make a
 # stone-based guard falsely think the room was already built.
-execute in minionskyblock:mining run forceload add 0 0 0 0
-execute in minionskyblock:mining unless block 4 24 1 minecraft:soul_wall_torch run function minionskyblock:world/build_arrival_room
+# mining_init self-reschedules until chunk (0,0) is confirmed loaded before touching the guard or the
+# prospector_return NPC — a bare forceload add doesn't guarantee the chunk is loaded within the same
+# tick, which used to make the guard falsely rebuild the arrival room on some reconnects.
+function minionskyblock:world/mining_init
 
 # Prospector NPC: real player-facing entry point into the Mining dimension, available from the very
 # start (nothing to build/craft — see CLAUDE.md's Mining dimension section). One NPC stands on the
 # island's NPC platform and teleports the player into the mining dimension's arrival room; a second
 # NPC waits in that room and teleports back. Kill-then-resummon every load: safe/idempotent, and keeps
-# both in sync if either is ever repositioned. Overworld side is deferred to prospector_init, which
-# waits for the chunk to actually be loaded before touching it — see CLAUDE.md, this used to silently
-# duplicate the NPC when chunk (0,0) wasn't yet loaded at this exact tick.
+# both in sync if either is ever repositioned. Both sides are deferred until their respective chunk is
+# confirmed loaded before touching it (prospector_init for the overworld side, mining_init above for
+# the mining side) — see CLAUDE.md, this used to silently duplicate the NPC when the chunk wasn't yet
+# loaded at this exact tick.
 function minionskyblock:world/prospector_init
-execute in minionskyblock:mining run kill @e[tag=prospector_return]
-execute in minionskyblock:mining run kill @e[tag=prospector_return_interaction]
-execute in minionskyblock:mining run summon minecraft:villager 4 21 2 {Tags:["prospector_return"],NoAI:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b,CanPickUpLoot:0b,Rotation:[0f,0f],CustomName:{text:"Prospector",color:"yellow",bold:1b},CustomNameVisible:1b,VillagerData:{profession:"minecraft:mason",type:"minecraft:plains",level:2}}
-execute in minionskyblock:mining run summon minecraft:interaction 4 21 2 {Tags:["prospector_return_interaction"],width:1.0f,height:2.0f,response:1b}
 
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
