@@ -134,6 +134,8 @@ Talk to the **Prospector** standing on your island (near the bedrock platform) t
 
 You arrive in a small safe room; everywhere outside it is solid stone waiting to be mined. A second Prospector inside that room teleports you back to your island whenever you're ready. Bring your own tools and light source — the dimension has no sky and no natural light.
 
+Mineshaft minecart chests also carry **wheat, pumpkin, melon and beetroot seeds**, plus **bamboo, sugar cane, and kelp** — the only in-game source for these, since the void-world island doesn't generate any of them naturally.
+
 ---
 
 ## Tips
