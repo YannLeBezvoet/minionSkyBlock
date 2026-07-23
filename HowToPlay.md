@@ -69,6 +69,8 @@ A small Armor Stand appears with its tool in hand: it starts working immediately
 > - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
 > - **Obsidian** (the most expensive Minion) wears full **Netherite** armor; Tier II also gets the redstone Flow trim.
 > - **Cobblestone, Dirt, Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
+>
+> **Nametags**: a Minion's name is hidden by default to keep the view clean once you have several of them. **Sneak (shift)** near a Minion to reveal its name.
 
 ### How it works
 
