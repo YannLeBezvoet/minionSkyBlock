@@ -5,8 +5,18 @@ execute if entity @s[tag=skyblock_light_fix2] run tag @s remove skyblock_light_f
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run fill -15 73 -4 5 73 4 minecraft:stone
 execute if entity @s[tag=skyblock_light_fix] unless entity @s[tag=skyblock_light_fix2] run tag @s add skyblock_light_fix2
 
-execute as @e[tag=prospector_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked
-execute as @e[tag=prospector_return_interaction,limit=1] if data entity @s interaction.player run function minionskyblock:world/prospector_clicked_return
+# Portal detection: @s is already the player (this whole function runs as/at them via the tick_loop
+# advancement reward), so this is a plain "am I standing in the walkway" box check — no interaction
+# entity needed, unlike the old Prospector villager. skyblock_portal_cd (set by
+# world/portal_teleport_out.mcfunction / portal_teleport_back.mcfunction) blocks immediate
+# re-triggering, mirroring vanilla's own nether portal cooldown.
+execute unless score @s skyblock_portal_cd matches 1.. if data entity @s {Dimension:"minecraft:overworld"} if entity @s[x=5,y=66,z=0,dx=0,dy=2,dz=1] run function minionskyblock:world/portal_teleport_out
+execute unless score @s skyblock_portal_cd matches 1.. if data entity @s {Dimension:"minionskyblock:mining"} if entity @s[x=4,y=21,z=4,dx=0,dy=2,dz=0] run function minionskyblock:world/portal_teleport_back
+
+# Ambient portal shimmer, one column per side — gated on the player's own dimension so it doesn't fire
+# at the wrong coordinates in whichever dimension @s isn't currently in.
+execute if data entity @s {Dimension:"minecraft:overworld"} run particle minecraft:portal 5 67 0.5 0.3 1 0.3 0.02 8
+execute if data entity @s {Dimension:"minionskyblock:mining"} run particle minecraft:portal 4 21 4 0.3 1 0.3 0.02 8
 
 execute as @e[tag=minion,distance=..6] run data merge entity @s {CustomNameVisible:0b}
 execute if entity @s[predicate=minionskyblock:sneaking] as @e[tag=minion,distance=..6] run data merge entity @s {CustomNameVisible:1b}
@@ -52,3 +62,4 @@ execute if score #world_ptick skyblock_temp matches 20.. run function minionskyb
 execute if score #world_ptick skyblock_temp matches 20.. run scoreboard players set #world_ptick skyblock_temp 0
 
 execute if score @s skyblock_hive_cd matches 1.. run scoreboard players remove @s skyblock_hive_cd 1
+execute if score @s skyblock_portal_cd matches 1.. run scoreboard players remove @s skyblock_portal_cd 1

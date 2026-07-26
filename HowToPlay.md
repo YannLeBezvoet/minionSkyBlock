@@ -132,9 +132,9 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 
 ## Mining dimension
 
-Talk to the **Prospector** standing on your island (near the bedrock platform) to teleport into a separate mining dimension — a huge stone expanse with normal ore veins, mineshafts, strongholds, and trial chambers to explore, generated much more densely than a regular world. This is available from the very start: nothing to build or craft first.
+Walk through the **obsidian portal** standing on your island (near the bedrock platform) to enter a separate mining dimension — a huge stone expanse with normal ore veins, mineshafts, strongholds, and trial chambers to explore, generated much more densely than a regular world. This is available from the very start: nothing to build or craft first.
 
-You arrive in a small safe room; everywhere outside it is solid stone waiting to be mined. A second Prospector inside that room teleports you back to your island whenever you're ready. Bring your own tools and light source — the dimension has no sky and no natural light.
+You arrive in a small safe room; everywhere outside it is solid stone waiting to be mined. A second portal inside that room teleports you back to your island whenever you're ready. Bring your own tools and light source — the dimension has no sky and no natural light.
 
 Mineshaft minecart chests also carry **wheat, pumpkin, melon and beetroot seeds**, plus **bamboo, sugar cane, and kelp** — the only in-game source for these, since the void-world island doesn't generate any of them naturally.
 
