@@ -37,13 +37,12 @@ function minionskyblock:world/mining_init
 
 # Portal: real player-facing entry point into the Mining dimension, available from the very start
 # (nothing to build/craft — see CLAUDE.md's Mining dimension section). Replaces the old Prospector
-# villager (see HISTORY.md) with a freestanding obsidian doorway; player/on_tick.mcfunction detects the
-# player standing in the walkway and teleports them. Both frames (island platform + mining arrival
-# room) are now part of the island.nbt / miningspawn.nbt structures themselves, authored in-game with a
-# structure block — not built by command. world/build_portal below only retroactively kills the old
-# Prospector villager pair for worlds created before this switch; it's still deferred until chunk (0,0)
-# is confirmed loaded first (same self-reschedule pattern as mining_init above), since kill is subject
-# to the same unloaded-chunk race as fill/setblock — see CLAUDE.md's Known Gotchas.
+# villager (see HISTORY.md) with an invisible teleport zone marked only by ambient particles — no
+# physical frame; player/on_tick.mcfunction detects the player standing in the marked spot and
+# teleports them. world/build_portal below only retroactively kills the old Prospector villager pair
+# for worlds created before this switch; it's still deferred until chunk (0,0) is confirmed loaded
+# first (same self-reschedule pattern as mining_init above), since kill is subject to the same
+# unloaded-chunk race as fill/setblock — see CLAUDE.md's Known Gotchas.
 function minionskyblock:world/build_portal
 
 # Tier 1 minion config
