@@ -132,7 +132,7 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 
 ## Mining dimension
 
-Walk through the **obsidian portal** standing on your island (near the bedrock platform) to enter a separate mining dimension — a huge stone expanse with normal ore veins, mineshafts, strongholds, and trial chambers to explore, generated much more densely than a regular world. This is available from the very start: nothing to build or craft first.
+Walk into the **shimmering portal** on your island (near the bedrock platform, marked by floating purple particles) to enter a separate mining dimension — a huge stone expanse with normal ore veins, mineshafts, strongholds, and trial chambers to explore, generated much more densely than a regular world. This is available from the very start: nothing to build or craft first.
 
 You arrive in a small safe room; everywhere outside it is solid stone waiting to be mined. A second portal inside that room teleports you back to your island whenever you're ready. Bring your own tools and light source — the dimension has no sky and no natural light.
 
