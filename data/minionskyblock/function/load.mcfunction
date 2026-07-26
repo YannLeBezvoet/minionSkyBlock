@@ -1,6 +1,7 @@
 scoreboard objectives add skyblock_joined dummy
 scoreboard objectives add skyblock_temp dummy
 scoreboard objectives add skyblock_hive_cd dummy
+scoreboard objectives add skyblock_portal_cd dummy
 scoreboard objectives add minion_timer dummy
 
 setworldspawn 0 66 0
@@ -21,7 +22,7 @@ execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15
 # minecraft:flat generator (4-thick bedrock floor Y=-64..-61, solid stone Y=-60..59 with plains ore
 # generation + mineshaft/stronghold/trial_chambers, 4-thick bedrock ceiling Y=60..63), no
 # tracked quarry system — see CLAUDE.md's Mining dimension section. Reached in-game via the
-# Prospector NPC; /function minionskyblock:world/mining_tp and .../mining_return are manual-only
+# portal; /function minionskyblock:world/mining_tp and .../mining_return are manual-only
 # shortcuts for quick testing (same convention as debug.mcfunction).
 # Needs its own forceload: chunk 0,0 has never been visited by a player, so without a ticket,
 # fill/setblock/if block silently no-op on it from a cross-dimension execute in — this is what caused
@@ -30,19 +31,20 @@ execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15
 # flat generator's own layers already place stone at the guard coordinates, which would make a
 # stone-based guard falsely think the room was already built.
 # mining_init self-reschedules until chunk (0,0) is confirmed loaded before touching the guard or the
-# prospector_return NPC — a bare forceload add doesn't guarantee the chunk is loaded within the same
+# exit portal fill — a bare forceload add doesn't guarantee the chunk is loaded within the same
 # tick, which used to make the guard falsely rebuild the arrival room on some reconnects.
 function minionskyblock:world/mining_init
 
-# Prospector NPC: real player-facing entry point into the Mining dimension, available from the very
-# start (nothing to build/craft — see CLAUDE.md's Mining dimension section). One NPC stands on the
-# island's NPC platform and teleports the player into the mining dimension's arrival room; a second
-# NPC waits in that room and teleports back. Kill-then-resummon every load: safe/idempotent, and keeps
-# both in sync if either is ever repositioned. Both sides are deferred until their respective chunk is
-# confirmed loaded before touching it (prospector_init for the overworld side, mining_init above for
-# the mining side) — see CLAUDE.md, this used to silently duplicate the NPC when the chunk wasn't yet
-# loaded at this exact tick.
-function minionskyblock:world/prospector_init
+# Portal: real player-facing entry point into the Mining dimension, available from the very start
+# (nothing to build/craft — see CLAUDE.md's Mining dimension section). Replaces the old Prospector
+# villager (see HISTORY.md) with a freestanding obsidian doorway; player/on_tick.mcfunction detects the
+# player standing in the walkway and teleports them. Both frames (island platform + mining arrival
+# room) are now part of the island.nbt / miningspawn.nbt structures themselves, authored in-game with a
+# structure block — not built by command. world/build_portal below only retroactively kills the old
+# Prospector villager pair for worlds created before this switch; it's still deferred until chunk (0,0)
+# is confirmed loaded first (same self-reschedule pattern as mining_init above), since kill is subject
+# to the same unloaded-chunk race as fill/setblock — see CLAUDE.md's Known Gotchas.
+function minionskyblock:world/build_portal
 
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
