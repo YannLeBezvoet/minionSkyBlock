@@ -140,6 +140,25 @@ Mineshaft minecart chests also carry **wheat, pumpkin, melon and beetroot seeds*
 
 ---
 
+## Elytra
+
+The Elytra is craftable directly on a standard crafting table:
+
+```text
+S N S
+P   P
+P   P
+```
+
+- **S** = String
+- **N** = Nether Star
+- **P** = Phantom Membrane
+- middle-left and middle-right slots stay empty
+
+This is a high-end recipe — a Nether Star normally only drops from the Wither, and Phantom Membranes drop from Phantoms, so expect to explore beyond the starting island (Mining dimension, Nether/End if you build your own portals) to gather the ingredients.
+
+---
+
 ## Tips
 
 - A Minion **cannot be broken** by other players (only you can pick it up via left-click).
