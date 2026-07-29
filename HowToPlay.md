@@ -159,7 +159,7 @@ P   P
 - **S** = String
 - **N** = Nether Star
 - **P** = Phantom Membrane
-- middle-left and middle-right slots stay empty
+- middle-center and bottom-center slots stay empty
 
 This is a high-end recipe — a Nether Star normally only drops from the Wither, and Phantom Membranes drop from Phantoms, so expect to explore beyond the starting island (Mining dimension, Nether/End if you build your own portals) to gather the ingredients.
 
