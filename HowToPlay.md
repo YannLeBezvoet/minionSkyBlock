@@ -117,6 +117,12 @@ Once the hive fills up, harvest it with a **glass bottle** for Honey Bottles (or
 
 ---
 
+## Rabbit hide from rotten flesh
+
+Killed by a zombie in the Mining dimension and stuck with a pile of rotten flesh? Smelt it in a **furnace** — it now produces **rabbit hide** instead of the usual XP-only cook. Craft 4 rabbit hides into leather (vanilla recipe) — a bootstrap source of leather (used for the leather-dyed Minion armor and other recipes) since the void-world island has no cows or rabbits.
+
+---
+
 ## Suggested progression
 
 1. **Cobblestone Minion T1** first — cheap recipe (8 cobblestone + redstone torch)
