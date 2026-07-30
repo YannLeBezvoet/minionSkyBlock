@@ -203,12 +203,16 @@ Mechanism: `data/minecraft/loot_table/blocks/gravel.json` is a **vanilla loot ta
 
 This piggybacks on Minecraft's own loot table system instead of the advancement-trigger + cooldown pattern used for Wild bee hives — no location/growth-verification gotchas apply here, since `minecraft:block` loot tables fire exactly once per confirmed block break, not on a looser "interaction happened" signal.
 
+## Ice Minion — bootstrap source is the Wandering Trader
+
+The Ice Minion T1/T2 recipes (`recipe/ice_minion_t1.json` = 8×ice, `recipe/ice_minion_t2.json` = 8×packed_ice) rely on a bootstrap source that isn't part of this datapack at all: the void world has no frozen ocean/taiga biome (surface biome is forced to `meadow`, see `load.mcfunction`), water doesn't freeze without one, and there's no shop to buy it from (see "Economy removal" in HISTORY.md) — but a vanilla **Wandering Trader** passing by can sell Ice/Packed Ice regardless, unrelated to any custom mechanic here. Confirmed working in-game. Unlike the Sand-from-gravel gap above, this one isn't actually blocked — no pack-side fix needed.
+
 ## Minions phase
 
 - Entity: tagged Armor Stand (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
 - Placement: custom crafted item → right-click → function detects via advancement and spawns the Armor Stand
 - Central tick: a single function iterates over all `@e[tag=minion]` (no per-entity schedule)
-- Implemented types: cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald, sand, gravel, quartz, obsidian — Tier I and Tier II
+- Implemented types: cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald, sand, gravel, quartz, obsidian, ice — Tier I and Tier II
 
 ### Minion storage (`minionskyblock:minion`)
 
@@ -228,7 +232,7 @@ Fields per entry:
 | `tier` | `1` | Tier number (integer) — used in tags and custom_data |
 | `tier_display` | `"I"` | Roman numeral tier display in the lore |
 | `placement_advancement` | `"place_cobblestone"` | Name of the advancement to revoke after placement (relative to `minionskyblock:minion/`) |
-| `armor` | `{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{...},legs:{...},feet:{...}}` | Full `equipment` sub-compound (head/chest/legs/feet) merged onto the armor stand by `place.mcfunction` via `$(armor)` — substituted as a whole NBT compound, not a primitive. Leather-dyed types (cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, wheat, sand, gravel, coal, redstone, lapis, emerald, quartz) use `leather_*` pieces with a `dyed_color` int (different per type, and per tier — T2 uses a distinct shade, not the same color twice); metal types (copper, gold→`golden_*`, iron, diamond, obsidian→`netherite_*`) use real armor pieces with no color, plus a `minecraft:trim` component (`redstone`/`flow`) added only at T2 |
+| `armor` | `{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{...},legs:{...},feet:{...}}` | Full `equipment` sub-compound (head/chest/legs/feet) merged onto the armor stand by `place.mcfunction` via `$(armor)` — substituted as a whole NBT compound, not a primitive. Leather-dyed types (cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, wheat, sand, gravel, coal, redstone, lapis, emerald, quartz, ice) use `leather_*` pieces with a `dyed_color` int (different per type, and per tier — T2 uses a distinct shade, not the same color twice); metal types (copper, gold→`golden_*`, iron, diamond, obsidian→`netherite_*`) use real armor pieces with no color, plus a `minecraft:trim` component (`redstone`/`flow`) added only at T2 |
 
 Timers by type and tier:
 
@@ -258,6 +262,7 @@ Timers by type and tier:
 | gravel | 10 | 5 |
 | quartz | 50 | 25 |
 | obsidian | 180 | 90 |
+| ice | 10 | 5 |
 
 ### Collection into an adjacent chest
 
@@ -265,7 +270,7 @@ Timers by type and tier:
 
 Loot tables: `loot_table/minion/drop/<type>.json` (resolution path: `minionskyblock:minion/drop/<type>`).
 
-Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, spruce_wood → spruce_log, birch_wood → birch_log, jungle_wood → jungle_log, acacia_wood → acacia_log, dark_oak_wood → dark_oak_log, mangrove_wood → mangrove_log, cherry_wood → cherry_log, pale_oak_wood → pale_oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald, sand → sand, gravel → gravel, quartz → quartz, obsidian → obsidian.
+Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, spruce_wood → spruce_log, birch_wood → birch_log, jungle_wood → jungle_log, acacia_wood → acacia_log, dark_oak_wood → dark_oak_log, mangrove_wood → mangrove_log, cherry_wood → cherry_log, pale_oak_wood → pale_oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald, sand → sand, gravel → gravel, quartz → quartz, obsidian → obsidian, ice → ice.
 
 If the chest is full, items overflow onto the ground.
 
@@ -301,6 +306,7 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | `gravel_minion_t1.json` | gravel | stone_shovel |
 | `quartz_minion_t1.json` | quartz | stone_pickaxe |
 | `obsidian_minion_t1.json` | obsidian | diamond_pickaxe |
+| `ice_minion_t1.json` | ice | stone_pickaxe |
 
 **Tier II** — 8× material (block form) + redstone_block at the center:
 
@@ -330,6 +336,7 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | `gravel_minion_t2.json` | flint | iron_shovel |
 | `quartz_minion_t2.json` | quartz_block | iron_pickaxe |
 | `obsidian_minion_t2.json` | crying_obsidian | diamond_pickaxe |
+| `ice_minion_t2.json` | packed_ice | iron_pickaxe |
 
 Components on each resulting item:
 

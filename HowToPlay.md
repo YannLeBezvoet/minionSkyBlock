@@ -63,6 +63,7 @@ The material follows a progression logic:
 | Gravel | Gravel | Flint |
 | Quartz | Quartz | Quartz Block |
 | Obsidian | Obsidian | Crying Obsidian |
+| Ice | Ice | Packed Ice |
 
 > The result is a special item with a colored name and an enchanted glint — this is your Minion, ready to be placed.
 
@@ -76,7 +77,7 @@ A small Armor Stand appears with its tool in hand: it starts working immediately
 > **Decorated minions**: every Minion wears a themed armor set.
 > - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
 > - **Obsidian** (the most expensive Minion) wears full **Netherite** armor; Tier II also gets the redstone Flow trim.
-> - **Cobblestone, Dirt, Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Cherry, Pale Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
+> - **Cobblestone, Dirt, Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Cherry, Pale Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz, Ice** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
 >
 > **Nametags**: a Minion's name is hidden by default to keep the view clean once you have several of them. **Sneak (shift)** near a Minion to reveal its name.
 
@@ -120,6 +121,7 @@ Each Minion exists in **Tier I** and **Tier II**. Tier II is faster and has a be
 | Gravel | 10 ticks | 5 ticks |
 | Quartz | 50 ticks | 25 ticks |
 | Obsidian | 180 ticks | 90 ticks |
+| Ice | 10 ticks | 5 ticks |
 
 To craft a T2, replace the redstone torch with a **redstone block** and the materials with their block form.
 
