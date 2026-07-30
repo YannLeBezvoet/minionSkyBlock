@@ -1,0 +1,1 @@
+function minionskyblock:minion/place with storage minionskyblock:minion mangrove_wood_t1

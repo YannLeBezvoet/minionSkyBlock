@@ -41,6 +41,14 @@ The material follows a progression logic:
 |---|---|---|
 | Cobblestone | Cobblestone | Stone |
 | Oak | Oak Planks | Oak Log |
+| Spruce | Spruce Planks | Spruce Log |
+| Birch | Birch Planks | Birch Log |
+| Jungle | Jungle Planks | Jungle Log |
+| Acacia | Acacia Planks | Acacia Log |
+| Dark Oak | Dark Oak Planks | Dark Oak Log |
+| Mangrove | Mangrove Planks | Mangrove Log |
+| Cherry | Cherry Planks | Cherry Log |
+| Pale Oak | Pale Oak Planks | Pale Oak Log |
 | Wheat | Wheat | Hay Block |
 | Iron | Iron Ingot | Iron Block |
 | Dirt | Dirt | Mud |
@@ -68,7 +76,7 @@ A small Armor Stand appears with its tool in hand: it starts working immediately
 > **Decorated minions**: every Minion wears a themed armor set.
 > - **Copper, Iron, Gold, Diamond** wear their matching vanilla armor (copper/iron/golden/diamond); Tier II additionally wears a **redstone Flow trim** — a swirling ornament — on each piece.
 > - **Obsidian** (the most expensive Minion) wears full **Netherite** armor; Tier II also gets the redstone Flow trim.
-> - **Cobblestone, Dirt, Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
+> - **Cobblestone, Dirt, Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Cherry, Pale Oak, Wheat, Coal, Redstone, Lapis, Emerald, Sand, Gravel, Quartz** wear leather armor dyed to match their block's color, with a brighter shade on Tier II.
 >
 > **Nametags**: a Minion's name is hidden by default to keep the view clean once you have several of them. **Sneak (shift)** near a Minion to reveal its name.
 
@@ -90,6 +98,14 @@ Each Minion exists in **Tier I** and **Tier II**. Tier II is faster and has a be
 |---|---|---|
 | Cobblestone | 15 ticks | 8 ticks |
 | Oak | 20 ticks | 10 ticks |
+| Spruce | 20 ticks | 10 ticks |
+| Birch | 20 ticks | 10 ticks |
+| Jungle | 20 ticks | 10 ticks |
+| Acacia | 20 ticks | 10 ticks |
+| Dark Oak | 20 ticks | 10 ticks |
+| Mangrove | 20 ticks | 10 ticks |
+| Cherry | 20 ticks | 10 ticks |
+| Pale Oak | 20 ticks | 10 ticks |
 | Wheat | 20 ticks | 10 ticks |
 | Iron | 60 ticks | 30 ticks |
 | Dirt | 10 ticks | 5 ticks |
@@ -128,7 +144,7 @@ Killed by a zombie in the Mining dimension and stuck with a pile of rotten flesh
 1. **Cobblestone Minion T1** first — cheap recipe (8 cobblestone + redstone torch)
 2. Keep chopping your tree and mining by hand while it works, to gather enough for your next Minions
 3. **Wheat Minion T1** — craft with 8 wheat + redstone torch, feeds you and stocks up for a future Wheat Minion T2
-4. **Oak Wood Minion T1** — planks instead of logs for T1
+4. **Wood Minion T1** for whichever tree you have (Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Cherry, Pale Oak — all work the same way) — planks instead of logs for T1
 5. Upgrade your first Minions to **T2** (block materials + redstone block)
 6. Place **chests** next to your Minions for automatic collection with no intervention
 
