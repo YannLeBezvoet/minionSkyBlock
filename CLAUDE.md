@@ -208,7 +208,7 @@ This piggybacks on Minecraft's own loot table system instead of the advancement-
 - Entity: tagged Armor Stand (`tag=minion`, `tag=minion_<type>`, `tag=tier_<n>`)
 - Placement: custom crafted item → right-click → function detects via advancement and spawns the Armor Stand
 - Central tick: a single function iterates over all `@e[tag=minion]` (no per-entity schedule)
-- Implemented types: cobblestone, dirt, oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald, sand, gravel, quartz, obsidian — Tier I and Tier II
+- Implemented types: cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, iron, wheat, coal, copper, gold, redstone, lapis, diamond, emerald, sand, gravel, quartz, obsidian — Tier I and Tier II
 
 ### Minion storage (`minionskyblock:minion`)
 
@@ -228,7 +228,7 @@ Fields per entry:
 | `tier` | `1` | Tier number (integer) — used in tags and custom_data |
 | `tier_display` | `"I"` | Roman numeral tier display in the lore |
 | `placement_advancement` | `"place_cobblestone"` | Name of the advancement to revoke after placement (relative to `minionskyblock:minion/`) |
-| `armor` | `{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{...},legs:{...},feet:{...}}` | Full `equipment` sub-compound (head/chest/legs/feet) merged onto the armor stand by `place.mcfunction` via `$(armor)` — substituted as a whole NBT compound, not a primitive. Leather-dyed types (cobblestone, dirt, oak_wood, wheat, sand, gravel, coal, redstone, lapis, emerald, quartz) use `leather_*` pieces with a `dyed_color` int (different per type, and per tier — T2 uses a distinct shade, not the same color twice); metal types (copper, gold→`golden_*`, iron, diamond, obsidian→`netherite_*`) use real armor pieces with no color, plus a `minecraft:trim` component (`redstone`/`flow`) added only at T2 |
+| `armor` | `{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{...},legs:{...},feet:{...}}` | Full `equipment` sub-compound (head/chest/legs/feet) merged onto the armor stand by `place.mcfunction` via `$(armor)` — substituted as a whole NBT compound, not a primitive. Leather-dyed types (cobblestone, dirt, oak_wood, spruce_wood, birch_wood, jungle_wood, acacia_wood, dark_oak_wood, mangrove_wood, cherry_wood, pale_oak_wood, wheat, sand, gravel, coal, redstone, lapis, emerald, quartz) use `leather_*` pieces with a `dyed_color` int (different per type, and per tier — T2 uses a distinct shade, not the same color twice); metal types (copper, gold→`golden_*`, iron, diamond, obsidian→`netherite_*`) use real armor pieces with no color, plus a `minecraft:trim` component (`redstone`/`flow`) added only at T2 |
 
 Timers by type and tier:
 
@@ -237,6 +237,14 @@ Timers by type and tier:
 | cobblestone | 15 | 8 |
 | dirt | 10 | 5 |
 | oak_wood | 20 | 10 |
+| spruce_wood | 20 | 10 |
+| birch_wood | 20 | 10 |
+| jungle_wood | 20 | 10 |
+| acacia_wood | 20 | 10 |
+| dark_oak_wood | 20 | 10 |
+| mangrove_wood | 20 | 10 |
+| cherry_wood | 20 | 10 |
+| pale_oak_wood | 20 | 10 |
 | iron | 60 | 30 |
 | wheat | 20 | 10 |
 | coal | 30 | 15 |
@@ -257,7 +265,7 @@ Timers by type and tier:
 
 Loot tables: `loot_table/minion/drop/<type>.json` (resolution path: `minionskyblock:minion/drop/<type>`).
 
-Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald, sand → sand, gravel → gravel, quartz → quartz, obsidian → obsidian.
+Drops by type: cobblestone → cobblestone, dirt → dirt, oak_wood → oak_log, spruce_wood → spruce_log, birch_wood → birch_log, jungle_wood → jungle_log, acacia_wood → acacia_log, dark_oak_wood → dark_oak_log, mangrove_wood → mangrove_log, cherry_wood → cherry_log, pale_oak_wood → pale_oak_log, iron → raw_iron, wheat → wheat, coal → coal, copper → raw_copper, gold → raw_gold, redstone → redstone, lapis → lapis_lazuli, diamond → diamond, emerald → emerald, sand → sand, gravel → gravel, quartz → quartz, obsidian → obsidian.
 
 If the chest is full, items overflow onto the ground.
 
@@ -271,6 +279,14 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | --- | --- | --- |
 | `cobblestone_minion_t1.json` | cobblestone | stone_pickaxe |
 | `oak_minion_t1.json` | oak_planks | stone_axe |
+| `spruce_minion_t1.json` | spruce_planks | stone_axe |
+| `birch_minion_t1.json` | birch_planks | stone_axe |
+| `jungle_minion_t1.json` | jungle_planks | stone_axe |
+| `acacia_minion_t1.json` | acacia_planks | stone_axe |
+| `dark_oak_minion_t1.json` | dark_oak_planks | stone_axe |
+| `mangrove_minion_t1.json` | mangrove_planks | stone_axe |
+| `cherry_minion_t1.json` | cherry_planks | stone_axe |
+| `pale_oak_minion_t1.json` | pale_oak_planks | stone_axe |
 | `wheat_minion_t1.json` | wheat | stone_hoe |
 | `iron_minion_t1.json` | iron_ingot | iron_pickaxe |
 | `dirt_minion_t1.json` | dirt | stone_shovel |
@@ -292,6 +308,14 @@ Universal center: **redstone_torch** for all T1, **redstone_block** for all T2.
 | --- | --- | --- |
 | `cobblestone_minion_t2.json` | stone | iron_pickaxe |
 | `oak_minion_t2.json` | oak_log | iron_axe |
+| `spruce_minion_t2.json` | spruce_log | iron_axe |
+| `birch_minion_t2.json` | birch_log | iron_axe |
+| `jungle_minion_t2.json` | jungle_log | iron_axe |
+| `acacia_minion_t2.json` | acacia_log | iron_axe |
+| `dark_oak_minion_t2.json` | dark_oak_log | iron_axe |
+| `mangrove_minion_t2.json` | mangrove_log | iron_axe |
+| `cherry_minion_t2.json` | cherry_log | iron_axe |
+| `pale_oak_minion_t2.json` | pale_oak_log | iron_axe |
 | `wheat_minion_t2.json` | hay_block | iron_hoe |
 | `iron_minion_t2.json` | iron_block | diamond_pickaxe |
 | `dirt_minion_t2.json` | mud | iron_shovel |

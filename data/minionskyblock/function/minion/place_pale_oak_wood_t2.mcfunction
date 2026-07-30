@@ -1,0 +1,1 @@
+function minionskyblock:minion/place with storage minionskyblock:minion pale_oak_wood_t2

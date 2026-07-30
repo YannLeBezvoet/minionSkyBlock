@@ -2,6 +2,22 @@ execute as @e[tag=minion,tag=minion_cobblestone] unless entity @s[tag=tier_2] at
 execute as @e[tag=minion,tag=minion_cobblestone,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion cobblestone_t2
 execute as @e[tag=minion,tag=minion_oak_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion oak_wood_t1
 execute as @e[tag=minion,tag=minion_oak_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion oak_wood_t2
+execute as @e[tag=minion,tag=minion_spruce_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion spruce_wood_t1
+execute as @e[tag=minion,tag=minion_spruce_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion spruce_wood_t2
+execute as @e[tag=minion,tag=minion_birch_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion birch_wood_t1
+execute as @e[tag=minion,tag=minion_birch_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion birch_wood_t2
+execute as @e[tag=minion,tag=minion_jungle_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion jungle_wood_t1
+execute as @e[tag=minion,tag=minion_jungle_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion jungle_wood_t2
+execute as @e[tag=minion,tag=minion_acacia_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion acacia_wood_t1
+execute as @e[tag=minion,tag=minion_acacia_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion acacia_wood_t2
+execute as @e[tag=minion,tag=minion_dark_oak_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion dark_oak_wood_t1
+execute as @e[tag=minion,tag=minion_dark_oak_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion dark_oak_wood_t2
+execute as @e[tag=minion,tag=minion_mangrove_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion mangrove_wood_t1
+execute as @e[tag=minion,tag=minion_mangrove_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion mangrove_wood_t2
+execute as @e[tag=minion,tag=minion_cherry_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion cherry_wood_t1
+execute as @e[tag=minion,tag=minion_cherry_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion cherry_wood_t2
+execute as @e[tag=minion,tag=minion_pale_oak_wood] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion pale_oak_wood_t1
+execute as @e[tag=minion,tag=minion_pale_oak_wood,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion pale_oak_wood_t2
 execute as @e[tag=minion,tag=minion_wheat] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion wheat_t1
 execute as @e[tag=minion,tag=minion_wheat,tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion wheat_t2
 execute as @e[tag=minion,tag=minion_dirt] unless entity @s[tag=tier_2] at @s run function minionskyblock:minion/behavior/tick with storage minionskyblock:minion dirt_t1
