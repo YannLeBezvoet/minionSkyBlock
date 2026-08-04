@@ -183,6 +183,21 @@ This is a high-end recipe — a Nether Star normally only drops from the Wither,
 
 ---
 
+## Shulker Shell
+
+Shulker Shells (used to craft Shulker Boxes) are normally only obtainable by killing Shulkers in an End City — this recipe makes them renewable from Popped Chorus Fruit instead:
+
+```text
+X X X
+X   X
+```
+
+- **X** = Popped Chorus Fruit (5 total)
+- bottom row and middle-center slot stay empty
+- yields 1 Shulker Shell
+
+---
+
 ## Tips
 
 - A Minion **cannot be broken** by other players (only you can pick it up via left-click).
