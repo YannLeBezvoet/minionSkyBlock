@@ -16,7 +16,7 @@ kill @e[tag=shop_npc_ore]
 kill @e[tag=shop_npc_ore_interaction]
 
 # Biome already generated is frozen at world creation (dimension json only applies to new chunks): retroactive re-biome
-execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15 minecraft:meadow replace minecraft:the_void
+execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 319 15 minecraft:meadow replace minecraft:the_void
 
 # Standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json).
 # minecraft:flat generator (4-thick bedrock floor Y=-64..-61, solid stone Y=-60..59 with plains ore
@@ -44,6 +44,18 @@ function minionskyblock:world/mining_init
 # first (same self-reschedule pattern as mining_init above), since kill is subject to the same
 # unloaded-chunk race as fill/setblock — see CLAUDE.md's Known Gotchas.
 function minionskyblock:world/build_portal
+
+# Biome changer config — consumable items that fillbiome a 16x16 chunk-aligned area around the
+# player (overworld only, see function/biome/change.mcfunction). Real fillbiome, real biome change
+# — an earlier attempt at this feature mistakenly concluded fillbiome had no gameplay effect in
+# this flat/fixed-biome world (based on /execute if biome reading false immediately after a
+# successful write) and briefly replaced it with a simulated mob-spawner; further testing showed
+# the change does take effect, just with a real and still not fully understood delay (observed:
+# still false minutes later, true after a much longer gap that also involved leaving/returning to
+# the chunk) — see the Known Gotchas entry on this. "advancement" is the suffix of the
+# self-revoking minionskyblock:biome/<advancement> advancement, same self-revoke pattern as minion
+# placement.
+data modify storage minionskyblock:biome_changer desert set value {biome:"minecraft:desert",name:"Desert",advancement:"change_desert"}
 
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
