@@ -6,7 +6,7 @@
         "item": {
           "predicates": {
             "minecraft:custom_data": {
-              "biome_item": "minecraft:desert"
+              "biome_item": "minecraft:stony_shore"
             }
           }
         }
@@ -14,6 +14,6 @@
     }
   },
   "rewards": {
-    "function": "minionskyblock:biome/change_desert"
+    "function": "minionskyblock:biome/change_stony_shore"
   }
 }
