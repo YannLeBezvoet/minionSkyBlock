@@ -168,7 +168,7 @@ Mineshaft minecart chests also carry **wheat, pumpkin, melon and beetroot seeds*
 
 Killing a mob **yourself** (fall damage, drowning, or another mob finishing it off doesn't count) has a small chance to drop a **Biome Stone** — a consumable item that changes the biome of the 16×16 chunk you're standing in to one specific biome (Desert, Jungle, Snowy Plains, and so on). There's no crafting recipe for these — they're rare kill drops only, roughly **1%** per kill (better with **Looting**: ~1.5% / 2% / 2.5% at Looting I / II / III).
 
-**Hold right-click** to consume one. It reshapes the chunk you're standing in and shows a confirmation message. It only works on your island (overworld) — using one in the Mining dimension just wastes it with no effect, since that dimension is a fixed stone cave with a permanent ceiling where biome barely matters. Changing a chunk's biome affects things like which mobs can spawn there and its foliage/water color — handy for turning a patch of your island into snow-free Desert, or a green Jungle corner, for example.
+**Hold right-click** to consume one. It sets the biome of the chunk you're standing in and shows a confirmation message — this only relabels the biome, it doesn't change the terrain or place any new blocks. It only works on your island (overworld) — using one in the Mining dimension just wastes it with no effect, since that dimension is a fixed stone cave with a permanent ceiling where biome barely matters. Changing a chunk's biome affects things like which mobs can spawn there and its foliage/water color — handy for making a chunk of your island snow-free by setting it to Desert, for example.
 
 ### Getting your first Biome Stones
 
