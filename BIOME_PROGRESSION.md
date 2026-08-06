@@ -1,0 +1,66 @@
+# Biome Stone progression flowchart
+
+Full unlock graph for the [Biome changer](CLAUDE.md#biome-changer-chunk-scale-biome-edit) mob-drop progression — see CLAUDE.md for the design rationale, the 46-distinct-mobs-vs-54-needed constraint that shaped it, and the loot table mechanism. This file is just the diagram, kept separate because it's large.
+
+Solid arrow = the mob's only possible Biome Stone drop. Dashed arrow = one of two possible outcomes, 50/50. Every edge is a 1% chance, `killed_by_player` only.
+
+```mermaid
+flowchart LR
+    meadow(["Meadow (START)"])
+
+    meadow -->|"bat 1%"| badlands["Badlands"]
+    meadow -->|"creeper 1%"| bamboo_jungle["Bamboo Jungle"]
+    meadow -->|"donkey 1%"| beach["Beach"]
+    meadow -->|"enderman 1%"| birch_forest["Birch Forest"]
+    meadow -->|"glow_squid 1%"| cherry_grove["Cherry Grove"]
+    meadow -->|"rabbit 1%"| cold_ocean["Cold Ocean"]
+    meadow -->|"sheep 1%"| dark_forest["Dark Forest"]
+    meadow -->|"skeleton 1%"| deep_cold_ocean["Deep Cold Ocean"]
+    meadow -->|"slime 1%"| deep_dark["Deep Dark"]
+    meadow -->|"spider 1%"| deep_frozen_ocean["Deep Frozen Ocean"]
+    meadow -->|"witch 1%"| deep_lukewarm_ocean["Deep Lukewarm Ocean"]
+    meadow -->|"zombie 1%"| deep_ocean["Deep Ocean"]
+    meadow -->|"zombie_villager 1%"| desert["Desert"]
+    desert -->|"husk 1%"| dripstone_caves["Dripstone Caves"]
+    desert -->|"parched 1%"| eroded_badlands["Eroded Badlands"]
+    deep_ocean -->|"dolphin 1%"| flower_forest["Flower Forest"]
+    cherry_grove -->|"pig 1%"| forest["Forest"]
+    deep_frozen_ocean -->|"salmon 1%"| frozen_ocean["Frozen Ocean"]
+    deep_lukewarm_ocean -->|"pufferfish 1%"| frozen_peaks["Frozen Peaks"]
+    deep_frozen_ocean -->|"polar_bear 1%"| frozen_river["Frozen River"]
+    deep_lukewarm_ocean -->|"tropical_fish 1%"| grove["Grove"]
+    bamboo_jungle -->|"parrot 1%"| ice_spikes["Ice Spikes"]
+    mushroom_fields -->|"mooshroom 1%"| jagged_peaks["Jagged Peaks"]
+    bamboo_jungle -->|"ocelot 1%"| jungle["Jungle"]
+    deep_frozen_ocean -->|"drowned 1%"| lukewarm_ocean["Lukewarm Ocean"]
+    desert -->|"camel 1%"| mushroom_fields["Mushroom Fields"]
+    deep_ocean -->|"cod 1%"| ocean["Ocean"]
+    forest -->|"wolf 1%"| old_growth_birch_forest["Old Growth Birch Forest"]
+    birch_forest -->|"chicken 1%"| old_growth_pine_taiga["Old Growth Pine Taiga"]
+    old_growth_pine_taiga -->|"fox 1%"| old_growth_spruce_taiga["Old Growth Spruce Taiga"]
+    deep_frozen_ocean -->|"squid 1%"| river["River"]
+    ice_spikes -->|"stray 1%"| snowy_beach["Snowy Beach"]
+    windswept_gravelly_hills -->|"llama 1%"| snowy_slopes["Snowy Slopes"]
+    bamboo_jungle -->|"panda 1%"| sparse_jungle["Sparse Jungle"]
+    beach -->|"turtle 1%"| stony_shore["Stony Shore"]
+    birch_forest -->|"cow 1%"| taiga["Taiga"]
+    deep_frozen_ocean -->|"nautilus 1%"| warm_ocean["Warm Ocean"]
+    frozen_peaks -->|"goat 1%"| windswept_gravelly_hills["Windswept Gravelly Hills"]
+    badlands -->|"armadillo 1%"| wooded_badlands["Wooded Badlands"]
+
+    beach -.->|"turtle 1% (alt)"| lush_caves["Lush Caves"]
+    cherry_grove -.->|"pig 1% (alt)"| mangrove_swamp["Mangrove Swamp"]
+    deep_frozen_ocean -.->|"drowned 1% (alt)"| pale_garden["Pale Garden"]
+    deep_frozen_ocean -.->|"nautilus 1% (alt)"| plains["Plains"]
+    deep_frozen_ocean -.->|"polar_bear 1% (alt)"| savanna["Savanna"]
+    deep_frozen_ocean -.->|"salmon 1% (alt)"| savanna_plateau["Savanna Plateau"]
+    deep_frozen_ocean -.->|"squid 1% (alt)"| snowy_plains["Snowy Plains"]
+    desert -.->|"camel 1% (alt)"| snowy_taiga["Snowy Taiga"]
+    desert -.->|"husk 1% (alt)"| stony_peaks["Stony Peaks"]
+    desert -.->|"parched 1% (alt)"| sulfur_caves["Sulfur Caves"]
+    deep_ocean -.->|"cod 1% (alt)"| sunflower_plains["Sunflower Plains"]
+    deep_ocean -.->|"dolphin 1% (alt)"| swamp["Swamp"]
+    birch_forest -.->|"chicken 1% (alt)"| windswept_forest["Windswept Forest"]
+    birch_forest -.->|"cow 1% (alt)"| windswept_hills["Windswept Hills"]
+    badlands -.->|"armadillo 1% (alt)"| windswept_savanna["Windswept Savanna"]
+```

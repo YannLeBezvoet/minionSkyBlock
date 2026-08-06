@@ -1,0 +1,1 @@
+function minionskyblock:biome/change with storage minionskyblock:biome_changer stony_shore

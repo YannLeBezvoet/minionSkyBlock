@@ -16,7 +16,7 @@ kill @e[tag=shop_npc_ore]
 kill @e[tag=shop_npc_ore_interaction]
 
 # Biome already generated is frozen at world creation (dimension json only applies to new chunks): retroactive re-biome
-execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 320 15 minecraft:meadow replace minecraft:the_void
+execute unless biome 0 66 0 minecraft:meadow run fillbiome -16 -64 -16 15 319 15 minecraft:meadow replace minecraft:the_void
 
 # Standalone minionskyblock:mining dimension (data/minionskyblock/dimension/mining.json).
 # minecraft:flat generator (4-thick bedrock floor Y=-64..-61, solid stone Y=-60..59 with plains ore
@@ -44,6 +44,67 @@ function minionskyblock:world/mining_init
 # first (same self-reschedule pattern as mining_init above), since kill is subject to the same
 # unloaded-chunk race as fill/setblock — see CLAUDE.md's Known Gotchas.
 function minionskyblock:world/build_portal
+
+# Biome changer config — consumable items that fillbiome a 16x16 chunk-aligned area around the
+# player (overworld only, see function/biome/change.mcfunction). One entry per overworld biome
+# (55 total, extracted from the actual installed 26.2 client jar's data/minecraft/worldgen/biome/
+# — excludes Nether/End biomes and the_void). "advancement" is the suffix of the self-revoking
+# minionskyblock:biome/<advancement> advancement, same self-revoke pattern as minion placement.
+data modify storage minionskyblock:biome_changer desert set value {biome:"minecraft:desert",name:"Desert",advancement:"change_desert"}
+data modify storage minionskyblock:biome_changer badlands set value {biome:"minecraft:badlands",name:"Badlands",advancement:"change_badlands"}
+data modify storage minionskyblock:biome_changer bamboo_jungle set value {biome:"minecraft:bamboo_jungle",name:"Bamboo Jungle",advancement:"change_bamboo_jungle"}
+data modify storage minionskyblock:biome_changer beach set value {biome:"minecraft:beach",name:"Beach",advancement:"change_beach"}
+data modify storage minionskyblock:biome_changer birch_forest set value {biome:"minecraft:birch_forest",name:"Birch Forest",advancement:"change_birch_forest"}
+data modify storage minionskyblock:biome_changer cherry_grove set value {biome:"minecraft:cherry_grove",name:"Cherry Grove",advancement:"change_cherry_grove"}
+data modify storage minionskyblock:biome_changer cold_ocean set value {biome:"minecraft:cold_ocean",name:"Cold Ocean",advancement:"change_cold_ocean"}
+data modify storage minionskyblock:biome_changer dark_forest set value {biome:"minecraft:dark_forest",name:"Dark Forest",advancement:"change_dark_forest"}
+data modify storage minionskyblock:biome_changer deep_cold_ocean set value {biome:"minecraft:deep_cold_ocean",name:"Deep Cold Ocean",advancement:"change_deep_cold_ocean"}
+data modify storage minionskyblock:biome_changer deep_dark set value {biome:"minecraft:deep_dark",name:"Deep Dark",advancement:"change_deep_dark"}
+data modify storage minionskyblock:biome_changer deep_frozen_ocean set value {biome:"minecraft:deep_frozen_ocean",name:"Deep Frozen Ocean",advancement:"change_deep_frozen_ocean"}
+data modify storage minionskyblock:biome_changer deep_lukewarm_ocean set value {biome:"minecraft:deep_lukewarm_ocean",name:"Deep Lukewarm Ocean",advancement:"change_deep_lukewarm_ocean"}
+data modify storage minionskyblock:biome_changer deep_ocean set value {biome:"minecraft:deep_ocean",name:"Deep Ocean",advancement:"change_deep_ocean"}
+data modify storage minionskyblock:biome_changer dripstone_caves set value {biome:"minecraft:dripstone_caves",name:"Dripstone Caves",advancement:"change_dripstone_caves"}
+data modify storage minionskyblock:biome_changer eroded_badlands set value {biome:"minecraft:eroded_badlands",name:"Eroded Badlands",advancement:"change_eroded_badlands"}
+data modify storage minionskyblock:biome_changer flower_forest set value {biome:"minecraft:flower_forest",name:"Flower Forest",advancement:"change_flower_forest"}
+data modify storage minionskyblock:biome_changer forest set value {biome:"minecraft:forest",name:"Forest",advancement:"change_forest"}
+data modify storage minionskyblock:biome_changer frozen_ocean set value {biome:"minecraft:frozen_ocean",name:"Frozen Ocean",advancement:"change_frozen_ocean"}
+data modify storage minionskyblock:biome_changer frozen_peaks set value {biome:"minecraft:frozen_peaks",name:"Frozen Peaks",advancement:"change_frozen_peaks"}
+data modify storage minionskyblock:biome_changer frozen_river set value {biome:"minecraft:frozen_river",name:"Frozen River",advancement:"change_frozen_river"}
+data modify storage minionskyblock:biome_changer grove set value {biome:"minecraft:grove",name:"Grove",advancement:"change_grove"}
+data modify storage minionskyblock:biome_changer ice_spikes set value {biome:"minecraft:ice_spikes",name:"Ice Spikes",advancement:"change_ice_spikes"}
+data modify storage minionskyblock:biome_changer jagged_peaks set value {biome:"minecraft:jagged_peaks",name:"Jagged Peaks",advancement:"change_jagged_peaks"}
+data modify storage minionskyblock:biome_changer jungle set value {biome:"minecraft:jungle",name:"Jungle",advancement:"change_jungle"}
+data modify storage minionskyblock:biome_changer lukewarm_ocean set value {biome:"minecraft:lukewarm_ocean",name:"Lukewarm Ocean",advancement:"change_lukewarm_ocean"}
+data modify storage minionskyblock:biome_changer lush_caves set value {biome:"minecraft:lush_caves",name:"Lush Caves",advancement:"change_lush_caves"}
+data modify storage minionskyblock:biome_changer mangrove_swamp set value {biome:"minecraft:mangrove_swamp",name:"Mangrove Swamp",advancement:"change_mangrove_swamp"}
+data modify storage minionskyblock:biome_changer meadow set value {biome:"minecraft:meadow",name:"Meadow",advancement:"change_meadow"}
+data modify storage minionskyblock:biome_changer mushroom_fields set value {biome:"minecraft:mushroom_fields",name:"Mushroom Fields",advancement:"change_mushroom_fields"}
+data modify storage minionskyblock:biome_changer ocean set value {biome:"minecraft:ocean",name:"Ocean",advancement:"change_ocean"}
+data modify storage minionskyblock:biome_changer old_growth_birch_forest set value {biome:"minecraft:old_growth_birch_forest",name:"Old Growth Birch Forest",advancement:"change_old_growth_birch_forest"}
+data modify storage minionskyblock:biome_changer old_growth_pine_taiga set value {biome:"minecraft:old_growth_pine_taiga",name:"Old Growth Pine Taiga",advancement:"change_old_growth_pine_taiga"}
+data modify storage minionskyblock:biome_changer old_growth_spruce_taiga set value {biome:"minecraft:old_growth_spruce_taiga",name:"Old Growth Spruce Taiga",advancement:"change_old_growth_spruce_taiga"}
+data modify storage minionskyblock:biome_changer pale_garden set value {biome:"minecraft:pale_garden",name:"Pale Garden",advancement:"change_pale_garden"}
+data modify storage minionskyblock:biome_changer plains set value {biome:"minecraft:plains",name:"Plains",advancement:"change_plains"}
+data modify storage minionskyblock:biome_changer river set value {biome:"minecraft:river",name:"River",advancement:"change_river"}
+data modify storage minionskyblock:biome_changer savanna set value {biome:"minecraft:savanna",name:"Savanna",advancement:"change_savanna"}
+data modify storage minionskyblock:biome_changer savanna_plateau set value {biome:"minecraft:savanna_plateau",name:"Savanna Plateau",advancement:"change_savanna_plateau"}
+data modify storage minionskyblock:biome_changer snowy_beach set value {biome:"minecraft:snowy_beach",name:"Snowy Beach",advancement:"change_snowy_beach"}
+data modify storage minionskyblock:biome_changer snowy_plains set value {biome:"minecraft:snowy_plains",name:"Snowy Plains",advancement:"change_snowy_plains"}
+data modify storage minionskyblock:biome_changer snowy_slopes set value {biome:"minecraft:snowy_slopes",name:"Snowy Slopes",advancement:"change_snowy_slopes"}
+data modify storage minionskyblock:biome_changer snowy_taiga set value {biome:"minecraft:snowy_taiga",name:"Snowy Taiga",advancement:"change_snowy_taiga"}
+data modify storage minionskyblock:biome_changer sparse_jungle set value {biome:"minecraft:sparse_jungle",name:"Sparse Jungle",advancement:"change_sparse_jungle"}
+data modify storage minionskyblock:biome_changer stony_peaks set value {biome:"minecraft:stony_peaks",name:"Stony Peaks",advancement:"change_stony_peaks"}
+data modify storage minionskyblock:biome_changer stony_shore set value {biome:"minecraft:stony_shore",name:"Stony Shore",advancement:"change_stony_shore"}
+data modify storage minionskyblock:biome_changer sulfur_caves set value {biome:"minecraft:sulfur_caves",name:"Sulfur Caves",advancement:"change_sulfur_caves"}
+data modify storage minionskyblock:biome_changer sunflower_plains set value {biome:"minecraft:sunflower_plains",name:"Sunflower Plains",advancement:"change_sunflower_plains"}
+data modify storage minionskyblock:biome_changer swamp set value {biome:"minecraft:swamp",name:"Swamp",advancement:"change_swamp"}
+data modify storage minionskyblock:biome_changer taiga set value {biome:"minecraft:taiga",name:"Taiga",advancement:"change_taiga"}
+data modify storage minionskyblock:biome_changer warm_ocean set value {biome:"minecraft:warm_ocean",name:"Warm Ocean",advancement:"change_warm_ocean"}
+data modify storage minionskyblock:biome_changer windswept_forest set value {biome:"minecraft:windswept_forest",name:"Windswept Forest",advancement:"change_windswept_forest"}
+data modify storage minionskyblock:biome_changer windswept_gravelly_hills set value {biome:"minecraft:windswept_gravelly_hills",name:"Windswept Gravelly Hills",advancement:"change_windswept_gravelly_hills"}
+data modify storage minionskyblock:biome_changer windswept_hills set value {biome:"minecraft:windswept_hills",name:"Windswept Hills",advancement:"change_windswept_hills"}
+data modify storage minionskyblock:biome_changer windswept_savanna set value {biome:"minecraft:windswept_savanna",name:"Windswept Savanna",advancement:"change_windswept_savanna"}
+data modify storage minionskyblock:biome_changer wooded_badlands set value {biome:"minecraft:wooded_badlands",name:"Wooded Badlands",advancement:"change_wooded_badlands"}
 
 # Tier 1 minion config
 data modify storage minionskyblock:minion cobblestone_t1 set value {block:"minecraft:cobblestone",drop:"minecraft:cobblestone",timer:15,tool:"minecraft:wooden_pickaxe",item:"minecraft:stone_pickaxe",color:"gray",name:"Cobblestone Minion",type:"cobblestone",tier:1b,tier_display:"I",placement_advancement:"place_cobblestone",armor:{head:{id:"minecraft:leather_helmet",count:1,components:{"minecraft:dyed_color":8355711}},chest:{id:"minecraft:leather_chestplate",count:1,components:{"minecraft:dyed_color":8355711}},legs:{id:"minecraft:leather_leggings",count:1,components:{"minecraft:dyed_color":8355711}},feet:{id:"minecraft:leather_boots",count:1,components:{"minecraft:dyed_color":8355711}}}}
