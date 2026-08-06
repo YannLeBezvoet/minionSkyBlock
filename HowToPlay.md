@@ -200,7 +200,6 @@ X   X
 
 ## Tips
 
-- A Minion **cannot be broken** by other players (only you can pick it up via left-click).
 - Minions work **even when you're offline** as long as the server is running.
 - You can place **as many Minions as you want** on your island.
 - Crops and trees **grow faster** than in a normal world (randomTickSpeed x3).
