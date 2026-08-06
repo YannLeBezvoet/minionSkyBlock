@@ -164,6 +164,38 @@ Mineshaft minecart chests also carry **wheat, pumpkin, melon and beetroot seeds*
 
 ---
 
+## Biome Stones
+
+Killing a mob **yourself** (fall damage, drowning, or another mob finishing it off doesn't count) has a small chance to drop a **Biome Stone** — a consumable item that changes the biome of the 16×16 chunk you're standing in to one specific biome (Desert, Jungle, Snowy Plains, and so on). There's no crafting recipe for these — they're rare kill drops only, roughly **1%** per kill (better with **Looting**: ~1.5% / 2% / 2.5% at Looting I / II / III).
+
+**Hold right-click** to consume one. It reshapes the chunk you're standing in and shows a confirmation message. It only works on your island (overworld) — using one in the Mining dimension just wastes it with no effect, since that dimension is a fixed stone cave with a permanent ceiling where biome barely matters. Changing a chunk's biome affects things like which mobs can spawn there and its foliage/water color — handy for turning a patch of your island into snow-free Desert, or a green Jungle corner, for example.
+
+### Getting your first Biome Stones
+
+The mobs that already spawn on your island at night (Meadow biome) can each drop one specific Biome Stone:
+
+| Mob | Biome Stone |
+|---|---|
+| Bat | Badlands |
+| Creeper | Bamboo Jungle |
+| Donkey | Beach |
+| Enderman | Birch Forest |
+| Glow Squid | Cherry Grove |
+| Rabbit | Cold Ocean |
+| Sheep | Dark Forest |
+| Skeleton | Deep Cold Ocean |
+| Slime | Deep Dark |
+| Spider | Deep Frozen Ocean |
+| Witch | Deep Lukewarm Ocean |
+| Zombie | Deep Ocean |
+| Zombie Villager | Desert |
+
+### Going further
+
+Every other biome (42 more, covering all 55 total) is unlocked the same way, but gated behind a mob that only spawns in a biome you've already changed a chunk to — for example, changing a chunk to Desert lets you find and kill a Husk there, which can drop a Dripstone Caves Biome Stone. The full unlock chain is diagrammed in [BIOME_PROGRESSION.md](BIOME_PROGRESSION.md).
+
+---
+
 ## Elytra
 
 The Elytra is craftable directly on a standard crafting table:

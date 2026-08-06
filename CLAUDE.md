@@ -212,7 +212,7 @@ The Ice Minion T1/T2 recipes (`recipe/ice_minion_t1.json` = 8×ice, `recipe/ice_
 
 ## Biome changer (chunk-scale biome edit)
 
-Consumable items that let a player retroactively change the biome of the 16×16 chunk they're standing in — e.g. to a `desert` for hotter mob-spawn rules and no snow. Not wired into a crafting recipe yet (deliberately deferred — see `function/biome/give_stone.mcfunction` below); not documented in HowToPlay.md until it is, since it isn't reachable by normal play yet.
+Consumable items that let a player retroactively change the biome of the 16×16 chunk they're standing in — e.g. to a `desert` for hotter mob-spawn rules and no snow. Not wired into a crafting recipe (deliberately deferred — see `function/biome/give_stone.mcfunction` below); reachable in normal play via the mob-drop progression instead (see "Biome Stone acquisition — mob-drop progression" below), so this is now documented for players in HowToPlay.md's "Biome Stones" section.
 
 **Covers all 55 overworld biomes**, extracted directly from the actual installed 26.2 client jar (`data/minecraft/worldgen/biome/*.json`) rather than assumed from memory — excludes the 5 Nether biomes, the 5 End biomes, and `the_void` (not a real placeable biome). Includes some that are unreachable by normal surface exploration but still valid `fillbiome` targets (`deep_dark`, `dripstone_caves`, `lush_caves`, `sulfur_caves` — cave-generated overworld biomes) and the newer `pale_garden`/`sulfur_caves` entries this jar happens to define.
 
