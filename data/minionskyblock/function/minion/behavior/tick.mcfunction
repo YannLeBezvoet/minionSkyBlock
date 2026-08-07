@@ -1,3 +1,4 @@
+$tp @e[tag=minion_interact_$(type),tag=tier_$(tier),distance=..16,limit=1,sort=nearest] ~ ~ ~
 scoreboard players add @s minion_timer 1
 $execute unless score @s minion_timer matches $(timer).. run return fail
 scoreboard players set @s minion_timer 0
